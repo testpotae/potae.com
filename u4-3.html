@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>การใช้อินเทอร์เน็ตอย่างปลอดภัย - วิทยาการคำนวณ ป.6</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Itim&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #4A90E2;
+            --color-secondary: #FFD166;
+            --color-accent: #FF6B6B;
+            --color-success: #06D6A0;
+            --color-ai: #9C27B0;
+            --color-robot: #FF5722;
+            --color-benefit: #2196F3;
+            --color-caution: #FF9800;
+            --color-danger: #F44336;
+            --color-bg: #F8F9FF;
+            --color-card: #FFFFFF;
+            --color-text: #333333;
+            --color-dark-blue: #0B2C4D;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Itim', cursive;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.8;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><path d="M30,30 Q50,10 70,30 T90,30 Q70,50 90,70 T90,90 Q50,70 30,90 T10,90 Q30,70 10,50 T10,10 Q30,30 30,30 Z" fill="%239C27B0" opacity="0.05"/><rect x="40" y="40" width="40" height="40" fill="%234A90E2" opacity="0.05" rx="5"/></svg>');
+            background-size: 120px;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--color-ai);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-dark-blue);
+            transform: translateX(-5px);
+            border-color: white;
+        }
+        
+        .lesson-title {
+            color: white;
+            font-size: 22px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        /* Hero Section */
+        .lesson-hero {
+            background: linear-gradient(135deg, var(--color-danger) 0%, #D32F2F 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .lesson-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="20" cy="20" r="8" fill="white" opacity="0.05"/><circle cx="80" cy="30" r="10" fill="white" opacity="0.05"/><circle cx="40" cy="70" r="12" fill="white" opacity="0.05"/><circle cx="70" cy="80" r="6" fill="white" opacity="0.05"/></svg>');
+            background-size: 100px;
+        }
+        
+        .lesson-hero h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px 25px;
+            border-radius: 50px;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .lesson-content {
+            background-color: var(--color-card);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: 5px solid var(--color-danger);
+        }
+        
+        .lesson-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--color-danger), var(--color-caution));
+        }
+        
+        /* Section Headers */
+        .section-header {
+            color: var(--color-danger);
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--color-caution);
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .section-header i {
+            margin-right: 15px;
+            color: var(--color-danger);
+        }
+        
+        /* Box Styles */
+        .box {
+            background: #FFEBEE;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 10px solid var(--color-danger);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Image Box */
+        .imagebox {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            border: 3px solid #EEE;
+            transition: all 0.3s ease;
+        }
+        
+        .imagebox:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+            border-color: var(--color-caution);
+        }
+        
+        .imagebox img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+            border: 5px solid white;
+            transition: transform 0.3s ease;
+        }
+        
+        .imagebox:hover img {
+            transform: scale(1.02);
+        }
+        
+        .image-caption {
+            font-weight: bold;
+            color: var(--color-dark-blue);
+            background-color: #FFFDE7;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+            display: block;
+        }
+        
+        /* List Styles */
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            font-size: 18px;
+            position: relative;
+            padding-left: 10px;
+        }
+        
+        li b {
+            color: var(--color-danger);
+        }
+        
+        /* Danger Sections */
+        .danger-section {
+            background-color: #FFF3E0;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-caution);
+        }
+        
+        .warning-section {
+            background-color: #FFEBEE;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-danger);
+        }
+        
+        /* Tips Section */
+        .tips-section {
+            background-color: #E8F5E9;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-success);
+        }
+        
+        .tips-section li {
+            color: #2E7D32;
+        }
+        
+        /* Reference Box */
+        .ref-box {
+            background-color: #F5F5F5;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
+            border-left: 10px solid #9E9E9E;
+        }
+        
+        .ref-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--color-dark-blue);
+            margin-bottom: 15px;
+        }
+        
+        /* Footer Navigation */
+        .lesson-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px dashed #DDD;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--color-dark-blue);
+            transform: translateY(-5px);
+            border-color: var(--color-secondary);
+        }
+        
+        .nav-btn.prev {
+            background-color: var(--color-ai);
+        }
+        
+        .nav-btn.prev:hover {
+            background-color: #7B1FA2;
+        }
+        
+        .nav-btn.next {
+            background-color: var(--color-success);
+        }
+        
+        .nav-btn.next:hover {
+            background-color: #05b585;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-hero h1 {
+                font-size: 28px;
+            }
+            
+            .lesson-footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> กลับหน้าแรก
+        </a>
+        <div class="lesson-title">บทที่ 4: ใช้เทคโนโลยีสารสนเทศอย่างปลอดภัย</div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="lesson-hero">
+        <h1>การใช้อินเทอร์เน็ตอย่างปลอดภัย</h1>
+        <div class="ai-badge">
+            <i class="fas fa-shield-alt"></i>
+            <span>ปกป้องตัวเองในโลกออนไลน์</span>
+        </div>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="lesson-content">
+            <!-- Introduction -->
+            <div class="intro-box" style="background-color: #F3E5F5; border-radius: 15px; padding: 25px; margin: 30px 0; border-left: 10px solid var(--color-ai);">
+                <p style="font-size: 20px;">
+                    ในปัจจุบันการใช้งานอินเทอร์เน็ตนั้นช่วยให้ชีวิตของผู้คนสะดวกสบายมากยิ่งขึ้น ไม่ว่าจะใช้ในการติดต่อสื่อสารผ่านทางสื่อสังคมออนไลน์ รวมไปถึงการทำธุรกรรมต่าง ๆ ผ่านทางอินเทอร์เน็ต นั่นอาจทำให้ทุกการเชื่อมต่อผู้ใช้ทิ้งได้ทิ้งรายละเอียดข้อมูลที่สำคัญ ๆ เอาไว้โดยไม่รู้ตัว
+                </p>
+            </div>
+            
+            <!-- การปกป้องข้อมูลส่วนตัว -->
+            <h2 class="section-header">
+                <i class="fas fa-user-shield"></i> การปกป้องข้อมูลส่วนตัว
+            </h2>
+            
+            <div class="box">
+                <h3 style="color: var(--color-danger); margin-top: 0;">
+                    <i class="fas fa-info-circle"></i> ข้อมูลส่วนตัว (Privacy)
+                </h3>
+                <p>คือ ข้อมูลที่แสดงความเป็นตัวตนของเรา เช่น ชื่อ-นามสกุล ที่อยู่ เบอร์โทรศัพท์ เลขที่บัตรประชาชน ชื่อบัญชีผู้ใช้-รหัสผ่าน จำนวนเงินเลขที่บัญชีธนาคาร เป็นต้น</p>
+            </div>
+            
+            <h3 style="color: var(--color-primary); margin-top: 30px;">
+                <i class="fas fa-images"></i> ตัวอย่างข้อมูลส่วนตัว
+            </h3>
+            
+            <div class="imagebox">
+                <h4 style="color: var(--color-dark-blue); margin-bottom: 15px; text-align: left;">1. บัตรประจำตัวประชาชน</h4>
+                <img src="image-768x343.jpeg.webp" alt="บัตรประจำตัวประชาชน">
+                <span class="image-caption">รูปภาพ บัตรประจำตัวประชาชน</span>
+            </div>
+            
+            <div class="imagebox">
+                <h4 style="color: var(--color-dark-blue); margin-bottom: 15px; text-align: left;">2. ตั๋วเครื่องบิน</h4>
+                <img src="image-4-768x328.jpeg.webp" alt="ตั๋วเครื่องบิน">
+                <span class="image-caption">รูปภาพ ตั๋วเครื่องบิน</span>
+            </div>
+            
+            <div class="imagebox">
+                <h4 style="color: var(--color-dark-blue); margin-bottom: 15px; text-align: left;">3. หนังสือเดินทาง</h4>
+                <img src="image-5-768x336.jpeg.webp" alt="หนังสือเดินทาง">
+                <span class="image-caption">รูปภาพ หนังสือเดินทาง</span>
+            </div>
+            
+            <!-- การหลอกลวงทางอินเทอร์เน็ต -->
+            <h2 class="section-header">
+                <i class="fas fa-exclamation-triangle"></i> การหลอกลวงทางอินเทอร์เน็ต
+            </h2>
+            
+            <div class="danger-section">
+                <h3 style="color: var(--color-caution);">
+                    <i class="fas fa-envelope"></i> 1. สแปม (Spam)
+                </h3>
+                <p>อีเมลหรือข้อความที่ส่งมาโดยผู้รับไม่ได้ร้องขอ โฆษณาสินค้า หลอกลวงเพื่อวัตถุประสงค์อื่นๆ</p>
+                <div class="imagebox" style="margin: 20px 0;">
+                    <img src="image-1.jpeg (1).webp" alt="สแปม">
+                    <span class="image-caption">รูปภาพ Spam</span>
+                </div>
+            </div>
+            
+            <div class="danger-section">
+                <h3 style="color: var(--color-caution);">
+                    <i class="fas fa-fish"></i> 2. ฟิชชิ่ง (Phishing)
+                </h3>
+                <p>เป็นการหลอกลวงโดยให้ผู้ใช้คลิกลิงค์ไปยังเว็บไซต์ที่สร้างขึ้นมาเพื่อเลียนแบบเว็บไซต์จริง เพื่อให้ผู้ใช้กรอกข้อมูล และนำข้อมูลไปใช้ประโยชน์</p>
+                <div class="imagebox" style="margin: 20px 0;">
+                    <img src="image-2.jpeg (1).webp" alt="ฟิชชิ่ง">
+                    <span class="image-caption">รูปภาพ Phishing</span>
+                </div>
+            </div>
+            
+            <div class="danger-section">
+                <h3 style="color: var(--color-caution);">
+                    <i class="fas fa-gamepad"></i> 3. เชิญชวนเล่นเกม
+                </h3>
+                <p>เชิญชวนให้เล่นเกมโดยให้เหรียญฟรี กระตุ้นให้ซื้อไอเทมเพิ่มเติม ชักชวนให้เล่นเกมทุกวัน</p>
+                <div class="imagebox" style="margin: 20px 0;">
+                    <img src="image-3.jpeg (1).webp" alt="เกม">
+                    <span class="image-caption">รูปภาพ เกม</span>
+                </div>
+            </div>
+            
+            <!-- ข่าวลวง -->
+            <h2 class="section-header">
+                <i class="fas fa-newspaper"></i> ข่าวลวง
+            </h2>
+            
+            <p>ในทุกๆ วันเราได้รับข้อมูลข่าวสารจากหลากหลายช่องทาง โดยเฉพาะทางสื่อออนไลน์ต้องยอมรับว่าหลายๆ ข้อมูลส่งผลกระทบต่อความคิด ความเชื่อของเรา ซึ่งข้อมูลบางส่วนนั้นถูกจัดว่าเป็น FAKE NEWS</p>
+            
+            <div class="imagebox">
+                <img src="image-1.jpg.webp" alt="ข่าวลวง">
+                <span class="image-caption">รูปภาพ ข่าวลวง</span>
+            </div>
+            
+            <div class="warning-section">
+                <h3 style="color: var(--color-danger);">
+                    <i class="fas fa-question-circle"></i> FAKE NEWS คืออะไร ?
+                </h3>
+                
+                <ol style="counter-reset: fake-counter; margin: 20px 0;">
+                    <li style="list-style: none; margin-bottom: 20px; padding-left: 70px; position: relative;">
+                        <b>พาดหัว ลวงให้คลิก (clickbait)</b> ใช้คำหรือรูปภาพพาดหัวที่ทำให้ดูชวนสงสัย ทั้งที่เนื้อข่าวอาจไม่มีอะไรเลย เพื่อเรียกยอดการเข้าดู
+                        <div style="position: absolute; left: 0; top: 0; width: 50px; height: 50px; background-color: var(--color-danger); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">1</div>
+                    </li>
+                    <li style="list-style: none; margin-bottom: 20px; padding-left: 70px; position: relative;">
+                        <b>โฆษณาชวนเชื่อ (Propaganda)</b> เรื่องราวที่ถูกคัดและสร้างขึ้นเพื่อให้เข้าใจผิด สร้างอคติทั้งทางลบและบวก โดยมากมักหวังผลทางการเมือง
+                        <div style="position: absolute; left: 0; top: 0; width: 50px; height: 50px; background-color: var(--color-danger); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">2</div>
+                    </li>
+                    <li style="list-style: none; margin-bottom: 20px; padding-left: 70px; position: relative;">
+                        <b>เสียดสี/ล้อเลียน (Satire/Parody)</b> เป็นการเรียกยอดผู้ชมโดยการสร้างข่าวล้อเลียน เสียดสีคนดังเพื่อความบันเทิง
+                        <div style="position: absolute; left: 0; top: 0; width: 50px; height: 50px; background-color: var(--color-danger); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">3</div>
+                    </li>
+                    <li style="list-style: none; margin-bottom: 20px; padding-left: 70px; position: relative;">
+                        <b>นำเสนอข่าวแบบลวก ๆ (Sloppy Journalism)</b> บางครั้งผู้สื่อข่าวอาจเผยแพร่ข้อมูลที่ไม่น่าเชื่อถือหรือไม่ได้ตรวจสอบข้อเท็จจริงทั้งหมดทำให้ผู้ชมเข้าใจผิด
+                        <div style="position: absolute; left: 0; top: 0; width: 50px; height: 50px; background-color: var(--color-danger); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">4</div>
+                    </li>
+                    <li style="list-style: none; margin-bottom: 20px; padding-left: 70px; position: relative;">
+                        <b>พาดหัวให้เข้าใจผิด (Mislead heading)</b> ใช้คำหรือข้อความในการพาดหัวเพื่อให้คนเข้าใจผิดหรือเรียกร้องความสนใจ ให้คนแชร์ต่อ เนื้อหาอาจไม่ใช่เรื่องเท็จทั้งหมด ซึ่งแพร่กระจายได้อย่างรวดเร็วในสื่อออนไลน์
+                        <div style="position: absolute; left: 0; top: 0; width: 50px; height: 50px; background-color: var(--color-danger); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">5</div>
+                    </li>
+                    <li style="list-style: none; margin-bottom: 20px; padding-left: 70px; position: relative;">
+                        <b>ข่าวลำเอียง (Biased/Slanted news)</b> โซเชียลมีเดียนำพาผู้ใช้สื่อไปยังข่าวหรือข้อมูลบางอย่างที่ช่วยสนับสนุนความคิด ความเชื่อ อคติของผู้ใช้สื่อ โดยวิเคราะห์จากลักษณะคำค้นหาของผู้ใช้สื่อเอง
+                        <div style="position: absolute; left: 0; top: 0; width: 50px; height: 50px; background-color: var(--color-danger); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">6</div>
+                    </li>
+                </ol>
+            </div>
+            
+            <!-- สิ่งที่ควรระวังบนอินเทอร์เน็ต -->
+            <h2 class="section-header">
+                <i class="fas fa-eye"></i> สิ่งที่ควรระวังบนอินเทอร์เน็ต
+            </h2>
+            
+            <div class="warning-section">
+                <ol>
+                    <li>สื่อลามกอนาจารและการค้าเด็ก</li>
+                    <li>การล่อลวงเยาวชน</li>
+                    <li>การเล่นเกมที่รุนแรง ฆ่าฟันและละเมิดทางเพศ</li>
+                    <li>การขายสินค้าอันตราย เช่น ยาลดความอ้วน ครีมผิวขาว</li>
+                    <li>การเผยแพร่ข้อมูลที่ไม่เหมาะสม เช่น การประกอบปืนหรือระเบิด</li>
+                    <li>การกลั่นแกล้งผู้อื่นในโลกออนไลน์</li>
+                    <li>การหลอกลวงขายสินค้าที่ไม่มีคุณภาพ</li>
+                    <li>ขโมยตัวตน เช่น บัญชีผู้ใช้งาน เพื่อไปหลอกบุคคลใกล้ชิด ขอข้อมูลต่างๆ</li>
+                </ol>
+            </div>
+            
+            <!-- ข้อแนะนำในการตั้งและใช้งานรหัสผ่าน -->
+            <h2 class="section-header">
+                <i class="fas fa-key"></i> ข้อแนะนำในการตั้งและใช้งานรหัสผ่าน
+            </h2>
+            
+            <div class="tips-section">
+                <ol>
+                    <li>สิ่งที่ต้องคำนึงถึงในการกำหนดรหัสผ่านให้มีความปลอดภัย มีดังนี้รหัสผ่านควรตั้งให้เป็นไปตามเงื่อนไขของระบบที่ใช้งาน รหัสผ่านที่ดีควรประกอบด้วยอักษรตัวใหญ่ ตัวเล็ก ตัวเลข และสัญลักษณ์ เช่น Y1nG@#!z หรือ @uG25sx*</li>
+                    <li>หลีกเลี่ยงการตั้งรหัสผ่านโดยใช้วัน เดือน ปีเกิด ชื่อผู้ใช้ ชื่อจังหวัด ชื่อตัวละคร ชื่อสิ่งของต่างๆ ที่เกี่ยวข้องหรือคำที่มีอยู่ในพจนานุกรม</li>
+                    <li>ตั้งให้จดจำได้ง่าย แต่ยากต่อการคาดเดาด้วยบุคคลหรือโปรแกรม เช่น ความสัมพันธ์ของรหัสผ่านกับข้อความหรือข้อมูลส่วนตัวที่คุ้นเคย เช่น ตั้งชื่อสุนัขตัวแรก แต่เขียนตัวอักษรจากหลังมาหน้า</li>
+                    <li>บัญชีรายชื่อผู้ใช้งานแต่ละระบบ ควรใช้รหัสผ่านที่แตกต่างกัน โดยเฉพาะบัญชีที่ใช้เข้าถึงข้อมูลที่มีความสำคัญ เช่น รหัสผ่านของบัตรเอทีเอ็มหลายใบให้ใช้รหัสผ่านต่างกัน</li>
+                    <li>ไม่บันทึกรหัสผ่านแบบอัตโนมัติบนโปรแกรมเบราเซอร์ โดยเฉพาะอย่างยิ่งหากใช้เครื่องคอมพิวเตอร์ร่วมกับผู้อื่น หรือเครื่องสาธารณะ</li>
+                    <li>หลีกเลี่ยงการบันทึกรหัสผ่านลงในกระดาษสมุดโน้ต รวมทั้งอุปกรณ์อิเล็กทรอนิกส์ด้วย หากจำเป็นต้องบันทึกก็ควรจัดเก็บไว้ในที่ปลอดภัย</li>
+                    <li>ไม่บอกรหัสผ่านของตนเองให้กับผู้อื่น ไม่ว่ากรณีใดๆ</li>
+                    <li>หมั่นเปลี่ยนรหัสผ่านเป็นประจำ อาจกระทำทุก 3 เดือน</li>
+                    <li>ออกจากระบบทุกครั้งเมื่อเลิกใช้บริการต่างๆ บนอินเทอร์เน็ต</li>
+                </ol>
+            </div>
+            
+            <div class="imagebox">
+                <img src="image.jpg.webp" alt="การตั้งรหัสผ่าน">
+                <span class="image-caption">รูปภาพ การตั้งรหัสผ่าน</span>
+            </div>
+            
+            <!-- Reference -->
+            <div class="ref-box">
+                <div class="ref-title">
+                    <i class="fas fa-book"></i>
+                    <h3 style="margin: 0;">ข้อมูลอ้างอิง</h3>
+                </div>
+                
+                <div style="background-color: white; border-radius: 10px; padding: 20px;">
+                    <p><b>วริณศิญา พงษ์เกษ</b> "การใช้เทคโนโลยีสารสนเทศอย่างปลอดภัย"</p>
+                    <p style="color: var(--color-primary);">จากเว็บไซต์ http://krupicnic.patum.ac.th/kha-xthibay-raywicha/bth-thi-4-kar-chi-thekhnoloyi-sarsnthes-xyang-plxdphay</p>
+                    
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #DDD;">
+                        <p><b>Phichitra Phetparee</b> "ข่าวลวงคืออะไร ?"</p>
+                        <p style="color: var(--color-primary);">จากเว็บไซต์ https://www.thaihealth.or.th/Content/48163</p>
+                    </div>
+                    
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #DDD;">
+                        <p><b>เอกสารประกอบการอบรม</b> หลักสูตรอบรมออนไลน์การจัดการเรียนรู้วิทยาการคำนวณสำหรับครูประถมศึกษาปีที่ 4 – 6 Coding Online for Grade ๔-๖ Teacher (C4T – 7)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Navigation -->
+            <div class="lesson-footer">
+                <div style="font-size: 18px;">
+                    <i class="fas fa-graduation-cap"></i> บทเรียนที่ 4.3: การใช้อินเทอร์เน็ตอย่างปลอดภัย
+                </div>
+                
+                <div class="nav-buttons">
+                    <a href="u4-2.html" class="nav-btn prev">
+                        <i class="fas fa-arrow-left"></i> บทที่แล้ว
+                    </a>
+                    <a href="index.html" class="nav-btn">
+                        <i class="fas fa-home"></i> หน้าแรก
+                    </a>
+                    <a href="u4-4.html" class="nav-btn next">
+                        บทต่อไป <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // เพิ่มเอฟเฟกต์เล็กน้อยให้กับเว็บไซต์
+        document.addEventListener('DOMContentLoaded', function() {
+            // เพิ่มเอฟเฟกต์ให้กับการ์ดต่างๆ
+            const cards = document.querySelectorAll('.box, .danger-section, .warning-section, .tips-section, .imagebox');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100 + 300);
+            });
+            
+            // เพิ่มเอฟเฟกต์ให้กับปุ่ม
+            const buttons = document.querySelectorAll('.nav-btn, .back-btn');
+            buttons.forEach(button => {
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // เอฟเฟกต์เมื่อชี้ภาพ
+            const imageboxes = document.querySelectorAll('.imagebox');
+            imageboxes.forEach(box => {
+                box.addEventListener('mouseenter', function() {
+                    const img = this.querySelector('img');
+                    if (img) {
+                        img.style.transform = 'scale(1.03)';
+                        img.style.transition = 'transform 0.3s ease';
+                    }
+                });
+                
+                box.addEventListener('mouseleave', function() {
+                    const img = this.querySelector('img');
+                    if (img) {
+                        img.style.transform = 'scale(1.02)';
+                    }
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับหัวข้อ
+            const headers = document.querySelectorAll('.section-header');
+            headers.forEach(header => {
+                header.addEventListener('mouseenter', function() {
+                    const icon = this.querySelector('i');
+                    if (icon) {
+                        icon.style.transform = 'scale(1.2)';
+                        icon.style.transition = 'transform 0.3s ease';
+                    }
+                });
+                
+                header.addEventListener('mouseleave', function() {
+                    const icon = this.querySelector('i');
+                    if (icon) {
+                        icon.style.transform = 'scale(1)';
+                    }
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับรายการ FAKE NEWS
+            const fakeNewsItems = document.querySelectorAll('.warning-section li[style*="position: relative"]');
+            fakeNewsItems.forEach((item, index) => {
+                item.addEventListener('mouseenter', function() {
+                    const numberDiv = this.querySelector('div[style*="background-color: var(--color-danger)"]');
+                    if (numberDiv) {
+                        numberDiv.style.transform = 'rotate(360deg)';
+                        numberDiv.style.transition = 'transform 0.5s ease';
+                    }
+                    this.style.backgroundColor = '#FFEBEE';
+                    this.style.paddingLeft = '75px';
+                    this.style.transition = 'all 0.3s ease';
+                    this.style.borderRadius = '10px';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    const numberDiv = this.querySelector('div[style*="background-color: var(--color-danger)"]');
+                    if (numberDiv) {
+                        numberDiv.style.transform = 'rotate(0)';
+                    }
+                    this.style.backgroundColor = '';
+                    this.style.paddingLeft = '70px';
+                    this.style.borderRadius = '0';
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับคำแนะนำรหัสผ่าน
+            const passwordTips = document.querySelectorAll('.tips-section li');
+            passwordTips.forEach(tip => {
+                tip.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#C8E6C9';
+                    this.style.paddingLeft = '20px';
+                    this.style.transition = 'all 0.3s ease';
+                    this.style.borderRadius = '8px';
+                });
+                
+                tip.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                    this.style.paddingLeft = '10px';
+                    this.style.borderRadius = '0';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

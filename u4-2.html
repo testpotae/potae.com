@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แนะนำโปรแกรมและทดลองใช้งาน - วิทยาการคำนวณ ป.6</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Itim&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #4A90E2;
+            --color-secondary: #FFD166;
+            --color-accent: #FF6B6B;
+            --color-success: #06D6A0;
+            --color-ai: #9C27B0;
+            --color-robot: #FF5722;
+            --color-benefit: #2196F3;
+            --color-caution: #FF9800;
+            --color-impact: #F44336;
+            --color-bg: #F8F9FF;
+            --color-card: #FFFFFF;
+            --color-text: #333333;
+            --color-dark-blue: #0B2C4D;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Itim', cursive;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.8;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><path d="M30,30 Q50,10 70,30 T90,30 Q70,50 90,70 T90,90 Q50,70 30,90 T10,90 Q30,70 10,50 T10,10 Q30,30 30,30 Z" fill="%239C27B0" opacity="0.05"/><rect x="40" y="40" width="40" height="40" fill="%234A90E2" opacity="0.05" rx="5"/></svg>');
+            background-size: 120px;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--color-ai);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-dark-blue);
+            transform: translateX(-5px);
+            border-color: white;
+        }
+        
+        .lesson-title {
+            color: white;
+            font-size: 22px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        /* Hero Section */
+        .lesson-hero {
+            background: linear-gradient(135deg, var(--color-ai) 0%, #7B1FA2 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .lesson-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="20" cy="20" r="8" fill="white" opacity="0.05"/><circle cx="80" cy="30" r="10" fill="white" opacity="0.05"/><circle cx="40" cy="70" r="12" fill="white" opacity="0.05"/><circle cx="70" cy="80" r="6" fill="white" opacity="0.05"/></svg>');
+            background-size: 100px;
+        }
+        
+        .lesson-hero h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px 25px;
+            border-radius: 50px;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .lesson-content {
+            background-color: var(--color-card);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: 5px solid var(--color-ai);
+        }
+        
+        .lesson-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--color-ai), var(--color-secondary));
+        }
+        
+        /* Section Headers */
+        .section-header {
+            color: var(--color-primary);
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--color-secondary);
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .section-header i {
+            margin-right: 15px;
+            color: var(--color-ai);
+        }
+        
+        /* Box Styles */
+        .box {
+            background: #E3F2FD;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 10px solid var(--color-primary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* ตารางสูตร Prompt */
+        .prompt-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+        
+        .prompt-table th {
+            background-color: var(--color-ai);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-family: 'Mali', cursive;
+            font-size: 18px;
+        }
+        
+        .prompt-table td {
+            border: 1px solid #E0E0E0;
+            padding: 15px;
+            vertical-align: top;
+        }
+        
+        .prompt-table tr:nth-child(even) { 
+            background-color: #F9F9F9; 
+        }
+        
+        .prompt-table tr:hover {
+            background-color: #F3E5F5;
+            transition: background-color 0.3s ease;
+        }
+        
+        /* การเน้นคำสั่ง */
+        .bad-prompt { 
+            color: #D32F2F; 
+            font-weight: bold; 
+            background: #FFEBEE; 
+            padding: 5px 12px; 
+            border-radius: 8px;
+            display: inline-block;
+            margin: 5px 0;
+            border: 2px solid #FFCDD2;
+        }
+        
+        .good-prompt { 
+            color: #2E7D32; 
+            font-weight: bold; 
+            background: #E8F5E9; 
+            padding: 5px 12px; 
+            border-radius: 8px;
+            display: inline-block;
+            margin: 5px 0;
+            border: 2px solid #C8E6C9;
+        }
+        
+        /* กล่องกิจกรรม */
+        .activity-box {
+            background: #FFFDE7;
+            padding: 30px;
+            border: 3px dashed var(--color-secondary);
+            border-radius: var(--border-radius);
+            margin-top: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .activity-box h3 {
+            color: var(--color-ai);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .question-box {
+            background: #F3E5F5;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-ai);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .question-box h3 {
+            color: var(--color-ai);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* List Styles */
+        ul {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        li b {
+            color: var(--color-primary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-hero h1 {
+                font-size: 28px;
+            }
+            
+            .prompt-table {
+                font-size: 14px;
+            }
+            
+            .prompt-table th, .prompt-table td {
+                padding: 10px;
+            }
+            
+            .lesson-footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+        
+        /* Footer Navigation */
+        .lesson-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px dashed #DDD;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--color-dark-blue);
+            transform: translateY(-5px);
+            border-color: var(--color-secondary);
+        }
+        
+        .nav-btn.prev {
+            background-color: var(--color-ai);
+        }
+        
+        .nav-btn.prev:hover {
+            background-color: #7B1FA2;
+        }
+        
+        .nav-btn.next {
+            background-color: var(--color-success);
+        }
+        
+        .nav-btn.next:hover {
+            background-color: #05b585;
+        }
+        
+        /* Example Comparison */
+        .example-comparison {
+            background-color: #FFF3E0;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-caution);
+        }
+        
+        /* Summary Box */
+        .summary-box {
+            background: #FAFAFA;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 10px solid #666;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> กลับหน้าแรก
+        </a>
+        <div class="lesson-title">บทที่ 4: ใช้เทคโนโลยีสารสนเทศอย่างปลอดภัย</div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="lesson-hero">
+        <h1>แนะนำโปรแกรมและทดลองใช้งาน</h1>
+        <div class="ai-badge">
+            <i class="fas fa-laptop-code"></i>
+            <span>เรียนรู้การใช้ AI อย่างชาญฉลาด</span>
+        </div>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="lesson-content">
+            <!-- Introduction -->
+            <div class="intro-box">
+                <p style="font-size: 20px;">
+                    การใช้งานปัญญาประดิษฐ์ (AI) อย่างมีประสิทธิภาพเริ่มต้นจากการรู้จักเลือกเครื่องมือที่เหมาะสมและเรียนรู้วิธีสื่อสารกับ AI อย่างชาญฉลาด บทเรียนนี้จะแนะนำโปรแกรม AI ที่น่าสนใจและสอนเทคนิคการเขียนคำสั่ง (Prompt) ให้ได้ผลลัพธ์ที่ดีที่สุด
+                </p>
+            </div>
+            
+            <!-- วาดรูปและสร้างสรรค์ -->
+            <h2 class="section-header">
+                <i class="fas fa-paint-brush"></i> 1. สายวาดรูปและสร้างสรรค์
+            </h2>
+            
+            <ul>
+                <li><b>Quick, Draw! (Google):</b> เกมวาดภาพตามคำสั่งใน 20 วินาที เพื่อให้ AI ทายว่าเราวาดอะไร (เรียนรู้เรื่องการจดจำรูปแบบ)</li>
+                <li><b>AutoDraw:</b> เครื่องมือที่ช่วยเปลี่ยนภาพวาดลายเส้นยึกยือของนักเรียน ให้กลายเป็นรูปวาดสวยๆ โดย AI จะช่วยเดาว่าเราอยากวาดรูปอะไร</li>
+            </ul>
+            
+            <!-- สายคุยและหาความรู้ -->
+            <h2 class="section-header">
+                <i class="fas fa-comments"></i> 2. สายคุยและหาความรู้ (Chatbot)
+            </h2>
+            
+            <p><b>Gemini / ChatGPT:</b> สอนการเขียน "คำสั่ง" (Prompt)</p>
+            
+            <p>
+                <span class="bad-prompt">แบบไม่ดี:</span> "แต่งนิทานให้หน่อย"<br>
+                <span class="good-prompt">แบบที่ดี:</span> "ช่วยแต่งนิทานสั้นๆ 5 บรรทัด เกี่ยวกับแมวสีส้มที่ชอบกินพิซซ่า ให้ข้อคิดเรื่องความแบ่งปัน"
+            </p>
+            
+            <div class="box">
+                <h3 style="color: var(--color-primary); margin-top: 0;">
+                    <i class="fas fa-lightbulb"></i> กฎสำคัญในการใช้ AI
+                </h3>
+                <p><b>การสอน:</b> ย้ำนักเรียนว่า AI เป็น "ผู้ช่วย" ไม่ใช่ "ผู้ทำแทน"</p>
+                <p><b>สูตรการสั่งงาน AI:</b> "ใคร + ทำอะไร + แบบไหน + เอาไปทำไม"</p>
+            </div>
+            
+            <!-- ตารางสูตร Prompt -->
+            <h2 class="section-header">
+                <i class="fas fa-table"></i> สูตรการเขียนคำสั่ง AI (Prompt)
+            </h2>
+            
+            <table class="prompt-table">
+                <thead>
+                    <tr>
+                        <th>องค์ประกอบ</th>
+                        <th>คำอธิบาย</th>
+                        <th>ตัวอย่าง</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>1. ใคร (Role)</b></td>
+                        <td>ให้ AI สมมติว่าเป็นใคร</td>
+                        <td>"สมมติว่าเธอเป็น คุณครูใจดี"</td>
+                    </tr>
+                    <tr>
+                        <td><b>2. ทำอะไร (Task)</b></td>
+                        <td>สั่งให้ทำอะไรให้ชัดเจน</td>
+                        <td>"ช่วย อธิบายเรื่องการสังเคราะห์แสง"</td>
+                    </tr>
+                    <tr>
+                        <td><b>3. แบบไหน (Format)</b></td>
+                        <td>อยากได้คำตอบยาวแค่ไหน หรือสไตล์ไหน</td>
+                        <td>"แบบ สรุปสั้นๆ 5 บรรทัด ใช้ภาษาเข้าใจง่าย"</td>
+                    </tr>
+                    <tr>
+                        <td><b>4. เอาไปทำไม (Context)</b></td>
+                        <td>บอกจุดประสงค์</td>
+                        <td>"เพื่อ ไปเล่าให้เพื่อน ป.1 ฟัง"</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <!-- ตัวอย่างเปรียบเทียบ -->
+            <div class="example-comparison">
+                <h3 style="color: var(--color-caution);">
+                    <i class="fas fa-balance-scale"></i> ตัวอย่างเปรียบเทียบ:
+                </h3>
+                <ul>
+                    <li><b>คำสั่งทั่วไป:</b> "แต่งนิทานให้หน่อย" (AI จะเดาไปเรื่อย ได้ผลลัพธ์กว้างเกินไป)</li>
+                    <li><b>คำสั่งอัจฉริยะ:</b> "สมมติว่าเธอเป็นนักเขียนนิทาน ช่วยแต่งนิทานเรื่องมดกับเครื่องบิน ยาว 1 หน้ากระดาษ โดยใช้คำศัพท์ภาษาอังกฤษง่ายๆ แทรกอยู่ด้วย เพื่อให้ผมฝึกภาษาอังกฤษ"</li>
+                </ul>
+            </div>
+            
+            <!-- กิจกรรมฝึกทักษะ -->
+            <div class="activity-box">
+                <h3>
+                    <i class="fas fa-tasks"></i> กิจกรรมฝึกทักษะ
+                </h3>
+                <p><b>โจทย์:</b> "ให้นักเรียนใช้ AI ช่วยออกแบบ เมนูอาหารกลางวันโรงเรียนในฝัน ที่มีสารอาหารครบ 5 หมู่ และตั้งชื่อเมนูให้เท่ที่สุด พร้อมเขียนคำสั่ง (Prompt) ส่งคุณครู"</p>
+            </div>
+            
+            <!-- คำถามชวนคิด -->
+            <div class="question-box">
+                <h3>
+                    <i class="fas fa-question-circle"></i> คำถามชวนคิด
+                </h3>
+                <p>"ในอนาคต นักเรียนอยากให้มี AI ช่วยทำอะไรในบ้านมากที่สุด?"</p>
+            </div>
+            
+            <!-- สรุป -->
+            <div class="summary-box">
+                <h3 style="color: var(--color-dark-blue);">
+                    <i class="fas fa-check-circle"></i> สรุป
+                </h3>
+                <p><b>AI เป็นเครื่องมือที่มีพลังมหาศาล</b> ถ้าเราใช้เป็นจะเกิดประโยชน์มาก แต่ถ้าใช้ผิดหรือเชื่อทุกอย่างโดยไม่คิด จะเกิดโทษได้</p>
+            </div>
+            
+            <!-- Footer Navigation -->
+            <div class="lesson-footer">
+                <div style="font-size: 18px;">
+                    <i class="fas fa-graduation-cap"></i> บทเรียนที่ 4.2: แนะนำโปรแกรมและทดลองใช้งาน
+                </div>
+                
+                <div class="nav-buttons">
+                    <a href="u4-1.html" class="nav-btn prev">
+                        <i class="fas fa-arrow-left"></i> บทที่แล้ว
+                    </a>
+                    <a href="index.html" class="nav-btn">
+                        <i class="fas fa-home"></i> หน้าแรก
+                    </a>
+                    <a href="u4-3.html" class="nav-btn next">
+                        บทต่อไป <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // เพิ่มเอฟเฟกต์เล็กน้อยให้กับเว็บไซต์
+        document.addEventListener('DOMContentLoaded', function() {
+            // เพิ่มเอฟเฟกต์ให้กับการ์ดต่างๆ
+            const cards = document.querySelectorAll('.box, .activity-box, .question-box, .example-comparison, .summary-box');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100 + 300);
+            });
+            
+            // เพิ่มเอฟเฟกต์ให้กับตารางแถว
+            const tableRows = document.querySelectorAll('.prompt-table tr');
+            tableRows.forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(-20px)';
+                row.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                
+                setTimeout(() => {
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateX(0)';
+                }, index * 100 + 500);
+            });
+            
+            // เพิ่มเอฟเฟกต์ให้กับปุ่ม
+            const buttons = document.querySelectorAll('.nav-btn, .back-btn');
+            buttons.forEach(button => {
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับตัวอย่างคำสั่ง
+            const prompts = document.querySelectorAll('.bad-prompt, .good-prompt');
+            prompts.forEach(prompt => {
+                prompt.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                    this.style.transition = 'transform 0.2s ease';
+                });
+                
+                prompt.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับไอคอนหัวข้อ
+            const icons = document.querySelectorAll('.section-header i, h3 i');
+            icons.forEach(icon => {
+                icon.addEventListener('mouseenter', function() {
+                    this.style.transform = 'rotate(15deg)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                
+                icon.addEventListener('mouseleave', function() {
+                    this.style.transform = 'rotate(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

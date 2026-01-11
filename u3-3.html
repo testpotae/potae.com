@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เทคนิคการค้นหาขั้นสูง - Google Search - วิทยาการคำนวณ ป.6</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Itim&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #4A90E2;
+            --color-secondary: #FFD166;
+            --color-accent: #FF6B6B;
+            --color-success: #06D6A0;
+            --color-advanced: #673AB7;
+            --color-technique: #2196F3;
+            --color-formula: #FF9800;
+            --color-feature: #9C27B0;
+            --color-bg: #F8F9FF;
+            --color-card: #FFFFFF;
+            --color-text: #333333;
+            --color-dark-blue: #0B2C4D;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Itim', cursive;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.8;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><path d="M30,30 Q50,10 70,30 T90,30 Q70,50 90,70 T90,90 Q50,70 30,90 T10,90 Q30,70 10,50 T10,10 Q30,30 30,30 Z" fill="%23673AB7" opacity="0.05"/><rect x="40" y="40" width="40" height="40" fill="%232196F3" opacity="0.05" rx="5"/></svg>');
+            background-size: 120px;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--color-advanced);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-dark-blue);
+            transform: translateX(-5px);
+            border-color: white;
+        }
+        
+        .lesson-title {
+            color: white;
+            font-size: 22px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        /* Hero Section */
+        .lesson-hero {
+            background: linear-gradient(135deg, var(--color-advanced) 0%, #512DA8 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .lesson-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="20" cy="20" r="8" fill="white" opacity="0.05"/><circle cx="80" cy="30" r="10" fill="white" opacity="0.05"/><circle cx="40" cy="70" r="12" fill="white" opacity="0.05"/><circle cx="70" cy="80" r="6" fill="white" opacity="0.05"/></svg>');
+            background-size: 100px;
+        }
+        
+        .lesson-hero h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .lesson-content {
+            background-color: var(--color-card);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: 5px solid var(--color-advanced);
+        }
+        
+        .lesson-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--color-advanced), var(--color-secondary));
+        }
+        
+        /* Introduction Box */
+        .intro-box {
+            background-color: #EDE7F6;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-advanced);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .intro-box p {
+            font-size: 20px;
+        }
+        
+        .filter-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background-color: var(--color-advanced);
+            color: white;
+            border-radius: 50%;
+            font-size: 28px;
+            margin-right: 15px;
+            float: left;
+        }
+        
+        /* Techniques Section */
+        .techniques-title {
+            text-align: center;
+            color: var(--color-dark-blue);
+            margin: 40px 0 30px 0;
+        }
+        
+        .techniques-container {
+            margin: 30px 0;
+        }
+        
+        .technique-card {
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-left: 10px solid var(--color-technique);
+        }
+        
+        .technique-card:nth-child(1) { border-left-color: #2196F3; }
+        .technique-card:nth-child(2) { border-left-color: #FF5722; }
+        .technique-card:nth-child(3) { border-left-color: #4CAF50; }
+        .technique-card:nth-child(4) { border-left-color: #9C27B0; }
+        .technique-card:nth-child(5) { border-left-color: #FF9800; }
+        
+        .technique-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .technique-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .technique-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: var(--color-technique);
+            color: white;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: bold;
+            flex-shrink: 0;
+            font-family: 'Mali', cursive;
+        }
+        
+        .technique-card:nth-child(1) .technique-number { background-color: #2196F3; }
+        .technique-card:nth-child(2) .technique-number { background-color: #FF5722; }
+        .technique-card:nth-child(3) .technique-number { background-color: #4CAF50; }
+        .technique-card:nth-child(4) .technique-number { background-color: #9C27B0; }
+        .technique-card:nth-child(5) .technique-number { background-color: #FF9800; }
+        
+        .technique-header h3 {
+            color: var(--color-dark-blue);
+            font-size: 24px;
+            margin: 0;
+        }
+        
+        /* Command Examples */
+        .command-example {
+            background-color: #263238;
+            color: #ECEFF1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            border-left: 5px solid var(--color-secondary);
+        }
+        
+        .command-note {
+            background-color: #FFFDE7;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        /* Summary Table */
+        .summary-section {
+            background-color: #FFF3E0;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border-left: 10px solid var(--color-formula);
+        }
+        
+        .summary-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 25px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .summary-table th {
+            background-color: var(--color-formula);
+            color: white;
+            padding: 18px;
+            text-align: left;
+            font-size: 18px;
+        }
+        
+        .summary-table td {
+            padding: 15px;
+            border-bottom: 1px solid #F0F0F0;
+        }
+        
+        .summary-table tr:nth-child(even) {
+            background-color: #F9F9F9;
+        }
+        
+        .summary-table tr:hover {
+            background-color: #F0F7FF;
+        }
+        
+        .symbol {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--color-formula);
+            color: white;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        /* Features Section */
+        .features-section {
+            background-color: #F3E5F5;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border-left: 10px solid var(--color-feature);
+        }
+        
+        .feature-box {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Image Box */
+        .imagebox {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            border: 3px solid #EEE;
+            transition: all 0.3s ease;
+        }
+        
+        .imagebox:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+            border-color: var(--color-secondary);
+        }
+        
+        .imagebox img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+            border: 5px solid white;
+        }
+        
+        .image-caption {
+            font-weight: bold;
+            color: var(--color-dark-blue);
+            background-color: #FFFDE7;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        
+        /* Reference Box */
+        .ref-box {
+            background-color: #F5F5F5;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
+            border-left: 10px solid #9E9E9E;
+        }
+        
+        .ref-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--color-dark-blue);
+            margin-bottom: 15px;
+        }
+        
+        /* Practice Section */
+        .practice-section {
+            background: linear-gradient(135deg, var(--color-success), #05b585);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            color: white;
+            text-align: center;
+        }
+        
+        .practice-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .practice-example {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        /* Footer */
+        .lesson-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px dashed #DDD;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--color-dark-blue);
+            transform: translateY(-5px);
+            border-color: var(--color-secondary);
+        }
+        
+        .nav-btn.prev {
+            background-color: var(--color-advanced);
+        }
+        
+        .nav-btn.prev:hover {
+            background-color: #512DA8;
+        }
+        
+        .nav-btn.next {
+            background-color: var(--color-success);
+        }
+        
+        .nav-btn.next:hover {
+            background-color: #05b585;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-hero h1 {
+                font-size: 28px;
+            }
+            
+            .summary-table {
+                font-size: 14px;
+            }
+            
+            .summary-table th, .summary-table td {
+                padding: 10px;
+            }
+            
+            .practice-examples {
+                grid-template-columns: 1fr;
+            }
+            
+            .lesson-footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .technique-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .technique-number {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> กลับหน้าแรก
+        </a>
+        <div class="lesson-title">บทที่ 3: ใช้อินเทอร์เน็ตในการค้นหาข้อมูลอย่างมีประสิทธิภาพ</div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="lesson-hero">
+        <h1>เทคนิคการค้นหาขั้นสูง - Google Search</h1>
+        <p style="font-size: 20px; position: relative; z-index: 1; max-width: 800px; margin: 0 auto;">ค้นหาข้อมูลแบบเจาะจงและรวดเร็วด้วยเทคนิคพิเศษ!</p>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="lesson-content">
+            <!-- Introduction -->
+            <div class="intro-box">
+                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div class="filter-icon">
+                        <i class="fas fa-filter"></i>
+                    </div>
+                    <div>
+                        <p style="font-size: 20px; margin: 0;">
+                            ปกติ Google จะแสดงผลลัพธ์เป็นล้านรายการ เทคนิคการค้นหาขั้นสูงจะเปรียบเสมือน <b style="color: var(--color-advanced);">"ตะแกรงร่อน"</b> ที่ช่วยกรองเอาเฉพาะข้อมูลที่ตรงใจและน่าเชื่อถือออกมา ช่วยให้เราทำงานได้เร็วขึ้นอย่างมาก
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Techniques -->
+            <h2 class="techniques-title">
+                <i class="fas fa-magic"></i> 5 เทคนิคค้นหาขั้นเทพ
+            </h2>
+            
+            <div class="techniques-container">
+                <!-- Technique 1 -->
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <div class="technique-number">1</div>
+                        <h3>เจาะจงคำ (Exact Match)</h3>
+                    </div>
+                    
+                    <p>ใช้เครื่องหมายคำพูดเพื่อให้ Google ค้นหาคำที่เรียงกันตามนั้นเป๊ะๆ</p>
+                    
+                    <div class="command-example">
+                        "พระอภัยมณี หนีนางผีเสื้อสมุทร"
+                    </div>
+                    
+                    <div class="command-note">
+                        <i class="fas fa-info-circle"></i> <b>ใช้เมื่อ:</b> ต้องการหาคำหรือประโยคที่ตรงเป๊ะทุกตัวอักษร
+                    </div>
+                </div>
+                
+                <!-- Technique 2 -->
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <div class="technique-number">2</div>
+                        <h3>ตัดคำที่ไม่ต้องการ (Exclude Words)</h3>
+                    </div>
+                    
+                    <p>ใช้เครื่องหมายลบ <b style="color: #FF5722;">-</b> หน้าคำที่ไม่อยากเจอ (ห้ามวรรคหลังเครื่องหมายลบ)</p>
+                    
+                    <div class="command-example">
+                        สูตรกะเพรา -ถั่วฝักยาว
+                    </div>
+                    
+                    <div class="command-note">
+                        <i class="fas fa-info-circle"></i> <b>ใช้เมื่อ:</b> ต้องการกรองผลการค้นหาโดยตัดคำบางคำออก
+                    </div>
+                </div>
+                
+                <!-- Technique 3 -->
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <div class="technique-number">3</div>
+                        <h3>ระบุประเภทไฟล์ (File Type)</h3>
+                    </div>
+                    
+                    <p>ระบุนามสกุลไฟล์ที่ต้องการ เช่น pdf, ppt, doc</p>
+                    
+                    <div class="command-example">
+                        ภาวะโลกร้อน filetype:pdf
+                    </div>
+                    
+                    <div class="command-note">
+                        <i class="fas fa-info-circle"></i> <b>ใช้เมื่อ:</b> ต้องการหาเอกสารหรือไฟล์เฉพาะประเภท
+                    </div>
+                </div>
+                
+                <!-- Technique 4 -->
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <div class="technique-number">4</div>
+                        <h3>ระบุเว็บไซต์ (Site Search)</h3>
+                    </div>
+                    
+                    <p>ค้นหาเฉพาะในเว็บไซต์หรือกลุ่มเว็บไซต์ที่กำหนด เช่น .ac.th (สถานศึกษา)</p>
+                    
+                    <div class="command-example">
+                        ทุนเรียนต่อญี่ปุ่น site:.ac.th
+                    </div>
+                    
+                    <div class="command-note">
+                        <i class="fas fa-info-circle"></i> <b>ใช้เมื่อ:</b> ต้องการหาข้อมูลจากแหล่งที่เชื่อถือได้เฉพาะเจาะจง
+                    </div>
+                </div>
+                
+                <!-- Technique 5 -->
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <div class="technique-number">5</div>
+                        <h3>เลือกอย่างใดอย่างหนึ่ง (OR)</h3>
+                    </div>
+                    
+                    <p>ใช้เมื่อต้องการข้อมูลคำใดคำหนึ่ง (OR ต้องเป็นตัวพิมพ์ใหญ่)</p>
+                    
+                    <div class="command-example">
+                        รถยนต์ สีแดง OR สีดำ
+                    </div>
+                    
+                    <div class="command-note">
+                        <i class="fas fa-info-circle"></i> <b>ใช้เมื่อ:</b> ต้องการหาข้อมูลที่มีหลายทางเลือก
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Summary Table -->
+            <div class="summary-section">
+                <h2 style="color: var(--color-formula); margin-top: 0; border-left: none; padding-left: 0;">
+                    <i class="fas fa-table"></i> 📊 สรุปสูตรจำง่าย
+                </h2>
+                
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>สัญลักษณ์ / คำสั่ง</th>
+                            <th>หน้าที่</th>
+                            <th>เทคนิคการจำ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span class="symbol">" "</span>
+                                <b>เครื่องหมายคำพูด</b>
+                            </td>
+                            <td>ค้นหาคำที่ตรงกันทุกตัวอักษร</td>
+                            <td><span style="color: var(--color-formula); font-weight: bold;">"เป๊ะ"</span> (ห้ามเพี้ยน)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="symbol">-</span>
+                                <b>เครื่องหมายลบ</b>
+                            </td>
+                            <td>ตัดคำที่ไม่ต้องการออก</td>
+                            <td><span style="color: var(--color-formula); font-weight: bold;">"ลบ"</span> (ไม่เอา)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="symbol">filetype:</span>
+                                <b>ประเภทไฟล์</b>
+                            </td>
+                            <td>ค้นหาประเภทไฟล์</td>
+                            <td><span style="color: var(--color-formula); font-weight: bold;">"ไฟล์"</span> (เจาะจงนามสกุล)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="symbol">site:</span>
+                                <b>เว็บไซต์</b>
+                            </td>
+                            <td>ค้นหาในเว็บที่กำหนด</td>
+                            <td><span style="color: var(--color-formula); font-weight: bold;">"ไซต์"</span> (แหล่งที่มา)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="symbol">OR</span>
+                                <b>หรือ</b>
+                            </td>
+                            <td>หาคำใดคำหนึ่ง</td>
+                            <td><span style="color: var(--color-formula); font-weight: bold;">"หรือ"</span> (อันไหนก็ได้)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Google Features -->
+            <div class="features-section">
+                <h2 style="color: var(--color-feature); margin-top: 0; border-left: none; padding-left: 0;">
+                    <i class="fas fa-cogs"></i> 🧮 ฟังก์ชันเพิ่มเติมของ Google
+                </h2>
+                
+                <!-- Calculator -->
+                <div class="feature-box">
+                    <h3 style="color: var(--color-feature);">
+                        <i class="fas fa-calculator"></i> การใช้เครื่องคิดเลขออนไลน์
+                    </h3>
+                    
+                    <p>สามารถพิมพ์ตัวเลขคำนวณลงในช่องค้นหาได้ทันที</p>
+                    
+                    <div class="command-example">
+                        (7*4) / 8
+                    </div>
+                    
+                    <div class="imagebox">
+                        <img src="image-9.jpeg.webp" alt="การใช้เครื่องคิดเลข Google">
+                        <div class="image-caption">ตัวอย่าง: พิมพ์คำนวณ (7*4) / 8</div>
+                    </div>
+                </div>
+                
+                <!-- Weather -->
+                <div class="feature-box">
+                    <h3 style="color: var(--color-feature);">
+                        <i class="fas fa-cloud-sun"></i> การตรวจสอบสภาพอากาศ (Weather)
+                    </h3>
+                    
+                    <p>พิมพ์คำว่า <b style="color: var(--color-feature);">Weather</b> ตามด้วยชื่อสถานที่</p>
+                    
+                    <div class="command-example">
+                        Weather พิจิตร
+                    </div>
+                    
+                    <div class="command-note">
+                        <i class="fas fa-exclamation-triangle"></i> <b>หมายเหตุ:</b> ในไทยข้อมูลอาจไม่ครอบคลุมทุกพื้นที่เล็กๆ
+                    </div>
+                </div>
+                
+                <!-- More Features -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 25px;">
+                    <div style="background-color: white; border-radius: 10px; padding: 15px; text-align: center; border-top: 5px solid var(--color-primary);">
+                        <div style="font-size: 30px; margin-bottom: 10px;">⏰</div>
+                        <p><b>เวลา</b><br>พิมพ์ "time" ตามด้วยชื่อเมือง</p>
+                    </div>
+                    <div style="background-color: white; border-radius: 10px; padding: 15px; text-align: center; border-top: 5px solid var(--color-success);">
+                        <div style="font-size: 30px; margin-bottom: 10px;">📏</div>
+                        <p><b>แปลงหน่วย</b><br>เช่น "10 miles to km"</p>
+                    </div>
+                    <div style="background-color: white; border-radius: 10px; padding: 15px; text-align: center; border-top: 5px solid var(--color-accent);">
+                        <div style="font-size: 30px; margin-bottom: 10px;">💰</div>
+                        <p><b>แปลงสกุลเงิน</b><br>เช่น "100 USD to THB"</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Practice Section -->
+            <div class="practice-section">
+                <h3 style="color: white;">
+                    <i class="fas fa-play-circle"></i> ลองฝึกใช้เทคนิคเหล่านี้ดูสิ!
+                </h3>
+                <p>เปิด Google และลองค้นหาด้วยคำสั่งต่อไปนี้:</p>
+                
+                <div class="practice-examples">
+                    <div class="practice-example">
+                        <p><b>หาสูตรอาหารเจาะจง</b></p>
+                        <p>"สูตรต้มยำกุ้ง" -กะทิ</p>
+                    </div>
+                    <div class="practice-example">
+                        <p><b>หาไฟล์เอกสาร</b></p>
+                        <p>โครงงานวิทยาศาสตร์ filetype:pdf</p>
+                    </div>
+                    <div class="practice-example">
+                        <p><b>หาในเว็บการศึกษา</b></p>
+                        <p>แบบฝึกหัดคณิตศาสตร์ site:.ac.th</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background-color: rgba(255, 255, 255, 0.2); border-radius: 10px;">
+                    <p><i class="fas fa-tips"></i> <b>เคล็ดลับ:</b> ลองผสมเทคนิคหลายๆ อย่างเข้าด้วยกันเพื่อผลลัพธ์ที่แม่นยำยิ่งขึ้น!</p>
+                </div>
+            </div>
+            
+            <!-- Reference -->
+            <div class="ref-box">
+                <div class="ref-title">
+                    <i class="fas fa-book"></i>
+                    <h3 style="margin: 0;">ข้อมูลอ้างอิง</h3>
+                </div>
+                
+                <div style="background-color: white; border-radius: 10px; padding: 20px;">
+                    <p><b>RhungCider</b> "วิธีค้นหาขั้นเทพ Google Search เคล็ดลับดีๆ ใหม่ล่าสุด"</p>
+                    <p style="color: var(--color-primary);">goodtipit.com</p>
+                    
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #DDD;">
+                        <p><b>รอมฎอน สุทธิการ</b> "เสิร์ชเอนจิน คืออะไร หลักการทำงานของระบบค้นหาข้อมูล"</p>
+                        <p style="color: var(--color-primary);">1belief.com</p>
+                    </div>
+                    
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #DDD;">
+                        <p><b>นายสุเมศ ชาแท่น</b> "การค้นหาข้อมูลใน Google Advance search"</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Navigation -->
+            <div class="lesson-footer">
+                <div style="font-size: 18px;">
+                    <i class="fas fa-graduation-cap"></i> บทเรียนที่ 3.3: เทคนิคการค้นหาขั้นสูง - Google Search
+                </div>
+                
+                <div class="nav-buttons">
+                    <a href="u3-2.html" class="nav-btn prev">
+                        <i class="fas fa-arrow-left"></i> บทที่แล้ว
+                    </a>
+                    <a href="index.html" class="nav-btn">
+                        <i class="fas fa-home"></i> หน้าแรก
+                    </a>
+                    <a href="u4-1.html" class="nav-btn next">
+                        บทต่อไป <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // เพิ่มเอฟเฟกต์เล็กน้อยให้กับเว็บไซต์
+        document.addEventListener('DOMContentLoaded', function() {
+            // เพิ่มเอฟเฟกต์ให้กับการ์ดเทคนิค
+            const techniqueCards = document.querySelectorAll('.technique-card');
+            techniqueCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200 + 300);
+            });
+            
+            // เพิ่มเอฟเฟกต์ให้กับปุ่ม
+            const buttons = document.querySelectorAll('.nav-btn, .back-btn');
+            buttons.forEach(button => {
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับตัวอย่างคำสั่ง
+            const commandExamples = document.querySelectorAll('.command-example');
+            commandExamples.forEach(example => {
+                example.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    this.style.backgroundColor = '#37474F';
+                    
+                    // คัดลอกข้อความไปยังคลิปบอร์ด (จำลอง)
+                    const text = this.textContent.trim();
+                    navigator.clipboard.writeText(text).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = "คัดลอกแล้ว! ✓";
+                        
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                            this.style.transform = '';
+                            this.style.backgroundColor = '';
+                        }, 1000);
+                    }).catch(err => {
+                        // ไม่สามารถคัดลอกได้ (เช่น ไม่ใช่ HTTPS)
+                        this.style.backgroundColor = '#455A64';
+                        setTimeout(() => {
+                            this.style.backgroundColor = '';
+                            this.style.transform = '';
+                        }, 300);
+                    });
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับตารางสรุป
+            const tableRows = document.querySelectorAll('.summary-table tr');
+            tableRows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateX(5px)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                
+                row.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // เอฟเฟกต์เมื่อชี้ภาพ
+            const imagebox = document.querySelector('.imagebox');
+            if (imagebox) {
+                imagebox.addEventListener('mouseenter', function() {
+                    const img = this.querySelector('img');
+                    if (img) {
+                        img.style.transform = 'scale(1.02)';
+                        img.style.transition = 'transform 0.3s ease';
+                    }
+                });
+                
+                imagebox.addEventListener('mouseleave', function() {
+                    const img = this.querySelector('img');
+                    if (img) {
+                        img.style.transform = 'scale(1)';
+                    }
+                });
+            }
+            
+            // เอฟเฟกต์สำหรับตัวอย่างฝึกหัด
+            const practiceExamples = document.querySelectorAll('.practice-example');
+            practiceExamples.forEach(example => {
+                example.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+                    this.style.transition = 'all 0.3s ease';
+                });
+                
+                example.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

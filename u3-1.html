@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>การใช้งานอินเทอร์เน็ตและเว็บเบราว์เซอร์ - วิทยาการคำนวณ ป.6</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Itim&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #4A90E2;
+            --color-secondary: #FFD166;
+            --color-accent: #FF6B6B;
+            --color-success: #06D6A0;
+            --color-internet: #2196F3;
+            --color-browser: #FF5722;
+            --color-chrome: #4285F4;
+            --color-bg: #F8F9FF;
+            --color-card: #FFFFFF;
+            --color-text: #333333;
+            --color-dark-blue: #0B2C4D;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Itim', cursive;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.8;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><path d="M10,10 L110,10 L110,110 L10,110 Z" fill="%232196F3" opacity="0.05" rx="5"/><circle cx="60" cy="60" r="30" fill="%234285F4" opacity="0.05"/></svg>');
+            background-size: 120px;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--color-internet);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-dark-blue);
+            transform: translateX(-5px);
+            border-color: white;
+        }
+        
+        .lesson-title {
+            color: white;
+            font-size: 22px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        /* Hero Section */
+        .lesson-hero {
+            background: linear-gradient(135deg, var(--color-internet) 0%, #1565C0 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .lesson-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="20" cy="20" r="10" fill="white" opacity="0.05"/><circle cx="80" cy="30" r="8" fill="white" opacity="0.05"/><circle cx="40" cy="70" r="12" fill="white" opacity="0.05"/><circle cx="70" cy="80" r="6" fill="white" opacity="0.05"/></svg>');
+            background-size: 100px;
+        }
+        
+        .lesson-hero h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .lesson-content {
+            background-color: var(--color-card);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: 5px solid var(--color-internet);
+        }
+        
+        .lesson-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--color-internet), var(--color-secondary));
+        }
+        
+        /* Introduction Box */
+        .intro-box {
+            background-color: #E3F2FD;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-internet);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .intro-box p {
+            font-size: 20px;
+        }
+        
+        /* Web Browser Section */
+        .browser-section {
+            background-color: #FFF3E0;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border-left: 10px solid var(--color-browser);
+        }
+        
+        .browser-section h2 {
+            color: var(--color-browser);
+            margin-top: 0;
+            border-left: none;
+            padding-left: 0;
+        }
+        
+        /* Image Box */
+        .imagebox {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            border: 3px solid #EEE;
+            transition: all 0.3s ease;
+        }
+        
+        .imagebox:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+            border-color: var(--color-secondary);
+        }
+        
+        .imagebox img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+            border: 5px solid white;
+        }
+        
+        .image-caption {
+            font-weight: bold;
+            color: var(--color-dark-blue);
+            background-color: #FFFDE7;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        
+        /* Browser Grid */
+        .browser-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .browser-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            text-align: center;
+            border-top: 8px solid var(--color-primary);
+        }
+        
+        .browser-card:nth-child(1) { border-top-color: #4285F4; } /* Chrome */
+        .browser-card:nth-child(2) { border-top-color: #0078D7; } /* Edge */
+        .browser-card:nth-child(3) { border-top-color: #FF7139; } /* Firefox */
+        .browser-card:nth-child(4) { border-top-color: #FF1B2D; } /* Opera */
+        .browser-card:nth-child(5) { border-top-color: #000000; } /* Safari */
+        
+        .browser-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .browser-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .browser-card:nth-child(1) .browser-icon { color: #4285F4; }
+        .browser-card:nth-child(2) .browser-icon { color: #0078D7; }
+        .browser-card:nth-child(3) .browser-icon { color: #FF7139; }
+        .browser-card:nth-child(4) .browser-icon { color: #FF1B2D; }
+        .browser-card:nth-child(5) .browser-icon { color: #000000; }
+        
+        .browser-card h4 {
+            color: var(--color-dark-blue);
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        /* Benefits Box */
+        .benefits-box {
+            background-color: #E8F5E9;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-success);
+        }
+        
+        /* Chrome Components */
+        .chrome-section {
+            background-color: #FFF3E0;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border-left: 10px solid var(--color-chrome);
+        }
+        
+        .components-list {
+            counter-reset: component-counter;
+            margin: 25px 0;
+        }
+        
+        .components-list li {
+            list-style: none;
+            margin-bottom: 15px;
+            padding-left: 60px;
+            position: relative;
+            font-size: 18px;
+        }
+        
+        .components-list li::before {
+            counter-increment: component-counter;
+            content: counter(component-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 45px;
+            height: 45px;
+            background-color: var(--color-chrome);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            font-family: 'Mali', cursive;
+        }
+        
+        /* Reference Box */
+        .ref-box {
+            background-color: #F5F5F5;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
+            border-left: 10px solid #9E9E9E;
+        }
+        
+        .ref-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--color-dark-blue);
+            margin-bottom: 15px;
+        }
+        
+        /* Internet Explorer */
+        .explorer-note {
+            background-color: #FFF3E0;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 5px solid #FFD166;
+        }
+        
+        /* Footer */
+        .lesson-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px dashed #DDD;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--color-dark-blue);
+            transform: translateY(-5px);
+            border-color: var(--color-secondary);
+        }
+        
+        .nav-btn.prev {
+            background-color: var(--color-internet);
+        }
+        
+        .nav-btn.prev:hover {
+            background-color: #1565C0;
+        }
+        
+        .nav-btn.next {
+            background-color: var(--color-success);
+        }
+        
+        .nav-btn.next:hover {
+            background-color: #05b585;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-hero h1 {
+                font-size: 28px;
+            }
+            
+            .browser-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .lesson-footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> กลับหน้าแรก
+        </a>
+        <div class="lesson-title">บทที่ 3: ใช้อินเทอร์เน็ตในการค้นหาข้อมูลอย่างมีประสิทธิภาพ</div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="lesson-hero">
+        <h1>การใช้งานอินเทอร์เน็ตและเว็บเบราว์เซอร์</h1>
+        <p style="font-size: 20px; position: relative; z-index: 1; max-width: 800px; margin: 0 auto;">เรียนรู้ประตูสู่โลกออนไลน์และเครื่องมือที่ช่วยให้เราเข้าถึงข้อมูลได้ง่ายขึ้น</p>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="lesson-content">
+            <!-- Introduction -->
+            <div class="intro-box">
+                <p style="font-size: 20px;">
+                    <b>อินเทอร์เน็ต (Internet)</b> คือ เครือข่ายคอมพิวเตอร์ขนาดใหญ่ที่เชื่อมต่อกันทั่วโลก ทำให้การส่งผ่านข้อมูลรูปแบบต่างๆ เช่น ข้อความ ภาพ เสียง และวิดีโอ ทำได้อย่างรวดเร็วโดยไม่มีข้อจำกัดด้านระยะทางและเวลา
+                </p>
+            </div>
+            
+            <!-- Web Browser Section -->
+            <div class="browser-section">
+                <h2><i class="fas fa-globe"></i> ความหมายของเว็บเบราว์เซอร์ (Web browser)</h2>
+                
+                <p>
+                    <b>Web browser</b> คือ ซอฟต์แวร์หรือโปรแกรมที่ใช้ในการเข้าถึงข้อมูลบนเครือข่าย World Wide Web (WWW) ทำหน้าที่รวบรวมและแสดงผลหน้าเว็บเพจต่างๆ ให้เราสามารถอ่านและใช้งานได้ง่าย
+                </p>
+                
+                <div class="imagebox">
+                    <img src="web-browser.png.webp" alt="การทำงานของเว็บเบราว์เซอร์">
+                    <div class="image-caption">ภาพที่ 1: การใช้งานเว็บเบราว์เซอร์เพื่อเข้าถึงโลกอินเทอร์เน็ต</div>
+                </div>
+                
+                <h3 style="color: var(--color-browser); margin-top: 30px;">
+                    <i class="fas fa-star"></i> Web browser ที่เป็นที่นิยมในปัจจุบัน
+                </h3>
+                
+                <div class="browser-grid">
+                    <!-- Google Chrome -->
+                    <div class="browser-card">
+                        <div class="browser-icon">
+                            <i class="fab fa-chrome"></i>
+                        </div>
+                        <h4>1. Google Chrome</h4>
+                        <p>เน้นความรวดเร็ว ปลอดภัย และใช้งานง่าย พัฒนาโดย Google</p>
+                    </div>
+                    
+                    <!-- Microsoft Edge -->
+                    <div class="browser-card">
+                        <div class="browser-icon">
+                            <i class="fab fa-edge"></i>
+                        </div>
+                        <h4>2. Microsoft Edge</h4>
+                        <p>เบราว์เซอร์พื้นฐานที่มาพร้อมกับระบบปฏิบัติการ Windows</p>
+                        <div class="explorer-note">
+                            <small><i class="fas fa-info-circle"></i> Internet Explorer ถูกแทนที่ด้วย Microsoft Edge ในปัจจุบัน</small>
+                        </div>
+                    </div>
+                    
+                    <!-- Mozilla Firefox -->
+                    <div class="browser-card">
+                        <div class="browser-icon">
+                            <i class="fab fa-firefox"></i>
+                        </div>
+                        <h4>3. Mozilla Firefox</h4>
+                        <p>เป็น Open source ที่โปรแกรมเมอร์ทั่วโลกสามารถช่วยกันพัฒนาได้</p>
+                    </div>
+                    
+                    <!-- Opera -->
+                    <div class="browser-card">
+                        <div class="browser-icon">
+                            <i class="fab fa-opera"></i>
+                        </div>
+                        <h4>4. Opera</h4>
+                        <p>โดดเด่นในเรื่องการใช้งานบนโทรศัพท์มือถือ พัฒนาโดยบริษัทในนอร์เวย์</p>
+                    </div>
+                    
+                    <!-- Safari -->
+                    <div class="browser-card">
+                        <div class="browser-icon">
+                            <i class="fab fa-safari"></i>
+                        </div>
+                        <h4>5. Safari</h4>
+                        <p>เบราว์เซอร์หลักสำหรับสาวก Apple ทั้งใน iPhone, iPad และ Mac</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Benefits -->
+            <div class="benefits-box">
+                <h2 style="color: var(--color-success); margin-top: 0; border-left: none; padding-left: 0;">
+                    <i class="fas fa-gift"></i> ประโยชน์ของเว็บเบราว์เซอร์
+                </h2>
+                
+                <p>ช่วยให้ผู้ใช้งานสามารถเข้าถึงเว็บไซต์ต่างๆ เพื่อค้นหาข้อมูล ทำธุรกิจ หรือธุรกรรมออนไลน์ได้สะดวก ถือเป็นด่านแรกที่สำคัญที่สุดในการเริ่มต้นใช้งานอินเทอร์เน็ต</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+                    <div style="background-color: white; border-radius: 10px; padding: 15px; text-align: center; border-top: 5px solid var(--color-success);">
+                        <div style="font-size: 30px; margin-bottom: 10px;">🔍</div>
+                        <p>ค้นหาข้อมูลได้รวดเร็ว</p>
+                    </div>
+                    <div style="background-color: white; border-radius: 10px; padding: 15px; text-align: center; border-top: 5px solid var(--color-primary);">
+                        <div style="font-size: 30px; margin-bottom: 10px;">🛒</div>
+                        <p>ทำธุรกรรมออนไลน์</p>
+                    </div>
+                    <div style="background-color: white; border-radius: 10px; padding: 15px; text-align: center; border-top: 5px solid var(--color-accent);">
+                        <div style="font-size: 30px; margin-bottom: 10px;">🎬</div>
+                        <p>ดูวิดีโอและฟังเพลง</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chrome Components -->
+            <div class="chrome-section">
+                <h2 style="color: var(--color-chrome); margin-top: 0; border-left: none; padding-left: 0;">
+                    <i class="fab fa-chrome"></i> ส่วนประกอบของ Google Chrome
+                </h2>
+                
+                <div class="imagebox">
+                    <img src="web-browser2-768x433.jpg.webp" alt="ส่วนประกอบของ Google Chrome">
+                    <div class="image-caption">ภาพที่ 2: หน้าต่างโปรแกรม Google Chrome และส่วนประกอบต่างๆ</div>
+                </div>
+                
+                <ol class="components-list">
+                    <li><b>Title bar (แถบชื่อ):</b> แสดงชื่อหน้าเว็บที่กำลังใช้งานอยู่</li>
+                    <li><b>Address Bar (แถบที่อยู่):</b> ช่องสำหรับใส่ URL เพื่อเชื่อมโยงไปยังเว็บไซต์</li>
+                    <li><b>Menu Bar (แถบเมนู):</b> รวมคำสั่งตั้งค่าและพิมพ์เอกสาร</li>
+                    <li><b>Apps:</b> ไอคอนสำหรับเข้าถึงแอปพลิเคชันที่ติดตั้งจาก Chrome Web Store</li>
+                    <li><b>แถบบุ๊กมาร์ก:</b> เก็บรายชื่อหน้าเว็บโปรดเพื่อการเข้าถึงอย่างรวดเร็ว</li>
+                    <li><b>ช่องค้นหา:</b> สำหรับพิมพ์คำค้นหาผ่าน Search Engine</li>
+                    <li><b>เพิ่มทางลัด:</b> ส่วนแสดงเว็บไซต์ที่เข้าชมบ่อยที่สุดด้านล่างช่องค้นหา</li>
+                </ol>
+                
+                <div style="background-color: #E3F2FD; border-radius: 10px; padding: 20px; margin-top: 25px;">
+                    <h4 style="color: var(--color-primary);">
+                        <i class="fas fa-lightbulb"></i> ข้อแนะนำสำหรับการใช้งานเบราว์เซอร์
+                    </h4>
+                    <ul style="padding-left: 20px; margin-top: 10px;">
+                        <li>ใช้ Bookmarks เพื่อบันทึกเว็บไซต์ที่สำคัญ</li>
+                        <li>หมั่นอัปเดตเบราว์เซอร์เพื่อความปลอดภัย</li>
+                        <li>ใช้แท็บ(Tab)เพื่อเปิดหลายเว็บไซต์พร้อมกัน</li>
+                        <li>เคลียร์ประวัติการท่องเว็บเป็นระยะ</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Reference -->
+            <div class="ref-box">
+                <div class="ref-title">
+                    <i class="fas fa-book"></i>
+                    <h3 style="margin: 0;">ข้อมูลอ้างอิง</h3>
+                </div>
+                
+                <div style="background-color: white; border-radius: 10px; padding: 20px;">
+                    <p><b>วินน์ซอฟต์ โซลูชั่น</b>, "WEB BROWSER คืออะไร มีประโยชน์อย่างไร"</p>
+                    <p style="color: var(--color-primary);">จากเว็บไซต์ wynnsoft-solution.com/th/What_is_a_Web_Browser</p>
+                </div>
+            </div>
+            
+            <!-- Try It Yourself -->
+            <div style="background: linear-gradient(135deg, var(--color-secondary), #FFC107); border-radius: 15px; padding: 25px; margin: 30px 0; text-align: center;">
+                <h3 style="color: var(--color-dark-blue);">
+                    <i class="fas fa-desktop"></i> ลองใช้เบราว์เซอร์ดูสิ!
+                </h3>
+                <p>เปิดคอมพิวเตอร์หรือมือถือของคุณ แล้วลองสังเกตว่า:</p>
+                <div style="display: flex; justify-content: center; gap: 20px; margin-top: 15px; flex-wrap: wrap;">
+                    <div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 10px;">
+                        <p>เบราว์เซอร์ที่คุณใช้คืออะไร?</p>
+                    </div>
+                    <div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 10px;">
+                        <p>ลองพิมพ์ URL ไปที่เว็บไซต์โปรดของคุณ</p>
+                    </div>
+                    <div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 10px;">
+                        <p>ลองเพิ่มเว็บไซต์นี้เป็นบุ๊กมาร์ก</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Navigation -->
+            <div class="lesson-footer">
+                <div style="font-size: 18px;">
+                    <i class="fas fa-graduation-cap"></i> บทเรียนที่ 3.1: การใช้งานอินเทอร์เน็ตและเว็บเบราว์เซอร์
+                </div>
+                
+                <div class="nav-buttons">
+                    <a href="u2-5.html" class="nav-btn prev">
+                        <i class="fas fa-arrow-left"></i> บทที่แล้ว
+                    </a>
+                    <a href="index.html" class="nav-btn">
+                        <i class="fas fa-home"></i> หน้าแรก
+                    </a>
+                    <a href="u3-2.html" class="nav-btn next">
+                        บทต่อไป <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // เพิ่มเอฟเฟกต์เล็กน้อยให้กับเว็บไซต์
+        document.addEventListener('DOMContentLoaded', function() {
+            // เพิ่มเอฟเฟกต์ให้กับการ์ดเบราว์เซอร์
+            const browserCards = document.querySelectorAll('.browser-card');
+            browserCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200 + 300);
+            });
+            
+            // เพิ่มเอฟเฟกต์ให้กับปุ่ม
+            const buttons = document.querySelectorAll('.nav-btn, .back-btn');
+            buttons.forEach(button => {
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // เอฟเฟกต์เมื่อชี้ภาพ
+            const imageboxes = document.querySelectorAll('.imagebox');
+            imageboxes.forEach(box => {
+                box.addEventListener('mouseenter', function() {
+                    const img = this.querySelector('img');
+                    if (img) {
+                        img.style.transform = 'scale(1.02)';
+                        img.style.transition = 'transform 0.3s ease';
+                    }
+                });
+                
+                box.addEventListener('mouseleave', function() {
+                    const img = this.querySelector('img');
+                    if (img) {
+                        img.style.transform = 'scale(1)';
+                    }
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับรายการส่วนประกอบ
+            const componentItems = document.querySelectorAll('.components-list li');
+            componentItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#F5F5F5';
+                    this.style.paddingLeft = '65px';
+                    this.style.transition = 'all 0.3s ease';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                    this.style.paddingLeft = '60px';
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับข้อแนะนำ
+            const tipBoxes = document.querySelectorAll('.explorer-note, .benefits-box div');
+            tipBoxes.forEach(box => {
+                box.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.02)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                
+                box.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

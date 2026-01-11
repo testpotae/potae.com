@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โปรแกรมค้นหา (Search Engine) - วิทยาการคำนวณ ป.6</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Itim&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #4A90E2;
+            --color-secondary: #FFD166;
+            --color-accent: #FF6B6B;
+            --color-success: #06D6A0;
+            --color-search: #34A853;
+            --color-google: #4285F4;
+            --color-bing: #008373;
+            --color-yahoo: #720E9E;
+            --color-duckduckgo: #DE5833;
+            --color-bg: #F8F9FF;
+            --color-card: #FFFFFF;
+            --color-text: #333333;
+            --color-dark-blue: #0B2C4D;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Itim', cursive;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.8;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="60" r="40" fill="%2334A853" opacity="0.05"/><rect x="40" y="40" width="40" height="40" fill="%234285F4" opacity="0.05" rx="5"/></svg>');
+            background-size: 120px;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--color-search);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-dark-blue);
+            transform: translateX(-5px);
+            border-color: white;
+        }
+        
+        .lesson-title {
+            color: white;
+            font-size: 22px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        /* Hero Section */
+        .lesson-hero {
+            background: linear-gradient(135deg, var(--color-search) 0%, #2E7D32 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .lesson-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="20" cy="20" r="8" fill="white" opacity="0.05"/><circle cx="80" cy="30" r="10" fill="white" opacity="0.05"/><circle cx="40" cy="70" r="12" fill="white" opacity="0.05"/><circle cx="70" cy="80" r="6" fill="white" opacity="0.05"/></svg>');
+            background-size: 100px;
+        }
+        
+        .lesson-hero h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .lesson-content {
+            background-color: var(--color-card);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: 5px solid var(--color-search);
+        }
+        
+        .lesson-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--color-search), var(--color-secondary));
+        }
+        
+        /* Introduction Box */
+        .intro-box {
+            background-color: #E8F5E9;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-search);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .intro-box p {
+            font-size: 20px;
+        }
+        
+        .keyword-example {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 2px solid var(--color-search);
+        }
+        
+        /* Search Definition */
+        .search-definition {
+            background-color: #E3F2FD;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-primary);
+        }
+        
+        /* Search Engines Grid */
+        .engines-title {
+            text-align: center;
+            color: var(--color-dark-blue);
+            margin: 40px 0 30px 0;
+        }
+        
+        .engines-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .engine-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            text-align: center;
+            border-top: 10px solid var(--color-google);
+        }
+        
+        .engine-card:nth-child(1) { border-top-color: var(--color-google); }
+        .engine-card:nth-child(2) { border-top-color: var(--color-bing); }
+        .engine-card:nth-child(3) { border-top-color: var(--color-yahoo); }
+        .engine-card:nth-child(4) { border-top-color: var(--color-duckduckgo); }
+        
+        .engine-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .engine-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+        }
+        
+        .engine-card:nth-child(1) .engine-logo { background-color: var(--color-google); }
+        .engine-card:nth-child(2) .engine-logo { background-color: var(--color-bing); }
+        .engine-card:nth-child(3) .engine-logo { background-color: var(--color-yahoo); }
+        .engine-card:nth-child(4) .engine-logo { background-color: var(--color-duckduckgo); }
+        
+        .engine-card h3 {
+            color: var(--color-dark-blue);
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        .engine-url {
+            display: inline-block;
+            background-color: #F5F5F5;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        /* Benefits Section */
+        .benefits-section {
+            background-color: #FFF3E0;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border-left: 10px solid var(--color-secondary);
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .benefit-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--color-success);
+        }
+        
+        /* Knowledge Box */
+        .knowledge-box {
+            background: linear-gradient(135deg, var(--color-secondary), #FFC107);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            color: var(--color-dark-blue);
+        }
+        
+        .knowledge-box h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        /* Reference Box */
+        .ref-box {
+            background-color: #F5F5F5;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
+            border-left: 10px solid #9E9E9E;
+        }
+        
+        .ref-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--color-dark-blue);
+            margin-bottom: 15px;
+        }
+        
+        /* Try Search */
+        .try-search {
+            background: linear-gradient(135deg, var(--color-primary), #1565C0);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            color: white;
+            text-align: center;
+        }
+        
+        .search-examples {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .search-example {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            min-width: 150px;
+        }
+        
+        /* Footer */
+        .lesson-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px dashed #DDD;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--color-dark-blue);
+            transform: translateY(-5px);
+            border-color: var(--color-secondary);
+        }
+        
+        .nav-btn.prev {
+            background-color: var(--color-search);
+        }
+        
+        .nav-btn.prev:hover {
+            background-color: #2E7D32;
+        }
+        
+        .nav-btn.next {
+            background-color: var(--color-success);
+        }
+        
+        .nav-btn.next:hover {
+            background-color: #05b585;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-hero h1 {
+                font-size: 28px;
+            }
+            
+            .engines-grid, .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .lesson-footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .search-examples {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> กลับหน้าแรก
+        </a>
+        <div class="lesson-title">บทที่ 3: ใช้อินเทอร์เน็ตในการค้นหาข้อมูลอย่างมีประสิทธิภาพ</div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="lesson-hero">
+        <h1>โปรแกรมค้นหา (Search Engine)</h1>
+        <p style="font-size: 20px; position: relative; z-index: 1; max-width: 800px; margin: 0 auto;">ค้นหาโลกแห่งข้อมูลด้วยเครื่องมือมหัศจรรย์ของอินเทอร์เน็ต</p>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="lesson-content">
+            <!-- Introduction -->
+            <div class="intro-box">
+                <p style="font-size: 20px;">
+                    <b>Search Engine</b> คือ โปรแกรมที่ออกแบบมาเพื่อสืบค้นข้อมูลบนโลกอินเทอร์เน็ต โดยเราต้องกรอกข้อมูลหรือคำที่ต้องการสืบค้นลงไป ซึ่งคำนี้เรียกว่า <b style="color: var(--color-search);">Keyword (คีย์เวิร์ด)</b> จากนั้นระบบจะประมวลผลลัพธ์ที่เกี่ยวข้องออกมาให้เราเลือกใช้งาน
+                </p>
+                
+                <div class="keyword-example">
+                    <i class="fas fa-key" style="color: var(--color-search); font-size: 24px;"></i>
+                    <div>
+                        <p><b>ตัวอย่าง Keyword:</b></p>
+                        <p>"วิธีเลี้ยงปลาทอง", "สูตรขนมเค้กช็อกโกแลต", "สถานที่ท่องเที่ยวจังหวัดเชียงใหม่"</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Search Definition -->
+            <div class="search-definition">
+                <h2 style="color: var(--color-primary); margin-top: 0; border-left: none; padding-left: 0;">
+                    <i class="fas fa-search"></i> การค้นหาข้อมูลคืออะไร?
+                </h2>
+                
+                <p>
+                    คือการสืบค้นสิ่งที่ต้องการทราบบนเครือข่ายอินเทอร์เน็ตผ่าน <b style="color: var(--color-primary);">Search Engine Site</b> ซึ่งทำหน้าที่รวบรวมรายชื่อเว็บไซต์ต่างๆ ไว้เป็นหมวดหมู่ ทำให้ประหยัดเวลาและได้รับผลลัพธ์ที่แม่นยำกว่าการหาด้วยตนเอง
+                </p>
+            </div>
+            
+            <!-- Search Engines -->
+            <h2 class="engines-title">
+                <i class="fas fa-globe-americas"></i> Search Engine Site ที่นิยม
+            </h2>
+            
+            <div class="engines-grid">
+                <!-- Google -->
+                <div class="engine-card">
+                    <div class="engine-logo">
+                        <img src="image-4.jpeg.webp" alt="Google Logo" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+                    </div>
+                    <h3>Google</h3>
+                    <p>อันดับหนึ่งของโลกและประเทศไทย มีความแม่นยำสูง</p>
+                    <div class="engine-url">www.google.com</div>
+                    <div style="margin-top: 15px; font-size: 14px; color: #666;">
+                        <i class="fas fa-star" style="color: #FFD700;"></i> <b>จุดเด่น:</b> รวดเร็วและครอบคลุมที่สุด
+                    </div>
+                </div>
+                
+                <!-- Bing -->
+                <div class="engine-card">
+                    <div class="engine-logo">
+                        <img src="image-3.jpeg.webp" alt="Bing Logo" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+                    </div>
+                    <h3>Bing</h3>
+                    <p>พัฒนาโดย Microsoft เป็นคู่แข่งหลักของ Google</p>
+                    <div class="engine-url">www.bing.com</div>
+                    <div style="margin-top: 15px; font-size: 14px; color: #666;">
+                        <i class="fas fa-star" style="color: #FFD700;"></i> <b>จุดเด่น:</b> รูปภาพพื้นหลังสวยงามทุกวัน
+                    </div>
+                </div>
+                
+                <!-- Yahoo -->
+                <div class="engine-card">
+                    <div class="engine-logo">
+                        <img src="image-1.jpeg.webp" alt="Yahoo Logo" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+                    </div>
+                    <h3>Yahoo</h3>
+                    <p>เน้นการนำเสนอข่าวสารและบริการอีเมลไปพร้อมการค้นหา</p>
+                    <div class="engine-url">www.yahoo.com</div>
+                    <div style="margin-top: 15px; font-size: 14px; color: #666;">
+                        <i class="fas fa-star" style="color: #FFD700;"></i> <b>จุดเด่น:</b> ข่าวสารอัปเดตตลอดเวลา
+                    </div>
+                </div>
+                
+                <!-- DuckDuckGo -->
+                <div class="engine-card">
+                    <div class="engine-logo">
+                        <img src="image-2.jpeg.webp" alt="DuckDuckGo Logo" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+                    </div>
+                    <h3>DuckDuckGo</h3>
+                    <p>หน้าตาสะอาด ปลอดภัย และไม่ค่อยมีโฆษณา</p>
+                    <div class="engine-url">duckduckgo.com</div>
+                    <div style="margin-top: 15px; font-size: 14px; color: #666;">
+                        <i class="fas fa-star" style="color: #FFD700;"></i> <b>จุดเด่น:</b> เน้นความเป็นส่วนตัวสูง
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Benefits -->
+            <div class="benefits-section">
+                <h2 style="color: var(--color-dark-blue); margin-top: 0; border-left: none; padding-left: 0;">
+                    <i class="fas fa-gift"></i> ประโยชน์ของ Search Engines
+                </h2>
+                
+                <p>ช่วยให้สืบค้นข้อมูลได้อย่างสะดวก รวดเร็ว และมีประสิทธิภาพ โดยมีข้อดีหลักๆ ดังนี้:</p>
+                
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <h4><i class="fas fa-bolt" style="color: var(--color-success);"></i> ค้นหาเว็บไซต์ที่ต้องการได้รวดเร็ว</h4>
+                        <p>เพียงพิมพ์คำค้นหา ก็ได้ผลลัพธ์ภายในไม่กี่วินาที</p>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <h4><i class="fas fa-images" style="color: var(--color-success);"></i> ค้นหาข้อมูลได้หลากหลาย</h4>
+                        <p>ข่าวสาร, เพลง, รูปภาพ, วิดีโอ, แผนที่</p>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <h4><i class="fas fa-graduation-cap" style="color: var(--color-success);"></i> ค้นหาข้อมูลจากเว็บไซต์เฉพาะทางได้</h4>
+                        <p>เช่น ข้อมูลการเรียน การแพทย์ กฎหมาย</p>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <h4><i class="fas fa-language" style="color: var(--color-success);"></i> รองรับการค้นหาได้หลายภาษาทั่วโลก</h4>
+                        <p>ค้นหาข้อมูลภาษาอังกฤษ ภาษาจีน ภาษาญี่ปุ่น ฯลฯ</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Knowledge Box -->
+            <div class="knowledge-box">
+                <h3>
+                    <i class="fas fa-lightbulb"></i>
+                    เกร็ดความรู้:
+                </h3>
+                <p>ในปัจจุบันการสร้างเว็บไซต์ควรคำนึงถึงรูปแบบที่ Search Engine ค้นหาได้ง่าย ซึ่งเรียกว่าการทำ <b>SEO (Search Engine Optimization)</b></p>
+                <div style="background-color: rgba(255, 255, 255, 0.3); border-radius: 10px; padding: 15px; margin-top: 15px;">
+                    <p><i class="fas fa-info-circle"></i> <b>SEO คืออะไร?</b> เทคนิคทำให้เว็บไซต์ติดอันดับต้นๆ ของผลการค้นหา</p>
+                </div>
+            </div>
+            
+            <!-- Try Search -->
+            <div class="try-search">
+                <h3 style="color: white;">
+                    <i class="fas fa-play-circle"></i> ลองค้นหาดูสิ!
+                </h3>
+                <p>เปิดเบราว์เซอร์และลองค้นหาข้อมูลต่อไปนี้:</p>
+                
+                <div class="search-examples">
+                    <div class="search-example">
+                        <p><b>ค้นหารูปภาพ</b></p>
+                        <p>"ลูกสุนัขพันธุ์ชิวาวา"</p>
+                    </div>
+                    <div class="search-example">
+                        <p><b>ค้นหาสูตรอาหาร</b></p>
+                        <p>"วิธีทำไข่เจียวฟู"</p>
+                    </div>
+                    <div class="search-example">
+                        <p><b>ค้นหาข้อมูลเรียน</b></p>
+                        <p>"ระบบสุริยะมีดาวเคราะห์กี่ดวง"</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background-color: rgba(255, 255, 255, 0.2); border-radius: 10px;">
+                    <p><i class="fas fa-tips"></i> <b>เคล็ดลับ:</b> ใช้เครื่องหมายคำพูด (" ") เพื่อค้นหาคำที่ตรงเป๊ะ</p>
+                </div>
+            </div>
+            
+            <!-- Reference -->
+            <div class="ref-box">
+                <div class="ref-title">
+                    <i class="fas fa-book"></i>
+                    <h3 style="margin: 0;">ข้อมูลอ้างอิง</h3>
+                </div>
+                
+                <div style="background-color: white; border-radius: 10px; padding: 20px;">
+                    <p><b>รอมฎอน สุทธิการ</b> "เสิร์ชเอนจิน (Search Engines) คืออะไร หลักการทำงานของระบบค้นหาข้อมูล"</p>
+                    <p style="color: var(--color-primary);">จากเว็บไซต์ https://www.1belief.com/article/search-engines/</p>
+                </div>
+            </div>
+            
+            <!-- How Search Works -->
+            <div style="background-color: #F3E5F5; border-radius: 15px; padding: 25px; margin: 30px 0;">
+                <h3 style="color: #9C27B0;">
+                    <i class="fas fa-cogs"></i> Search Engine ทำงานอย่างไร?
+                </h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div style="text-align: center;">
+                        <div style="width: 60px; height: 60px; background-color: #9C27B0; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 24px;">
+                            1
+                        </div>
+                        <p><b>Crawling</b><br>รวบรวมข้อมูลจากเว็บไซต์</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="width: 60px; height: 60px; background-color: #9C27B0; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 24px;">
+                            2
+                        </div>
+                        <p><b>Indexing</b><br>จัดหมวดหมู่ข้อมูล</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="width: 60px; height: 60px; background-color: #9C27B0; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 24px;">
+                            3
+                        </div>
+                        <p><b>Ranking</b><br>จัดอันดับผลการค้นหา</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Navigation -->
+            <div class="lesson-footer">
+                <div style="font-size: 18px;">
+                    <i class="fas fa-graduation-cap"></i> บทเรียนที่ 3.2: โปรแกรมค้นหา (Search Engine)
+                </div>
+                
+                <div class="nav-buttons">
+                    <a href="u3-1.html" class="nav-btn prev">
+                        <i class="fas fa-arrow-left"></i> บทที่แล้ว
+                    </a>
+                    <a href="index.html" class="nav-btn">
+                        <i class="fas fa-home"></i> หน้าแรก
+                    </a>
+                    <a href="u3-3.html" class="nav-btn next">
+                        บทต่อไป <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // เพิ่มเอฟเฟกต์เล็กน้อยให้กับเว็บไซต์
+        document.addEventListener('DOMContentLoaded', function() {
+            // เพิ่มเอฟเฟกต์ให้กับการ์ด Search Engine
+            const engineCards = document.querySelectorAll('.engine-card');
+            engineCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200 + 300);
+            });
+            
+            // เพิ่มเอฟเฟกต์ให้กับปุ่ม
+            const buttons = document.querySelectorAll('.nav-btn, .back-btn');
+            buttons.forEach(button => {
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับข้อความค้นหา
+            const searchExamples = document.querySelectorAll('.search-example');
+            searchExamples.forEach(example => {
+                example.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+                    this.style.transition = 'all 0.3s ease';
+                });
+                
+                example.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับรายการประโยชน์
+            const benefitItems = document.querySelectorAll('.benefit-item');
+            benefitItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const icon = this.querySelector('i');
+                    if (icon) {
+                        icon.style.transform = 'scale(1.3)';
+                        icon.style.transition = 'transform 0.3s ease';
+                    }
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    const icon = this.querySelector('i');
+                    if (icon) {
+                        icon.style.transform = 'scale(1)';
+                    }
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับขั้นตอนการทำงาน
+            const steps = document.querySelectorAll('[style*="background-color: #9C27B0;"]');
+            steps.forEach(step => {
+                step.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.1)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                
+                step.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>การเขียนโปรแกรมแบบมีเงื่อนไข - วิทยาการคำนวณ ป.6</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Itim&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #4A90E2;
+            --color-secondary: #FFD166;
+            --color-accent: #FF6B6B;
+            --color-success: #06D6A0;
+            --color-condition: #E91E63;
+            --color-if: #2196F3;
+            --color-else: #FF9800;
+            --color-bg: #F8F9FF;
+            --color-card: #FFFFFF;
+            --color-text: #333333;
+            --color-dark-blue: #0B2C4D;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Itim', cursive;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.8;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><path d="M30,30 Q50,10 70,30 T90,30 Q70,50 90,70 T90,90 Q50,70 30,90 T10,90 Q30,70 10,50 T10,10 Q30,30 30,30 Z" fill="%23E91E63" opacity="0.05"/></svg>');
+            background-size: 100px;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--color-condition);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-dark-blue);
+            transform: translateX(-5px);
+            border-color: white;
+        }
+        
+        .lesson-title {
+            color: white;
+            font-size: 22px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        /* Hero Section */
+        .lesson-hero {
+            background: linear-gradient(135deg, var(--color-condition) 0%, #C2185B 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .lesson-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M30,20 L70,20 L70,80 L30,80 Z" fill="white" opacity="0.05"/><path d="M20,50 L80,50" stroke="white" stroke-width="2" opacity="0.05"/></svg>');
+            background-size: 80px;
+        }
+        
+        .lesson-hero h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-subtitle {
+            font-size: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            opacity: 0.9;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .lesson-content {
+            background-color: var(--color-card);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: 5px solid var(--color-condition);
+        }
+        
+        .lesson-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--color-condition), var(--color-secondary));
+        }
+        
+        /* Introduction */
+        .intro-box {
+            background-color: #FCE4EC;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-condition);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .intro-box p {
+            font-size: 20px;
+        }
+        
+        .condition-example {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border: 2px solid var(--color-condition);
+        }
+        
+        .condition-example i {
+            color: var(--color-condition);
+            font-size: 28px;
+        }
+        
+        /* Image Box */
+        .imagebox {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            border: 3px solid #EEE;
+            transition: all 0.3s ease;
+        }
+        
+        .imagebox:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+            border-color: var(--color-secondary);
+        }
+        
+        .imagebox img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+            border: 5px solid white;
+        }
+        
+        .image-caption {
+            font-weight: bold;
+            color: var(--color-dark-blue);
+            background-color: #FFFDE7;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        
+        /* Structure Cards */
+        .structure-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .structure-card {
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .structure-card.if-then {
+            border-top: 10px solid var(--color-if);
+            background-color: #E3F2FD;
+        }
+        
+        .structure-card.if-else {
+            border-top: 10px solid var(--color-else);
+            background-color: #FFF3E0;
+        }
+        
+        .structure-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .structure-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .structure-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 28px;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .if-then .structure-icon {
+            background-color: var(--color-if);
+        }
+        
+        .if-else .structure-icon {
+            background-color: var(--color-else);
+        }
+        
+        .structure-header h3 {
+            color: var(--color-dark-blue);
+            font-size: 24px;
+            margin: 0;
+        }
+        
+        /* Example Boxes */
+        .example-box {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .life-example {
+            border-left: 5px solid var(--color-success);
+            background-color: #F1F8E9;
+        }
+        
+        .code-example {
+            border-left: 5px solid var(--color-primary);
+            background-color: #F5F5F5;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-example code {
+            background-color: #263238;
+            color: #ECEFF1;
+            padding: 15px;
+            border-radius: 8px;
+            display: block;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        /* Activity Box */
+        .activity-box {
+            background: linear-gradient(135deg, #FFD166, #FFC107);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            color: var(--color-dark-blue);
+            box-shadow: 0 8px 20px rgba(255, 193, 7, 0.3);
+        }
+        
+        .activity-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .activity-header i {
+            color: var(--color-dark-blue);
+            font-size: 32px;
+        }
+        
+        .activity-content {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .activity-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .activity-example {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 5px solid var(--color-condition);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Summary */
+        .summary-box {
+            background: linear-gradient(135deg, var(--color-primary), #1565C0);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            color: white;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.3);
+        }
+        
+        /* Footer */
+        .lesson-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px dashed #DDD;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--color-dark-blue);
+            transform: translateY(-5px);
+            border-color: var(--color-secondary);
+        }
+        
+        .nav-btn.prev {
+            background-color: var(--color-condition);
+        }
+        
+        .nav-btn.prev:hover {
+            background-color: #C2185B;
+        }
+        
+        .nav-btn.next {
+            background-color: var(--color-success);
+        }
+        
+        .nav-btn.next:hover {
+            background-color: #05b585;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-hero h1 {
+                font-size: 28px;
+            }
+            
+            .structure-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .activity-examples {
+                grid-template-columns: 1fr;
+            }
+            
+            .lesson-footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> กลับหน้าแรก
+        </a>
+        <div class="lesson-title">บทที่ 2: ออกแบบและเขียนโปรแกรมอย่างง่าย</div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="lesson-hero">
+        <h1>การเขียนโปรแกรมแบบมีเงื่อนไข</h1>
+        <div class="hero-subtitle">สอนคอมพิวเตอร์ให้คิดและตัดสินใจได้เหมือนเรา!</div>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="lesson-content">
+            <!-- Introduction -->
+            <div class="intro-box">
+                <p style="font-size: 20px;">
+                    <b>การเขียนโปรแกรมแบบมีเงื่อนไข</b> คือ การเขียนโปรแกรมที่สามารถเลือกทำงานได้แตกต่างกันตามเงื่อนไขที่กำหนดไว้ เช่น ถ้าเงื่อนไขเป็นจริงให้ทำสิ่งหนึ่ง แต่ถ้าเงื่อนไขไม่เป็นจริงให้ทำอีกสิ่งหนึ่ง ช่วยให้โปรแกรมสามารถ <b>“คิด”</b> และ <b>“ตัดสินใจ”</b> ได้เหมือนกับเราในชีวิตประจำวัน
+                </p>
+                
+                <div class="condition-example">
+                    <i class="fas fa-brain"></i>
+                    <div>
+                        <p>การเขียนโปรแกรมแบบมีเงื่อนไขคือการบอกคอมพิวเตอร์ว่า 
+                        <span style="color: var(--color-condition); font-weight: bold;">"ถ้ามีเหตุการณ์นี้เกิดขึ้น ให้ทำสิ่งนี้"</span> หรือ 
+                        <span style="color: var(--color-condition); font-weight: bold;">"ถ้ามีเหตุการณ์อื่นเกิดขึ้น ให้ทำอีกสิ่งหนึ่ง"</span></p>
+                        <p>คอมพิวเตอร์จะทำตามคำสั่งของเราก็ต่อเมื่อเงื่อนไขนั้นเป็นจริงเท่านั้น</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Image -->
+            <div class="imagebox">
+                <img src="Screenshot-2568-06-10-at-17.59.21-1-768x351.webp" alt="แนวคิดการเขียนโปรแกรมแบบมีเงื่อนไข">
+                <div class="image-caption">ภาพที่ 1: การเปรียบเทียบการตัดสินใจในชีวิตประจำวันกับการเขียนโปรแกรม</div>
+            </div>
+            
+            <!-- Structure Heading -->
+            <h2 style="color: var(--color-dark-blue); text-align: center; margin-top: 40px;">
+                <i class="fas fa-sitemap"></i> โครงสร้างของการเขียนโปรแกรมแบบมีเงื่อนไข
+            </h2>
+            <p style="text-align: center; font-size: 18px; margin-bottom: 30px;">โครงสร้างหลักๆ แบ่งออกเป็น 2 แบบ ดังนี้:</p>
+            
+            <!-- Structure Cards -->
+            <div class="structure-container">
+                <!-- If-Then Structure -->
+                <div class="structure-card if-then">
+                    <div class="structure-header">
+                        <div class="structure-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3>1. ถ้า…แล้ว… (If…Then…)</h3>
+                    </div>
+                    
+                    <p>เป็นการกำหนดเงื่อนไข <span style="color: var(--color-success); font-weight: bold;">ถ้าเงื่อนไขเป็นจริง</span> คอมพิวเตอร์จะทำตามคำสั่งนั้น แต่ถ้าไม่เป็นจริงจะข้ามคำสั่งนั้นไปทันที</p>
+                    
+                    <div class="example-box life-example">
+                        <h4><i class="fas fa-home"></i> ตัวอย่างในชีวิตประจำวัน:</h4>
+                        <p>"ถ้า น้องทำการบ้านเสร็จ แล้ว น้องจะได้ดูการ์ตูน"</p>
+                        <ul style="padding-left: 20px; margin-top: 10px;">
+                            <li>กรณีทำการบ้านเสร็จ (จริง) → <span style="color: var(--color-success); font-weight: bold;">ได้ดูการ์ตูน</span></li>
+                            <li>กรณีทำการบ้านไม่เสร็จ (ไม่จริง) → ข้ามการดูการ์ตูนไป</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="example-box code-example">
+                        <h4><i class="fas fa-code"></i> ตัวอย่างการเขียนโปรแกรม:</h4>
+                        <code>ถ้า คะแนนสอบ >= 50 แล้ว แสดงข้อความ "ผ่าน"</code>
+                    </div>
+                </div>
+                
+                <!-- If-Then-Else Structure -->
+                <div class="structure-card if-else">
+                    <div class="structure-header">
+                        <div class="structure-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3>2. ถ้า…แล้ว…มิฉะนั้น… (If…Then…Else…)</h3>
+                    </div>
+                    
+                    <p>แบบนี้จะซับซ้อนขึ้น คือถ้าเงื่อนไขเป็นจริงให้ทำอย่างหนึ่ง <span style="color: var(--color-condition); font-weight: bold;">แต่ถ้าไม่เป็นจริงให้ทำอีกอย่างหนึ่งแทน</span></p>
+                    
+                    <div class="example-box life-example">
+                        <h4><i class="fas fa-home"></i> ตัวอย่างในชีวิตประจำวัน:</h4>
+                        <p>"ถ้า อากาศร้อน แล้ว เราจะเปิดพัดลม มิฉะนั้น (ถ้าไม่ร้อน) เราจะปิดพัดลม"</p>
+                    </div>
+                    
+                    <div class="example-box code-example">
+                        <h4><i class="fas fa-code"></i> ตัวอย่างการเขียนโปรแกรม:</h4>
+                        <code>ถ้า อุณหภูมิ > 28 องศาเซลเซียส แล้ว แสดง "เปิดแอร์" มิฉะนั้น แสดง "ปิดแอร์"</code>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Activity -->
+            <div class="activity-box">
+                <div class="activity-header">
+                    <i class="fas fa-gamepad"></i>
+                    <h2 style="margin: 0;">🌟 กิจกรรมสนุกๆ: ลองมาช่วยกันคิดเงื่อนไข!</h2>
+                </div>
+                
+                <div class="activity-content">
+                    <p>ให้นักเรียนลองคิดสถานการณ์ที่ใช้เงื่อนไขในชีวิตประจำวันคนละ 1 ตัวอย่าง เช่น:</p>
+                    
+                    <div class="activity-examples">
+                        <div class="activity-example">
+                            <p><i>"ถ้า วันนี้เป็นวันศุกร์ แล้ว ฉันจะดูหนังเรื่องโปรด"</i></p>
+                        </div>
+                        
+                        <div class="activity-example">
+                            <p><i>"ถ้า วันนี้ฝนไม่ตก แล้ว ฉันจะขี่มอเตอร์ไซค์ มิฉะนั้น ฉันจะนั่งรถเมล์"</i></p>
+                        </div>
+                        
+                        <div class="activity-example">
+                            <p><i>"ถ้า ฉันสอบได้คะแนนดี แล้ว แม่จะพาไปเที่ยว มิฉะนั้น ต้องอ่านหนังสือเพิ่ม"</i></p>
+                        </div>
+                    </div>
+                    
+                    <div style="background-color: #FFF3E0; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                        <h4><i class="fas fa-lightbulb"></i> ท้าทายเพิ่มเติม:</h4>
+                        <p>ลองคิดเงื่อนไขที่มีมากกว่า 2 ทางเลือก เช่น:</p>
+                        <p><i>"ถ้า คะแนน >= 80 แล้ว ได้เกรด A มิฉะนั้นถ้า คะแนน >= 70 แล้ว ได้เกรด B มิฉะนั้น ได้เกรด C"</i></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Summary -->
+            <div class="summary-box">
+                <h2 style="color: white; margin-bottom: 15px;">
+                    <i class="fas fa-star"></i> สรุป
+                </h2>
+                <p style="font-size: 20px;">
+                    การเขียนโปรแกรมแบบมีเงื่อนไขทำให้คอมพิวเตอร์สามารถตัดสินใจได้ตามสถานการณ์ต่างๆ 
+                    เหมือนกับการตัดสินใจในชีวิตประจำวันของพวกเรานั่นเอง!
+                </p>
+                <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+                    <div style="text-align: center;">
+                        <div style="background-color: white; color: var(--color-if); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 24px;">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <p>If-Then<br>เลือกทำงานเมื่อเงื่อนไขเป็นจริง</p>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div style="background-color: white; color: var(--color-else); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 24px;">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <p>If-Then-Else<br>เลือกทำงานสองทางเลือก</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Navigation -->
+            <div class="lesson-footer">
+                <div style="font-size: 18px;">
+                    <i class="fas fa-graduation-cap"></i> บทเรียนที่ 2.2: การเขียนโปรแกรมแบบมีเงื่อนไข
+                </div>
+                
+                <div class="nav-buttons">
+                    <a href="u2-1.html" class="nav-btn prev">
+                        <i class="fas fa-arrow-left"></i> บทที่แล้ว
+                    </a>
+                    <a href="index.html" class="nav-btn">
+                        <i class="fas fa-home"></i> หน้าแรก
+                    </a>
+                    <a href="u2-3.html" class="nav-btn next">
+                        บทต่อไป <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // เพิ่มเอฟเฟกต์เล็กน้อยให้กับเว็บไซต์
+        document.addEventListener('DOMContentLoaded', function() {
+            // เพิ่มเอฟเฟกต์ให้กับการ์ดโครงสร้าง
+            const structureCards = document.querySelectorAll('.structure-card');
+            structureCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 300 + 300);
+            });
+            
+            // เพิ่มเอฟเฟกต์ให้กับปุ่ม
+            const buttons = document.querySelectorAll('.nav-btn, .back-btn');
+            buttons.forEach(button => {
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // เอฟเฟกต์เมื่อชี้ภาพ
+            const imagebox = document.querySelector('.imagebox');
+            imagebox.addEventListener('mouseenter', function() {
+                const img = this.querySelector('img');
+                if (img) {
+                    img.style.transform = 'scale(1.02)';
+                    img.style.transition = 'transform 0.3s ease';
+                }
+            });
+            
+            imagebox.addEventListener('mouseleave', function() {
+                const img = this.querySelector('img');
+                if (img) {
+                    img.style.transform = 'scale(1)';
+                }
+            });
+            
+            // เอฟเฟกต์สำหรับตัวอย่างกิจกรรม
+            const activityExamples = document.querySelectorAll('.activity-example');
+            activityExamples.forEach(example => {
+                example.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+                });
+                
+                example.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับโค้ดตัวอย่าง
+            const codeExamples = document.querySelectorAll('.code-example');
+            codeExamples.forEach(example => {
+                example.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

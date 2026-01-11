@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>การเขียนโปรแกรมโดยใช้ Scratch - วิทยาการคำนวณ ป.6</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Itim&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #4A90E2;
+            --color-secondary: #FFD166;
+            --color-accent: #FF6B6B;
+            --color-success: #06D6A0;
+            --color-scratch: #FF8F00;
+            --color-stage: #2196F3;
+            --color-sprite: #E91E63;
+            --color-script: #9C27B0;
+            --color-bg: #F8F9FF;
+            --color-card: #FFFFFF;
+            --color-text: #333333;
+            --color-dark-blue: #0B2C4D;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Itim', cursive;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.8;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><rect x="30" y="30" width="60" height="60" fill="%23FF8F00" opacity="0.05" rx="10"/><circle cx="40" cy="40" r="8" fill="%234A90E2" opacity="0.05"/><circle cx="80" cy="80" r="10" fill="%23E91E63" opacity="0.05"/></svg>');
+            background-size: 120px;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--color-scratch);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-dark-blue);
+            transform: translateX(-5px);
+            border-color: white;
+        }
+        
+        .lesson-title {
+            color: white;
+            font-size: 22px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        /* Hero Section */
+        .lesson-hero {
+            background: linear-gradient(135deg, var(--color-scratch) 0%, #FF6F00 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .lesson-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="20" cy="20" r="10" fill="white" opacity="0.05"/><circle cx="80" cy="30" r="8" fill="white" opacity="0.05"/><circle cx="40" cy="70" r="12" fill="white" opacity="0.05"/><circle cx="70" cy="80" r="6" fill="white" opacity="0.05"/></svg>');
+            background-size: 100px;
+        }
+        
+        .lesson-hero h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .scratch-logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px 25px;
+            border-radius: 50px;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .lesson-content {
+            background-color: var(--color-card);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: 5px solid var(--color-scratch);
+        }
+        
+        .lesson-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--color-scratch), var(--color-secondary));
+        }
+        
+        /* Introduction Box */
+        .intro-box {
+            background-color: #FFF3E0;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-scratch);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .intro-box p {
+            font-size: 20px;
+        }
+        
+        /* Access Methods */
+        .access-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .method-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-top: 10px solid var(--color-primary);
+        }
+        
+        .method-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .method-card.online {
+            border-top: 10px solid var(--color-success);
+        }
+        
+        .method-card.offline {
+            border-top: 10px solid var(--color-accent);
+        }
+        
+        .method-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .method-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background-color: var(--color-primary);
+            border-radius: 50%;
+            font-size: 28px;
+            color: white;
+        }
+        
+        .online .method-icon {
+            background-color: var(--color-success);
+        }
+        
+        .offline .method-icon {
+            background-color: var(--color-accent);
+        }
+        
+        .method-header h3 {
+            color: var(--color-dark-blue);
+            font-size: 22px;
+            margin: 0;
+        }
+        
+        .scratch-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--color-scratch);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .scratch-link:hover {
+            background-color: #FF6F00;
+            transform: translateY(-5px);
+            border-color: white;
+        }
+        
+        /* Image Box */
+        .imagebox {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            border: 3px solid #EEE;
+            transition: all 0.3s ease;
+        }
+        
+        .imagebox:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+            border-color: var(--color-secondary);
+        }
+        
+        .imagebox img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+            border: 5px solid white;
+        }
+        
+        .image-caption {
+            font-weight: bold;
+            color: var(--color-dark-blue);
+            background-color: #FFFDE7;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        
+        /* Components Section */
+        .components-box {
+            background-color: #E3F2FD;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border-left: 10px solid var(--color-stage);
+        }
+        
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .component-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--color-stage);
+        }
+        
+        .component-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            background-color: var(--color-stage);
+            color: white;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        /* Project Structure */
+        .project-structure {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .project-card {
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-card.stage {
+            border-top: 10px solid var(--color-stage);
+            background-color: #E3F2FD;
+        }
+        
+        .project-card.sprite {
+            border-top: 10px solid var(--color-sprite);
+            background-color: #FCE4EC;
+        }
+        
+        .project-card.script {
+            border-top: 10px solid var(--color-script);
+            background-color: #F3E5F5;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .project-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .project-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 28px;
+            color: white;
+        }
+        
+        .stage .project-icon {
+            background-color: var(--color-stage);
+        }
+        
+        .sprite .project-icon {
+            background-color: var(--color-sprite);
+        }
+        
+        .script .project-icon {
+            background-color: var(--color-script);
+        }
+        
+        .project-header h3 {
+            color: var(--color-dark-blue);
+            font-size: 24px;
+            margin: 0;
+        }
+        
+        /* Sprite Details */
+        .sprite-details {
+            background-color: #FFF3E0;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        
+        .sprite-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .sprite-detail-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .sprite-detail-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            background-color: var(--color-sprite);
+            color: white;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        /* Footer */
+        .lesson-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px dashed #DDD;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--color-dark-blue);
+            transform: translateY(-5px);
+            border-color: var(--color-secondary);
+        }
+        
+        .nav-btn.prev {
+            background-color: var(--color-scratch);
+        }
+        
+        .nav-btn.prev:hover {
+            background-color: #FF6F00;
+        }
+        
+        .nav-btn.next {
+            background-color: var(--color-success);
+        }
+        
+        .nav-btn.next:hover {
+            background-color: #05b585;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-hero h1 {
+                font-size: 28px;
+            }
+            
+            .access-methods, .project-structure {
+                grid-template-columns: 1fr;
+            }
+            
+            .components-grid, .sprite-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .lesson-footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> กลับหน้าแรก
+        </a>
+        <div class="lesson-title">บทที่ 2: ออกแบบและเขียนโปรแกรมอย่างง่าย</div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="lesson-hero">
+        <h1>การเขียนโปรแกรมโดยใช้ Scratch</h1>
+        <div class="scratch-logo">
+            <i class="fas fa-cat"></i>
+            <span>เรียนรู้การสร้างสรรค์เกมและอนิเมชันด้วย Scratch!</span>
+        </div>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="lesson-content">
+            <!-- Introduction -->
+            <div class="intro-box">
+                <p style="font-size: 20px;">
+                    <b>โปรแกรม Scratch (สะ – แครช)</b> เป็นโปรแกรมภาษาที่สร้างชิ้นงานได้อย่างง่าย เช่น นิทานโต้ตอบ ภาพเคลื่อนไหว เกม และดนตรี ช่วยให้เรียนรู้หลักการทางคณิตศาสตร์และการเขียนโปรแกรมผ่านการคิดสร้างสรรค์และเป็นระบบ
+                </p>
+            </div>
+            
+            <!-- Access Methods -->
+            <h2 style="color: var(--color-dark-blue); text-align: center; margin-top: 40px;">
+                <i class="fas fa-door-open"></i> วิธีการเข้าใช้งานโปรแกรม Scratch
+            </h2>
+            
+            <div class="access-methods">
+                <!-- Online Method -->
+                <div class="method-card online">
+                    <div class="method-header">
+                        <div class="method-icon">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <h3>1. การเข้าใช้งานแบบออนไลน์ (Online)</h3>
+                    </div>
+                    
+                    <ul style="padding-left: 20px;">
+                        <li>เข้าใช้งานที่ลิงก์: <a href="https://scratch.mit.edu/" target="_blank" style="color: var(--color-success); font-weight: bold;">https://scratch.mit.edu/</a></li>
+                        <li>คลิกเลือก <b>Start Creating</b> เพื่อเข้าสู่หน้าโปรแกรม</li>
+                    </ul>
+                    
+                    <a href="https://scratch.mit.edu/" target="_blank" class="scratch-link">
+                        <i class="fas fa-external-link-alt"></i> ไปที่ Scratch Online
+                    </a>
+                </div>
+                
+                <!-- Offline Method -->
+                <div class="method-card offline">
+                    <div class="method-header">
+                        <div class="method-icon">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <h3>2. การเข้าใช้งานแบบออฟไลน์ (Offline)</h3>
+                    </div>
+                    
+                    <ul style="padding-left: 20px;">
+                        <li>ดาวน์โหลดโปรแกรมที่: <a href="https://scratch.mit.edu/download" target="_blank" style="color: var(--color-accent); font-weight: bold;">https://scratch.mit.edu/download</a></li>
+                        <li>เลือกระบบปฏิบัติการที่คอมพิวเตอร์ใช้งานอยู่</li>
+                    </ul>
+                    
+                    <a href="https://scratch.mit.edu/download" target="_blank" class="scratch-link" style="background-color: var(--color-accent);">
+                        <i class="fas fa-download"></i> ดาวน์โหลด Scratch Offline
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Image 1 -->
+            <div class="imagebox">
+                <img src="2-1-768x416.jpg.webp" alt="หน้าดาวน์โหลด Scratch">
+                <div class="image-caption">ภาพที่ 1: ขั้นตอนการเลือกดาวน์โหลดโปรแกรม Scratch</div>
+            </div>
+            
+            <div style="background-color: #F5F5F5; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                <h4><i class="fas fa-check-circle" style="color: var(--color-success);"></i> ขั้นตอนต่อจากนี้:</h4>
+                <p>3. เปิดไฟล์ที่ดาวน์โหลดเพื่อทำการติดตั้ง</p>
+                <p>4. เมื่อติดตั้งเสร็จแล้ว ให้กดปุ่ม <b style="color: var(--color-primary);">No, thanks</b> ในหน้าจอที่แสดงขึ้นมา</p>
+            </div>
+            
+            <!-- Image 2 -->
+            <div class="imagebox">
+                <img src="2-2.jpg.webp" alt="การติดตั้งเสร็จสมบูรณ์">
+                <div class="image-caption">ภาพที่ 2: หน้าจอหลังการติดตั้งเสร็จสิ้น</div>
+            </div>
+            
+            <!-- Components Section -->
+            <div class="components-box">
+                <h2 style="color: var(--color-stage); margin-top: 0;">
+                    <i class="fas fa-puzzle-piece"></i> 1. ส่วนประกอบของโปรแกรม Scratch
+                </h2>
+                
+                <div class="imagebox">
+                    <img src="2-3-768x386.jpg.webp" alt="ส่วนประกอบโปรแกรม Scratch">
+                    <div class="image-caption">ภาพที่ 3: แผนผังแสดงส่วนประกอบหลักของโปรแกรม</div>
+                </div>
+                
+                <div class="components-grid">
+                    <div class="component-item">
+                        <span class="component-num">1</span> แถบเมนู (Menu bar)
+                    </div>
+                    <div class="component-item">
+                        <span class="component-num">2</span> แถบเครื่องมือ (tabs)
+                    </div>
+                    <div class="component-item">
+                        <span class="component-num">3</span> บล็อกคำสั่ง (Block Palette)
+                    </div>
+                    <div class="component-item">
+                        <span class="component-num">4</span> ส่วนขยาย (Extension)
+                    </div>
+                    <div class="component-item">
+                        <span class="component-num">5</span> พื้นที่ทำงาน (Script Area)
+                    </div>
+                    <div class="component-item">
+                        <span class="component-num">6</span> ย่อ ขยาย กึ่งกลางพื้นที่วางบล็อก
+                    </div>
+                    <div class="component-item">
+                        <span class="component-num">7</span> เริ่มต้น สิ้นสุด (Start-Stop)
+                    </div>
+                    <div class="component-item">
+                        <span class="component-num">8</span> การแสดงผล (Screen Control)
+                    </div>
+                    <div class="component-item">
+                        <span class="component-num">9</span> เวที (Stage)
+                    </div>
+                    <div class="component-item">
+                        <span class="component-num">10</span> รายละเอียดตัวละคร (Sprites list)
+                    </div>
+                    <div class="component-item">
+                        <span class="component-num">11</span> รายละเอียดเวที (Stage information)
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project Structure -->
+            <h2 style="color: var(--color-dark-blue); text-align: center; margin-top: 40px;">
+                <i class="fas fa-cubes"></i> 2. รู้จักโปรเจกต์
+            </h2>
+            <p style="text-align: center; font-size: 18px; margin-bottom: 30px;">โปรเจกต์ใน Scratch มีโครงสร้าง 3 ส่วนหลัก ดังนี้:</p>
+            
+            <div class="project-structure">
+                <!-- Stage -->
+                <div class="project-card stage">
+                    <div class="project-header">
+                        <div class="project-icon">
+                            <i class="fas fa-tv"></i>
+                        </div>
+                        <h3>2.1 เวที (Stage)</h3>
+                    </div>
+                    
+                    <p>คือส่วนที่แสดงผลของโปรแกรม เปรียบเสมือนฉากที่แสดงสิ่งต่าง ๆ (ขนาดกว้าง 480 หน่วย สูง 360 หน่วย)</p>
+                    
+                    <div class="imagebox" style="margin: 15px 0; padding: 15px;">
+                        <img src="2-4-768x401.jpg.webp" alt="เวที Scratch">
+                        <div class="image-caption">ภาพที่ 4: ลักษณะและขนาดของเวที</div>
+                    </div>
+                </div>
+                
+                <!-- Sprite -->
+                <div class="project-card sprite">
+                    <div class="project-header">
+                        <div class="project-icon">
+                            <i class="fas fa-ghost"></i>
+                        </div>
+                        <h3>2.2 ตัวละคร (Sprite)</h3>
+                    </div>
+                    
+                    <p>คือวัตถุที่สร้างขึ้นมาเพื่อแสดงบทบาทต่าง ๆ มีคุณสมบัติคือ <b>คุณลักษณะ</b> (ชื่อ, ท่าทาง) และ <b>พฤติกรรม</b> (การเคลื่อนที่)</p>
+                    
+                    <div class="imagebox" style="margin: 15px 0; padding: 15px;">
+                        <img src="2-5-696x433.jpg.webp" alt="ตัวละคร Scratch">
+                        <div class="image-caption">ภาพที่ 5: ตัวอย่างตัวละครในโปรแกรม</div>
+                    </div>
+                </div>
+                
+                <!-- Script -->
+                <div class="project-card script">
+                    <div class="project-header">
+                        <div class="project-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>2.3 สคริปต์ (Script)</h3>
+                    </div>
+                    
+                    <p>คือชุดคำสั่งสำหรับตัวละครหรือเวที แบ่งออกเป็น 9 กลุ่มบล็อกคำสั่งหลัก</p>
+                    
+                    <div class="imagebox" style="margin: 15px 0; padding: 15px;">
+                        <img src="Scratch-6-768x675.jpg.webp" alt="กลุ่มบล็อกคำสั่ง">
+                        <div class="image-caption">ภาพที่ 7: กลุ่มบล็อกคำสั่งทั้ง 9 กลุ่ม</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sprite Details -->
+            <div class="sprite-details">
+                <h3 style="color: var(--color-sprite);">
+                    <i class="fas fa-info-circle"></i> การกำหนดรายละเอียดให้กับตัวละคร
+                </h3>
+                
+                <div class="imagebox">
+                    <img src="Scratch-3.jpg (1).webp" alt="รายละเอียดตัวละคร">
+                    <div class="image-caption">ภาพที่ 6: แผงควบคุมรายละเอียดตัวละคร</div>
+                </div>
+                
+                <div class="sprite-list">
+                    <div class="sprite-detail-item">
+                        <span class="sprite-detail-num">1</span> ชื่อของตัวละคร (สามารถแก้ไขได้)
+                    </div>
+                    <div class="sprite-detail-item">
+                        <span class="sprite-detail-num">2</span> ตำแหน่ง x, y (จุดกลางเวทีคือ 0,0)
+                    </div>
+                    <div class="sprite-detail-item">
+                        <span class="sprite-detail-num">3</span> แสดง/ซ่อนตัวละคร
+                    </div>
+                    <div class="sprite-detail-item">
+                        <span class="sprite-detail-num">4</span> ขนาดของตัวละคร (Size)
+                    </div>
+                    <div class="sprite-detail-item">
+                        <span class="sprite-detail-num">5</span> ทิศทาง (Direction)
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Try It Out -->
+            <div style="background: linear-gradient(135deg, var(--color-secondary), #FFC107); border-radius: 15px; padding: 30px; margin: 40px 0; text-align: center;">
+                <h2 style="color: var(--color-dark-blue);">
+                    <i class="fas fa-rocket"></i> พร้อมเริ่มสร้างสรรค์แล้ว!
+                </h2>
+                <p style="font-size: 18px; margin: 15px 0;">ตอนนี้คุณรู้จัก Scratch ครบทุกส่วนแล้ว ลองเปิดโปรแกรมแล้วเริ่มสร้างโปรเจกต์แรกของคุณดูสิ!</p>
+                <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
+                    <a href="https://scratch.mit.edu/" target="_blank" class="scratch-link" style="background-color: var(--color-scratch);">
+                        <i class="fas fa-play-circle"></i> เริ่มสร้างเกมเลย
+                    </a>
+                    <a href="https://scratch.mit.edu/projects/editor/" target="_blank" class="scratch-link" style="background-color: var(--color-success);">
+                        <i class="fas fa-paint-brush"></i> เริ่มสร้างอนิเมชัน
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Footer Navigation -->
+            <div class="lesson-footer">
+                <div style="font-size: 18px;">
+                    <i class="fas fa-graduation-cap"></i> บทเรียนที่ 2.4: การเขียนโปรแกรมโดยใช้ Scratch
+                </div>
+                
+                <div class="nav-buttons">
+                    <a href="u2-3.html" class="nav-btn prev">
+                        <i class="fas fa-arrow-left"></i> บทที่แล้ว
+                    </a>
+                    <a href="index.html" class="nav-btn">
+                        <i class="fas fa-home"></i> หน้าแรก
+                    </a>
+                    <a href="u2-5.html" class="nav-btn next">
+                        บทต่อไป <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // เพิ่มเอฟเฟกต์เล็กน้อยให้กับเว็บไซต์
+        document.addEventListener('DOMContentLoaded', function() {
+            // เพิ่มเอฟเฟกต์ให้กับการ์ดวิธีการเข้าใช้งาน
+            const methodCards = document.querySelectorAll('.method-card');
+            methodCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200 + 300);
+            });
+            
+            // เพิ่มเอฟเฟกต์ให้กับการ์ดโครงสร้างโปรเจกต์
+            const projectCards = document.querySelectorAll('.project-card');
+            projectCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200 + 600);
+            });
+            
+            // เพิ่มเอฟเฟกต์ให้กับปุ่ม
+            const buttons = document.querySelectorAll('.nav-btn, .back-btn, .scratch-link');
+            buttons.forEach(button => {
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // เอฟเฟกต์เมื่อชี้ภาพ
+            const imageboxes = document.querySelectorAll('.imagebox');
+            imageboxes.forEach(box => {
+                box.addEventListener('mouseenter', function() {
+                    const img = this.querySelector('img');
+                    if (img) {
+                        img.style.transform = 'scale(1.02)';
+                        img.style.transition = 'transform 0.3s ease';
+                    }
+                });
+                
+                box.addEventListener('mouseleave', function() {
+                    const img = this.querySelector('img');
+                    if (img) {
+                        img.style.transform = 'scale(1)';
+                    }
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับรายการส่วนประกอบ
+            const componentItems = document.querySelectorAll('.component-item, .sprite-detail-item');
+            componentItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const numSpan = this.querySelector('.component-num, .sprite-detail-num');
+                    if (numSpan) {
+                        numSpan.style.transform = 'scale(1.2)';
+                        numSpan.style.transition = 'transform 0.3s ease';
+                    }
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    const numSpan = this.querySelector('.component-num, .sprite-detail-num');
+                    if (numSpan) {
+                        numSpan.style.transform = 'scale(1)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

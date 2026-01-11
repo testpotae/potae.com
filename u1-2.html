@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>การใช้เหตุผลเชิงตรรกะในการแก้ปัญหา - วิทยาการคำนวณ ป.6</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Itim&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #4A90E2;
+            --color-secondary: #FFD166;
+            --color-accent: #FF6B6B;
+            --color-success: #06D6A0;
+            --color-logic: #9C27B0;
+            --color-experience: #FF9800;
+            --color-bg: #F8F9FF;
+            --color-card: #FFFFFF;
+            --color-text: #333333;
+            --color-dark-blue: #0B2C4D;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Itim', cursive;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.8;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><path d="M20,30 Q40,10 60,30 T100,30 Q80,50 100,70 T100,100 Q60,80 20,100 T20,20 Q20,30 20,30 Z" fill="%239C27B0" opacity="0.05"/><circle cx="90" cy="40" r="8" fill="%234A90E2" opacity="0.05"/></svg>');
+            background-size: 120px;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--color-logic);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-dark-blue);
+            transform: translateX(-5px);
+            border-color: white;
+        }
+        
+        .lesson-title {
+            color: white;
+            font-size: 22px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        /* Hero Section */
+        .lesson-hero {
+            background: linear-gradient(135deg, var(--color-logic) 0%, #6A1B9A 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .lesson-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M50,10 L90,50 L50,90 L10,50 Z" fill="white" opacity="0.05"/></svg>');
+            background-size: 80px;
+        }
+        
+        .lesson-hero h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .lesson-hero p {
+            font-size: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            opacity: 0.9;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .lesson-content {
+            background-color: var(--color-card);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: 5px solid var(--color-logic);
+        }
+        
+        .lesson-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--color-logic), var(--color-secondary));
+        }
+        
+        /* Introduction */
+        .intro-box {
+            background-color: #F3E5F5;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-logic);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .intro-box p {
+            font-size: 20px;
+        }
+        
+        /* Logic Types Container */
+        .logic-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        /* Logic Type 1 */
+        .logic-card {
+            background-color: #E3F2FD;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-top: 10px solid var(--color-primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logic-card.type1 {
+            border-top: 10px solid var(--color-primary);
+        }
+        
+        .logic-card.type2 {
+            border-top: 10px solid var(--color-experience);
+        }
+        
+        .logic-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .logic-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .logic-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background-color: var(--color-primary);
+            border-radius: 50%;
+            font-size: 28px;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .logic-card.type2 .logic-icon {
+            background-color: var(--color-experience);
+        }
+        
+        .logic-header h2 {
+            color: var(--color-dark-blue);
+            font-size: 24px;
+            margin: 0;
+        }
+        
+        .logic-content {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Image Boxes */
+        .image-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .imagebox {
+            text-align: center;
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .imagebox:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+            border-color: var(--color-secondary);
+        }
+        
+        .imagebox img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+            border: 5px solid white;
+        }
+        
+        .imagebox p {
+            font-weight: bold;
+            color: var(--color-dark-blue);
+            background-color: #FFFDE7;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        
+        /* Practice Box */
+        .practice-box {
+            background-color: #E8F5E9;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 40px 0;
+            border-left: 10px solid var(--color-success);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .practice-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .practice-title i {
+            color: var(--color-success);
+            font-size: 28px;
+        }
+        
+        .practice-example {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 2px dashed var(--color-success);
+        }
+        
+        /* Reference Box */
+        .ref-box {
+            background-color: #F5F5F5;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
+            border-left: 10px solid #9E9E9E;
+        }
+        
+        .ref-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--color-dark-blue);
+            margin-bottom: 15px;
+        }
+        
+        .ref-content {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            font-size: 16px;
+        }
+        
+        /* Footer */
+        .lesson-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px dashed #DDD;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--color-dark-blue);
+            transform: translateY(-5px);
+            border-color: var(--color-secondary);
+        }
+        
+        .nav-btn.prev {
+            background-color: var(--color-logic);
+        }
+        
+        .nav-btn.prev:hover {
+            background-color: #6A1B9A;
+        }
+        
+        .nav-btn.next {
+            background-color: var(--color-success);
+        }
+        
+        .nav-btn.next:hover {
+            background-color: #05b585;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-hero h1 {
+                font-size: 28px;
+            }
+            
+            .logic-types {
+                grid-template-columns: 1fr;
+            }
+            
+            .image-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .lesson-footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> กลับหน้าแรก
+        </a>
+        <div class="lesson-title">บทที่ 1: ใช้เหตุผลเชิงตรรกะและอัลกอริทึม</div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="lesson-hero">
+        <h1>การใช้เหตุผลเชิงตรรกะในการแก้ปัญหา</h1>
+        <p>เรียนรู้วิธีคิดอย่างมีเหตุผลและใช้ตรรกะแก้ไขปัญหาอย่างชาญฉลาด</p>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="lesson-content">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <div style="display: inline-flex; align-items: center; justify-content: center; width: 70px; height: 70px; background-color: var(--color-logic); border-radius: 50%; font-size: 32px; color: white; margin-bottom: 15px;">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h2 style="color: var(--color-logic);">คิดอย่างมีตรรกะ...แก้ปัญหาได้ดี!</h2>
+            </div>
+            
+            <div class="intro-box">
+                <p style="font-size: 20px;">
+                    การใช้เหตุผลเชิงตรรกะในการแก้ปัญหา คือการแก้ไขปัญหาโดยอาศัยกฎเกณฑ์ เงื่อนไข หรือหลักการที่มีเหตุผล ร่วมกับประสบการณ์ เพื่ออธิบายและคาดการณ์ผลลัพธ์ของวิธีการแก้ปัญหา โดยมุ่งหวังให้ได้คำตอบที่ถูกต้องและเหมาะสมกับสถานการณ์
+                </p>
+            </div>
+            
+            <h2 style="color: var(--color-primary); margin-top: 40px; margin-bottom: 20px;">
+                <i class="fas fa-cogs"></i> วิธีการใช้เหตุผลเชิงตรรกะ
+            </h2>
+            
+            <div class="logic-types">
+                <!-- วิธีที่ 1 -->
+                <div class="logic-card type1">
+                    <div class="logic-header">
+                        <div class="logic-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <h2>1. การใช้เหตุผลเชิงตรรกะในการแก้ไขปัญหาโดยใช้เหตุผล</h2>
+                    </div>
+                    
+                    <div class="logic-content">
+                        <p>เป็นการแก้ไขปัญหาโดยใช้กฎเกณฑ์หรือหลักเหตุผลมาเป็นตัวอ้างอิง เพื่อนำไปสู่การตัดสินใจหรือวิธีการแก้ปัญหา ซึ่งผลลัพธ์จะขึ้นอยู่กับเงื่อนไขเริ่มต้นของปัญหา</p>
+                    </div>
+                    
+                    <div class="image-container">
+                        <div class="imagebox">
+                            <div style="width: 100%; height: 180px; background: linear-gradient(135deg, #4A90E2, #1565c0); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                                <div style="background-color: white; padding: 20px; border-radius: 10px; text-align: center;">
+                                    <i class="fas fa-question-circle" style="font-size: 40px; color: #4A90E2;"></i>
+                                    <p style="margin-top: 10px; font-weight: bold;">เงื่อนไข</p>
+                                </div>
+                            </div>
+                            <p>ตัวอย่างการใช้เหตุผลเชิงตรรกะจากเงื่อนไข</p>
+                        </div>
+                        
+                        <div class="imagebox">
+                            <div style="width: 100%; height: 180px; background: linear-gradient(135deg, #FFD166, #FBC02D); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                                <div style="background-color: white; padding: 20px; border-radius: 10px; text-align: center;">
+                                    <i class="fas fa-clipboard-check" style="font-size: 40px; color: #FFD166;"></i>
+                                    <p style="margin-top: 10px; font-weight: bold;">ตัดสินใจ</p>
+                                </div>
+                            </div>
+                            <p>การตัดสินใจจากข้อมูลที่กำหนด</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- วิธีที่ 2 -->
+                <div class="logic-card type2">
+                    <div class="logic-header">
+                        <div class="logic-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <h2>2. การใช้เหตุผลเชิงตรรกะในการแก้ไขปัญหาโดยใช้ประสบการณ์</h2>
+                    </div>
+                    
+                    <div class="logic-content">
+                        <p>เป็นใช้เหตุผลจากการตั้งสมมติฐาน การสังเกต การทดลอง และนำผลที่ได้มาใช้เป็นหลักฐานเพื่อสรุปคำตอบ ทั้งนี้ข้อสรุปอาจเปลี่ยนแปลงได้ขึ้นอยู่กับปัจจัย เช่น จำนวนตัวอย่าง หรือวิธีการทดลอง</p>
+                    </div>
+                    
+                    <div class="image-container">
+                        <div class="imagebox">
+                            <div style="width: 100%; height: 180px; background: linear-gradient(135deg, #FF9800, #F57C00); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                                <div style="background-color: white; padding: 20px; border-radius: 10px; text-align: center;">
+                                    <i class="fas fa-microscope" style="font-size: 40px; color: #FF9800;"></i>
+                                    <p style="margin-top: 10px; font-weight: bold;">การทดลอง</p>
+                                </div>
+                            </div>
+                            <p>การใช้ประสบการณ์และการทดลองในการสรุปผล</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ตัวอย่างการฝึกคิด -->
+            <div class="practice-box">
+                <div class="practice-title">
+                    <i class="fas fa-lightbulb"></i>
+                    <h2 style="margin: 0; color: var(--color-dark-blue);">ลองฝึกคิดเชิงตรรกะดูสิ!</h2>
+                </div>
+                
+                <div class="practice-example">
+                    <h3><i class="fas fa-question-circle"></i> สถานการณ์ที่ 1</h3>
+                    <p>ถ้านักเรียนมีเงื่อนไขว่า:</p>
+                    <ul style="padding-left: 20px; margin: 10px 0;">
+                        <li>ถ้าฝนตก จะต้องอยู่บ้าน</li>
+                        <li>วันนี้ฝนตก</li>
+                    </ul>
+                    <p style="background-color: #E3F2FD; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                        <i class="fas fa-check-circle"></i> นักเรียนจะต้องอยู่บ้านหรือไม่? <strong>ใช่ ต้องอยู่บ้าน!</strong>
+                    </p>
+                </div>
+                
+                <div class="practice-example">
+                    <h3><i class="fas fa-question-circle"></i> สถานการณ์ที่ 2</h3>
+                    <p>ถ้านักเรียนสังเกตเห็นว่า:</p>
+                    <ul style="padding-left: 20px; margin: 10px 0;">
+                        <li>ปลูกต้นไม้ 5 ต้น และรดน้ำทุกวัน</li>
+                        <li>ต้นไม้ทั้ง 5 ต้น เติบโตดี</li>
+                    </ul>
+                    <p style="background-color: #FFFDE7; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                        <i class="fas fa-check-circle"></i> นักเรียนจะสรุปว่าอย่างไร? <strong>การรดน้ำทุกวันช่วยให้ต้นไม้เติบโตดี!</strong>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- ข้อมูลอ้างอิง -->
+            <div class="ref-box">
+                <div class="ref-title">
+                    <i class="fas fa-book"></i>
+                    <h3 style="margin: 0;">ข้อมูลอ้างอิง</h3>
+                </div>
+                
+                <div class="ref-content">
+                    <p><strong>Imagineering Education</strong>, "ใช้เหตุผลเชิงตรรกะในการแก้ปัญหา"</p>
+                    <p style="color: var(--color-primary);">เว็บไซต์ https://imagineering.co.th</p>
+                    
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #DDD;">
+                        <p><strong>มูลนิธิการศึกษาทางไกลผ่านดาวเทียม (DLTV)</strong>, "การใช้เหตุผลเชิงตรรกะ"</p>
+                        <p style="color: var(--color-primary);">เว็บไซต์ https://dltv.ac.th</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Navigation -->
+            <div class="lesson-footer">
+                <div style="font-size: 18px;">
+                    <i class="fas fa-graduation-cap"></i> บทเรียนที่ 1.2: การใช้เหตุผลเชิงตรรกะในการแก้ปัญหา
+                </div>
+                
+                <div class="nav-buttons">
+                    <a href="u1-1.html" class="nav-btn prev">
+                        <i class="fas fa-arrow-left"></i> บทที่แล้ว
+                    </a>
+                    <a href="index.html" class="nav-btn">
+                        <i class="fas fa-home"></i> หน้าแรก
+                    </a>
+                    <a href="u1-3.html" class="nav-btn next">
+                        บทต่อไป <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // เพิ่มเอฟเฟกต์เล็กน้อยให้กับเว็บไซต์
+        document.addEventListener('DOMContentLoaded', function() {
+            // เพิ่มเอฟเฟกต์ให้กับการ์ดตรรกะ
+            const logicCards = document.querySelectorAll('.logic-card');
+            logicCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 300 + 300);
+            });
+            
+            // เพิ่มเอฟเฟกต์ให้กับปุ่ม
+            const buttons = document.querySelectorAll('.nav-btn, .back-btn');
+            buttons.forEach(button => {
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // เอฟเฟกต์เมื่อชี้ภาพตัวอย่าง
+            const imageBoxes = document.querySelectorAll('.imagebox');
+            imageBoxes.forEach(box => {
+                box.addEventListener('mouseenter', function() {
+                    const icon = this.querySelector('i');
+                    if (icon) {
+                        icon.style.transform = 'scale(1.2)';
+                        icon.style.transition = 'transform 0.3s ease';
+                    }
+                });
+                
+                box.addEventListener('mouseleave', function() {
+                    const icon = this.querySelector('i');
+                    if (icon) {
+                        icon.style.transform = 'scale(1)';
+                    }
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับตัวอย่างการฝึกคิด
+            const practiceExamples = document.querySelectorAll('.practice-example');
+            practiceExamples.forEach(example => {
+                example.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.99)';
+                    this.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.1)';
+                    
+                    setTimeout(() => {
+                        this.style.transform = '';
+                        this.style.boxShadow = '';
+                    }, 200);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

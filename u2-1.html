@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>การออกแบบโปรแกรมโดยเขียนเป็นข้อความหรือผังงาน - วิทยาการคำนวณ ป.6</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Itim&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #4A90E2;
+            --color-secondary: #FFD166;
+            --color-accent: #FF6B6B;
+            --color-success: #06D6A0;
+            --color-design: #2196F3;
+            --color-text: #E91E63;
+            --color-flowchart: #FF9800;
+            --color-bg: #F8F9FF;
+            --color-card: #FFFFFF;
+            --color-text-dark: #333333;
+            --color-dark-blue: #0B2C4D;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Itim', cursive;
+            background-color: var(--color-bg);
+            color: var(--color-text-dark);
+            line-height: 1.8;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><rect x="30" y="30" width="60" height="60" fill="%234A90E2" opacity="0.05" rx="10"/><circle cx="60" cy="60" r="20" fill="%23FFD166" opacity="0.05"/></svg>');
+            background-size: 120px;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--color-design);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-dark-blue);
+            transform: translateX(-5px);
+            border-color: white;
+        }
+        
+        .lesson-title {
+            color: white;
+            font-size: 22px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        /* Hero Section */
+        .lesson-hero {
+            background: linear-gradient(135deg, var(--color-design) 0%, #1565C0 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .lesson-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M20,20 L80,20 L80,80 L20,80 Z" fill="white" opacity="0.05"/><path d="M30,30 L70,30 L70,70 L30,70 Z" fill="white" opacity="0.05"/></svg>');
+            background-size: 80px;
+        }
+        
+        .lesson-hero h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .lesson-content {
+            background-color: var(--color-card);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: 5px solid var(--color-design);
+        }
+        
+        .lesson-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--color-design), var(--color-secondary));
+        }
+        
+        /* Section Cards */
+        .section-card {
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-card.text-design {
+            border-top: 10px solid var(--color-text);
+            background-color: #FCE4EC;
+        }
+        
+        .section-card.flowchart-design {
+            border-top: 10px solid var(--color-flowchart);
+            background-color: #FFF3E0;
+        }
+        
+        .section-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .section-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 28px;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .text-design .section-icon {
+            background-color: var(--color-text);
+        }
+        
+        .flowchart-design .section-icon {
+            background-color: var(--color-flowchart);
+        }
+        
+        .section-header h2 {
+            color: var(--color-dark-blue);
+            font-size: 26px;
+            margin: 0;
+        }
+        
+        /* Image Boxes */
+        .imagebox {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            border: 3px solid #EEE;
+            transition: all 0.3s ease;
+        }
+        
+        .imagebox:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+            border-color: var(--color-secondary);
+        }
+        
+        .imagebox img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+            border: 5px solid white;
+        }
+        
+        .image-caption {
+            font-weight: bold;
+            color: var(--color-dark-blue);
+            background-color: #FFFDE7;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        
+        /* Benefits Box */
+        .benefits-box {
+            background-color: #E3F2FD;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-primary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .benefits-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .benefits-title i {
+            color: var(--color-primary);
+            font-size: 28px;
+        }
+        
+        .benefits-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        
+        .benefit-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--color-primary);
+        }
+        
+        /* Methods List */
+        .methods-list {
+            counter-reset: method-counter;
+            margin: 25px 0;
+        }
+        
+        .methods-list li {
+            list-style: none;
+            margin-bottom: 15px;
+            padding-left: 60px;
+            position: relative;
+            font-size: 18px;
+        }
+        
+        .methods-list li::before {
+            counter-increment: method-counter;
+            content: counter(method-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 45px;
+            height: 45px;
+            background-color: var(--color-flowchart);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            font-family: 'Mali', cursive;
+        }
+        
+        /* Footer */
+        .lesson-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px dashed #DDD;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--color-dark-blue);
+            transform: translateY(-5px);
+            border-color: var(--color-secondary);
+        }
+        
+        .nav-btn.prev {
+            background-color: var(--color-design);
+        }
+        
+        .nav-btn.prev:hover {
+            background-color: #1565C0;
+        }
+        
+        .nav-btn.next {
+            background-color: var(--color-success);
+        }
+        
+        .nav-btn.next:hover {
+            background-color: #05b585;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-hero h1 {
+                font-size: 28px;
+            }
+            
+            .benefits-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .lesson-footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .section-icon {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> กลับหน้าแรก
+        </a>
+        <div class="lesson-title">บทที่ 2: ออกแบบและเขียนโปรแกรมอย่างง่าย</div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="lesson-hero">
+        <h1>การออกแบบโปรแกรมโดยเขียนเป็นข้อความหรือผังงาน</h1>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="lesson-content">
+            <!-- Section 1: Text Design -->
+            <div class="section-card text-design">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-font"></i>
+                    </div>
+                    <h2>1. การออกแบบโปรแกรมด้วยการเขียนเป็นข้อความ</h2>
+                </div>
+                
+                <p style="font-size: 18px;">
+                    เป็นการแสดงลำดับขั้นตอนการทำงานด้วยการเขียนเป็นข้อความบอกเล่า ดังนั้น ในการเขียนข้อความต้องเขียนให้ละเอียด ชัดเจน เป็นขั้นตอน เข้าใจง่าย ไม่ยืดเยื้อจนเกินไปจนยากต่อการทำความเข้าใจหรือยากต่อการตรวจสอบความถูกต้อง
+                </p>
+                
+                <div class="imagebox">
+                    <img src="exp-1-696x428.jpg.webp" alt="ตัวอย่างการออกแบบด้วยข้อความ">
+                    <div class="image-caption">ภาพที่ 1: ตัวอย่างการเขียนลำดับขั้นตอน (Algorithm) ด้วยข้อความ</div>
+                </div>
+                
+                <div style="background-color: #F3E5F5; border-radius: 10px; padding: 20px; margin-top: 20px;">
+                    <h3 style="color: var(--color-text); margin-bottom: 10px;">
+                        <i class="fas fa-lightbulb"></i> เทคนิคการเขียนข้อความให้ดี
+                    </h3>
+                    <ul style="padding-left: 20px;">
+                        <li>เขียนทีละขั้นตอนชัดเจน</li>
+                        <li>ใช้ภาษาง่ายๆ เข้าใจง่าย</li>
+                        <li>ระบุลำดับการทำงาน (ขั้นที่ 1, 2, 3...)</li>
+                        <li>ตรวจสอบว่าข้อมูลเข้าและออกชัดเจน</li>
+                        <li>ให้คนอื่นอ่านแล้วเข้าใจได้ทันที</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Section 2: Flowchart Design -->
+            <div class="section-card flowchart-design">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h2>2. การออกแบบโปรแกรมด้วยการเขียนเป็นผังงาน</h2>
+                </div>
+                
+                <p style="font-size: 18px;">
+                    <b>ผังงาน (Flowchart)</b> คือ รูปภาพหรือสัญลักษณ์ ที่ใช้เขียนแทนคำอธิบาย ข้อความ หรือคำพูดที่ใช้ในอัลกอริทึม เพราะการที่จะเข้าใจขั้นตอนได้ง่ายและตรงกันนั้น การใช้คำพูดหรือข้อความอาจทำได้ยากกว่าการใช้รูปภาพหรือสัญลักษณ์
+                </p>
+                
+                <div class="imagebox">
+                    <img src="exp-2.jpg.webp" alt="สัญลักษณ์ผังงาน">
+                    <div class="image-caption">ภาพที่ 2: สัญลักษณ์มาตรฐานและการเขียนผังงาน</div>
+                </div>
+                
+                <!-- Benefits -->
+                <div class="benefits-box">
+                    <div class="benefits-title">
+                        <i class="fas fa-star"></i>
+                        <h3 style="margin: 0; color: var(--color-dark-blue);">ประโยชน์ของผังงาน</h3>
+                    </div>
+                    
+                    <div class="benefits-list">
+                        <div class="benefit-item">
+                            <h4><i class="fas fa-check-circle" style="color: var(--color-primary);"></i> เข้าใจง่าย</h4>
+                            <p>ไม่ขึ้นกับภาษาคอมพิวเตอร์ภาษาใดภาษาหนึ่ง สื่อสารได้ทุกภาษา</p>
+                        </div>
+                        
+                        <div class="benefit-item">
+                            <h4><i class="fas fa-eye" style="color: var(--color-primary);"></i> เห็นภาพชัดเจน</h4>
+                            <p>ช่วยลำดับขั้นตอนการทำงาน ไม่สับสน ลดความผิดพลาดในการสื่อสาร</p>
+                        </div>
+                        
+                        <div class="benefit-item">
+                            <h4><i class="fas fa-search" style="color: var(--color-primary);"></i> ตรวจสอบง่าย</h4>
+                            <p>ช่วยให้ตรวจเช็กความถูกต้องและแก้ไขโปรแกรมได้รวดเร็ว</p>
+                        </div>
+                        
+                        <div class="benefit-item">
+                            <h4><i class="fas fa-graduation-cap" style="color: var(--color-primary);"></i> เรียนรู้งานไว</h4>
+                            <p>ช่วยให้ผู้อื่นศึกษาการทำงานของโปรแกรมเราได้อย่างรวดเร็ว</p>
+                        </div>
+                        
+                        <div class="benefit-item">
+                            <h4><i class="fas fa-tools" style="color: var(--color-primary);"></i> ง่ายต่อการบำรุงรักษา</h4>
+                            <p>สะดวกในการกลับมาทบทวนเพื่อปรับปรุงแก้ไขในภายหลัง</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Methods -->
+                <h3 style="color: var(--color-flowchart); margin-top: 30px; margin-bottom: 20px;">
+                    <i class="fas fa-list-ol"></i> วิธีการเขียนผังงานที่ดี
+                </h3>
+                
+                <ol class="methods-list">
+                    <li>ใช้สัญลักษณ์ตามที่กำหนดไว้เป็นมาตรฐาน</li>
+                    <li>ต้องมีจุดเริ่มต้น <b>(Start)</b> และสิ้นสุด <b>(Stop)</b> เสมอ</li>
+                    <li>ใช้หัวลูกศรแสดงทิศทางจากบนลงล่างหรือซ้ายไปขวา</li>
+                    <li>ทุกแผนภาพต้องมีลูกศรเข้า 1 เส้นและออก 1 เส้น (ยกเว้นจุดเริ่มต้น/สิ้นสุด)</li>
+                    <li>ใช้ข้อความที่สั้น กะทัดรัด และเข้าใจง่าย</li>
+                    <li>หลีกเลี่ยงเส้นโยงที่ตัดกันไปมา ควรใช้จุดเชื่อมต่อแทน</li>
+                    <li>ผังงานควรสะอาด เป็นระเบียบ และอ่านง่าย</li>
+                    <li>ควรทดสอบความถูกต้องของผังงานก่อนเริ่มเขียนโปรแกรมจริง</li>
+                </ol>
+                
+                <div style="background-color: #E8F5E9; border-radius: 10px; padding: 20px; margin-top: 25px;">
+                    <h4 style="color: var(--color-success);">
+                        <i class="fas fa-clipboard-check"></i> ลองฝึกเขียนผังงานดูสิ!
+                    </h4>
+                    <p>ให้นักเรียนลองเขียนผังงานสำหรับการทำกิจกรรมต่อไปนี้:</p>
+                    <ul style="padding-left: 20px; margin-top: 10px;">
+                        <li>การแปรงฟันตอนเช้า</li>
+                        <li>การเดินทางจากบ้านมาโรงเรียน</li>
+                        <li>การทำการบ้านวิชาคณิตศาสตร์</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Comparison Box -->
+            <div style="background: linear-gradient(135deg, var(--color-text), var(--color-flowchart)); border-radius: 15px; padding: 30px; margin: 40px 0; color: white;">
+                <h3 style="text-align: center; margin-bottom: 20px;">
+                    <i class="fas fa-balance-scale"></i> เปรียบเทียบการออกแบบด้วยข้อความ vs ผังงาน
+                </h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div style="background-color: rgba(255, 255, 255, 0.2); border-radius: 10px; padding: 20px; text-align: center;">
+                        <h4><i class="fas fa-font"></i> การเขียนเป็นข้อความ</h4>
+                        <ul style="text-align: left; padding-left: 20px; margin-top: 10px;">
+                            <li>ใช้ง่าย รวดเร็ว</li>
+                            <li>ไม่ต้องใช้สัญลักษณ์</li>
+                            <li>เหมาะกับขั้นตอนง่ายๆ</li>
+                            <li>อาจเข้าใจผิดได้ง่าย</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background-color: rgba(255, 255, 255, 0.2); border-radius: 10px; padding: 20px; text-align: center;">
+                        <h4><i class="fas fa-project-diagram"></i> การเขียนเป็นผังงาน</h4>
+                        <ul style="text-align: left; padding-left: 20px; margin-top: 10px;">
+                            <li>เห็นภาพชัดเจน</li>
+                            <li>เข้าใจได้ตรงกัน</li>
+                            <li>เหมาะกับขั้นตอนซับซ้อน</li>
+                            <li>ใช้เวลาวาดนานกว่า</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Navigation -->
+            <div class="lesson-footer">
+                <div style="font-size: 18px;">
+                    <i class="fas fa-graduation-cap"></i> บทเรียนที่ 2.1: การออกแบบโปรแกรมโดยเขียนเป็นข้อความหรือผังงาน
+                </div>
+                
+                <div class="nav-buttons">
+                    <a href="u1-3.html" class="nav-btn prev">
+                        <i class="fas fa-arrow-left"></i> บทที่แล้ว
+                    </a>
+                    <a href="index.html" class="nav-btn">
+                        <i class="fas fa-home"></i> หน้าแรก
+                    </a>
+                    <a href="u2-2.html" class="nav-btn next">
+                        บทต่อไป <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // เพิ่มเอฟเฟกต์เล็กน้อยให้กับเว็บไซต์
+        document.addEventListener('DOMContentLoaded', function() {
+            // เพิ่มเอฟเฟกต์ให้กับการ์ดส่วนต่างๆ
+            const sectionCards = document.querySelectorAll('.section-card');
+            sectionCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 300 + 300);
+            });
+            
+            // เพิ่มเอฟเฟกต์ให้กับปุ่ม
+            const buttons = document.querySelectorAll('.nav-btn, .back-btn');
+            buttons.forEach(button => {
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // เอฟเฟกต์เมื่อชี้ภาพ
+            const imageboxes = document.querySelectorAll('.imagebox');
+            imageboxes.forEach(box => {
+                box.addEventListener('mouseenter', function() {
+                    const img = this.querySelector('img');
+                    if (img) {
+                        img.style.transform = 'scale(1.02)';
+                        img.style.transition = 'transform 0.3s ease';
+                    }
+                });
+                
+                box.addEventListener('mouseleave', function() {
+                    const img = this.querySelector('img');
+                    if (img) {
+                        img.style.transform = 'scale(1)';
+                    }
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับรายการประโยชน์
+            const benefitItems = document.querySelectorAll('.benefit-item');
+            benefitItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const icon = this.querySelector('i');
+                    if (icon) {
+                        icon.style.transform = 'scale(1.2)';
+                        icon.style.transition = 'transform 0.3s ease';
+                    }
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    const icon = this.querySelector('i');
+                    if (icon) {
+                        icon.style.transform = 'scale(1)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

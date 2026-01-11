@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>การแก้ปัญหาอย่างเป็นขั้นตอน - วิทยาการคำนวณ ป.6</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Itim&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #4A90E2;
+            --color-secondary: #FFD166;
+            --color-accent: #FF6B6B;
+            --color-success: #06D6A0;
+            --color-bg: #F8F9FF;
+            --color-card: #FFFFFF;
+            --color-text: #333333;
+            --color-dark-blue: #0B2C4D;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Itim', cursive;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.8;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="20" cy="20" r="5" fill="%234A90E2" opacity="0.1"/><circle cx="80" cy="40" r="7" fill="%23FFD166" opacity="0.1"/><circle cx="40" cy="80" r="6" fill="%23FF6B6B" opacity="0.1"/></svg>');
+            background-size: 150px;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--color-primary);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-dark-blue);
+            transform: translateX(-5px);
+            border-color: white;
+        }
+        
+        .lesson-title {
+            color: white;
+            font-size: 22px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        /* Hero Section */
+        .lesson-hero {
+            background: linear-gradient(135deg, var(--color-primary) 0%, #1565c0 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .lesson-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M10,50 Q25,20 50,10 Q75,20 90,50 Q75,80 50,90 Q25,80 10,50 Z" fill="white" opacity="0.05"/></svg>');
+            background-size: 100px;
+        }
+        
+        .lesson-hero h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .lesson-hero p {
+            font-size: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            opacity: 0.9;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .lesson-content {
+            background-color: var(--color-card);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: 5px solid var(--color-primary);
+        }
+        
+        .lesson-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--color-primary), var(--color-secondary));
+        }
+        
+        /* Step Cards */
+        .step-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .step-card {
+            background-color: #E3F2FD;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-top: 10px solid var(--color-primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: var(--color-primary);
+            color: white;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-family: 'Mali', cursive;
+        }
+        
+        .step-card h3 {
+            color: var(--color-dark-blue);
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        
+        /* Example Boxes */
+        .example-container {
+            background-color: #FFFDE7;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid #FFD166;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .example-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--color-dark-blue);
+            margin-bottom: 15px;
+        }
+        
+        .example-title i {
+            color: var(--color-accent);
+            font-size: 24px;
+        }
+        
+        .example-box {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border: 2px dashed #FFD166;
+        }
+        
+        .input-output {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .input-box, .output-box {
+            flex: 1;
+            min-width: 200px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .input-box {
+            border-top: 8px solid var(--color-success);
+        }
+        
+        .output-box {
+            border-top: 8px solid var(--color-accent);
+        }
+        
+        .input-box h4, .output-box h4 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        /* Step List */
+        .step-list {
+            counter-reset: step-counter;
+            margin: 25px 0;
+        }
+        
+        .step-list li {
+            list-style: none;
+            margin-bottom: 15px;
+            padding-left: 60px;
+            position: relative;
+            font-size: 18px;
+        }
+        
+        .step-list li::before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 45px;
+            height: 45px;
+            background-color: var(--color-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            font-family: 'Mali', cursive;
+        }
+        
+        /* Life Example */
+        .life-example {
+            background-color: #E8F5E9;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-success);
+        }
+        
+        /* Fun Elements */
+        .fun-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background-color: var(--color-secondary);
+            border-radius: 50%;
+            font-size: 28px;
+            margin: 0 10px 20px 0;
+            color: var(--color-dark-blue);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Footer */
+        .lesson-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px dashed #DDD;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--color-dark-blue);
+            transform: translateY(-5px);
+            border-color: var(--color-secondary);
+        }
+        
+        .nav-btn.next {
+            background-color: var(--color-success);
+        }
+        
+        .nav-btn.next:hover {
+            background-color: #05b585;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-hero h1 {
+                font-size: 28px;
+            }
+            
+            .step-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-output {
+                flex-direction: column;
+            }
+            
+            .lesson-footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> กลับหน้าแรก
+        </a>
+        <div class="lesson-title">บทที่ 1: ใช้เหตุผลเชิงตรรกะและอัลกอริทึม</div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="lesson-hero">
+        <h1>การแก้ปัญหาอย่างเป็นขั้นตอน</h1>
+        <p>เรียนรู้วิธีแก้ปัญหาอย่างเป็นระบบด้วย 4 ขั้นตอนง่ายๆ พร้อมตัวอย่างสนุกๆ ในชีวิตประจำวัน</p>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="lesson-content">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <div class="fun-icon">
+                    <i class="fas fa-puzzle-piece"></i>
+                </div>
+                <h2 style="color: var(--color-dark-blue); display: inline-block;">มาแก้ปริศนาด้วยกัน!</h2>
+            </div>
+            
+            <p style="font-size: 20px; margin-bottom: 30px;">
+                การแก้ปัญหาอย่างเป็นขั้นตอนเป็นวิธีการแก้ปัญหาที่ช่วยให้ผู้เรียนสามารถตัดสินใจได้อย่างถูกต้องและมีเหตุผลมากยิ่งขึ้น ทำให้สามารถมองเห็นปัญหาอย่างเป็นระบบ และสามารถแก้ไขปัญหาได้อย่างมีประสิทธิภาพ
+            </p>
+            
+            <h2 style="color: var(--color-primary); margin-top: 40px; margin-bottom: 20px;">
+                <i class="fas fa-list-ol"></i> กระบวนการแก้ปัญหา 4 ขั้นตอน
+            </h2>
+            
+            <div class="step-container">
+                <!-- Step 1 -->
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>การวิเคราะห์และกำหนดรายละเอียดของปัญหา</h3>
+                    <ul style="padding-left: 20px;">
+                        <li>การระบุข้อมูลเข้า (Input)</li>
+                        <li>การระบุข้อมูลออก (Output)</li>
+                        <li>การกำหนดวิธีประมวลผล (Process)</li>
+                    </ul>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>การวางแผนในการแก้ปัญหา</h3>
+                    <p>การเลือกเครื่องมือและออกแบบขั้นตอน เช่น ผังงาน หรือรหัสจำลอง เพื่อให้เข้าใจลำดับการทำงานได้ง่าย</p>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>การดำเนินการแก้ปัญหา</h3>
+                    <p>การลงมือปฏิบัติตามแผนที่วางไว้</p>
+                </div>
+                
+                <!-- Step 4 -->
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>การตรวจสอบและปรับปรุง</h3>
+                    <p>ตรวจสอบความถูกต้อง และปรับปรุงวิธีการให้ดียิ่งขึ้น</p>
+                </div>
+            </div>
+            
+            <hr style="margin: 40px 0; border: none; border-top: 3px dashed #DDD;">
+            
+            <!-- ตัวอย่างที่ 1 -->
+            <div class="example-container">
+                <div class="example-title">
+                    <i class="fas fa-lightbulb"></i>
+                    <h2 style="margin: 0;">ตัวอย่าง: การหาค่ามากที่สุดของ 3 จำนวน</h2>
+                </div>
+                
+                <div class="input-output">
+                    <div class="input-box">
+                        <h4><i class="fas fa-sign-in-alt"></i> ข้อมูลเข้า</h4>
+                        <p style="font-size: 20px; font-weight: bold; color: var(--color-success);">a, b และ c</p>
+                        <p>(เช่น 8, 7, 12)</p>
+                    </div>
+                    
+                    <div class="output-box">
+                        <h4><i class="fas fa-sign-out-alt"></i> ข้อมูลออก</h4>
+                        <p style="font-size: 20px; font-weight: bold; color: var(--color-accent);">ค่าที่มากที่สุด</p>
+                        <p>(เช่น 12)</p>
+                    </div>
+                </div>
+                
+                <h3 style="color: var(--color-dark-blue); margin: 25px 0 15px 0;">
+                    <i class="fas fa-footsteps"></i> ขั้นตอนการแก้ปัญหา
+                </h3>
+                
+                <ol class="step-list">
+                    <li>เปรียบเทียบ a กับ b</li>
+                    <li>นำค่าที่ได้ไปเปรียบเทียบกับ c</li>
+                    <li>ค่าที่ได้คือค่ามากที่สุด</li>
+                </ol>
+                
+                <div class="example-box">
+                    <h4><i class="fas fa-check-circle"></i> ลองทำดูเลย!</h4>
+                    <p>ถ้า a = 8, b = 7, c = 12</p>
+                    <p style="font-size: 24px; font-weight: bold; color: var(--color-accent); margin-top: 10px;">
+                        ค่าที่มากที่สุดคือ <span style="background-color: var(--color-secondary); padding: 5px 15px; border-radius: 10px;">12</span>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- ตัวอย่างที่ 2 -->
+            <div class="life-example">
+                <div class="example-title">
+                    <i class="fas fa-home"></i>
+                    <h2 style="margin: 0;">ตัวอย่างในชีวิตประจำวัน</h2>
+                </div>
+                
+                <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;">
+                    <div class="example-box" style="flex: 1; min-width: 250px;">
+                        <h4><i class="fas fa-utensils"></i> การทำบะหมี่กึ่งสำเร็จรูป</h4>
+                        <ol style="padding-left: 20px; margin-top: 10px;">
+                            <li>เริ่มต้น</li>
+                            <li>ต้มน้ำ</li>
+                            <li>ใส่เส้น</li>
+                            <li>รอ 2 นาที</li>
+                            <li>ใส่เครื่องปรุง</li>
+                            <li>เสร็จสิ้น</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="example-box" style="flex: 1; min-width: 250px;">
+                        <h4><i class="fas fa-shapes"></i> การหาพื้นที่สามเหลี่ยม</h4>
+                        <ol style="padding-left: 20px; margin-top: 10px;">
+                            <li>เริ่มต้น</li>
+                            <li>กำหนดฐาน</li>
+                            <li>กำหนดความสูง</li>
+                            <li>คำนวณพื้นที่</li>
+                            <li>แสดงผล</li>
+                            <li>เสร็จสิ้น</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="example-box" style="margin-top: 20px;">
+                    <h4><i class="fas fa-brain"></i> ลองคิดดูสิ!</h4>
+                    <p>ลองคิดดูว่าในชีวิตประจำวันของเรา มีกิจกรรมอะไรบ้างที่เราทำเป็นขั้นตอน?</p>
+                    <ul style="padding-left: 20px; margin-top: 10px;">
+                        <li>การแปรงฟัน</li>
+                        <li>การเดินทางมาโรงเรียน</li>
+                        <li>การทำการบ้าน</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Footer Navigation -->
+            <div class="lesson-footer">
+                <div style="font-size: 18px;">
+                    <i class="fas fa-graduation-cap"></i> บทเรียนที่ 1.1: การแก้ปัญหาอย่างเป็นขั้นตอน
+                </div>
+                
+                <div class="nav-buttons">
+                    <a href="index.html" class="nav-btn">
+                        <i class="fas fa-home"></i> หน้าแรก
+                    </a>
+                    <a href="u1-2.html" class="nav-btn next">
+                        บทต่อไป <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // เพิ่มเอฟเฟกต์เล็กน้อยให้กับเว็บไซต์
+        document.addEventListener('DOMContentLoaded', function() {
+            // เพิ่มเอฟเฟกต์ให้กับการ์ดขั้นตอน
+            const stepCards = document.querySelectorAll('.step-card');
+            stepCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200 + 300);
+            });
+            
+            // เพิ่มเอฟเฟกต์ให้กับปุ่ม
+            const buttons = document.querySelectorAll('.nav-btn, .back-btn');
+            buttons.forEach(button => {
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // เอฟเฟกต์เมื่อกดตัวอย่าง
+            const exampleBoxes = document.querySelectorAll('.example-box');
+            exampleBoxes.forEach(box => {
+                box.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

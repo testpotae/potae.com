@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ปัญญาประดิษฐ์ (AI) เทคโนโลยีเปลี่ยนโลก - วิทยาการคำนวณ ป.6</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Itim&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #4A90E2;
+            --color-secondary: #FFD166;
+            --color-accent: #FF6B6B;
+            --color-success: #06D6A0;
+            --color-ai: #9C27B0;
+            --color-robot: #FF5722;
+            --color-benefit: #2196F3;
+            --color-caution: #FF9800;
+            --color-impact: #F44336;
+            --color-bg: #F8F9FF;
+            --color-card: #FFFFFF;
+            --color-text: #333333;
+            --color-dark-blue: #0B2C4D;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Itim', cursive;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.8;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><path d="M30,30 Q50,10 70,30 T90,30 Q70,50 90,70 T90,90 Q50,70 30,90 T10,90 Q30,70 10,50 T10,10 Q30,30 30,30 Z" fill="%239C27B0" opacity="0.05"/><rect x="40" y="40" width="40" height="40" fill="%234A90E2" opacity="0.05" rx="5"/></svg>');
+            background-size: 120px;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--color-ai);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-dark-blue);
+            transform: translateX(-5px);
+            border-color: white;
+        }
+        
+        .lesson-title {
+            color: white;
+            font-size: 22px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        /* Hero Section */
+        .lesson-hero {
+            background: linear-gradient(135deg, var(--color-ai) 0%, #7B1FA2 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .lesson-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="20" cy="20" r="8" fill="white" opacity="0.05"/><circle cx="80" cy="30" r="10" fill="white" opacity="0.05"/><circle cx="40" cy="70" r="12" fill="white" opacity="0.05"/><circle cx="70" cy="80" r="6" fill="white" opacity="0.05"/></svg>');
+            background-size: 100px;
+        }
+        
+        .lesson-hero h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px 25px;
+            border-radius: 50px;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .lesson-content {
+            background-color: var(--color-card);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: 5px solid var(--color-ai);
+        }
+        
+        .lesson-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--color-ai), var(--color-secondary));
+        }
+        
+        /* Introduction */
+        .intro-box {
+            background-color: #F3E5F5;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-ai);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .intro-box p {
+            font-size: 20px;
+        }
+        
+        /* AI Definition */
+        .ai-definition {
+            background-color: #E3F2FD;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border-left: 10px solid var(--color-primary);
+        }
+        
+        .comparison-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+        
+        .comparison-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .comparison-item.computer {
+            border-top: 8px solid var(--color-primary);
+        }
+        
+        .comparison-item.ai {
+            border-top: 8px solid var(--color-ai);
+        }
+        
+        /* AI vs Robot */
+        .ai-vs-robot {
+            background-color: #FFF3E0;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border-left: 10px solid var(--color-robot);
+        }
+        
+        .ai-robot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .ai-robot-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .ai-robot-item.robot {
+            border-top: 8px solid var(--color-robot);
+        }
+        
+        .ai-robot-item.ai {
+            border-top: 8px solid var(--color-ai);
+        }
+        
+        /* Image Box */
+        .imagebox {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            border: 3px solid #EEE;
+            transition: all 0.3s ease;
+        }
+        
+        .imagebox:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+            border-color: var(--color-secondary);
+        }
+        
+        .imagebox img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+            border: 5px solid white;
+        }
+        
+        .image-caption {
+            font-weight: bold;
+            color: var(--color-dark-blue);
+            background-color: #FFFDE7;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        
+        /* AI Working Process */
+        .ai-process {
+            background-color: #E8F5E9;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border-left: 10px solid var(--color-success);
+        }
+        
+        .process-steps {
+            counter-reset: process-counter;
+            margin: 25px 0;
+        }
+        
+        .process-steps li {
+            list-style: none;
+            margin-bottom: 20px;
+            padding-left: 70px;
+            position: relative;
+            font-size: 18px;
+        }
+        
+        .process-steps li::before {
+            counter-increment: process-counter;
+            content: counter(process-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 50px;
+            height: 50px;
+            background-color: var(--color-success);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: bold;
+            font-family: 'Mali', cursive;
+        }
+        
+        /* Examples Section */
+        .examples-section {
+            background-color: #FFF3E0;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .example-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--color-primary);
+        }
+        
+        /* Benefits & Cautions */
+        .benefits-section {
+            background-color: #E3F2FD;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border-left: 10px solid var(--color-benefit);
+        }
+        
+        .cautions-section {
+            background-color: #FFEBEE;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border-left: 10px solid var(--color-caution);
+        }
+        
+        /* Applications Section */
+        .applications-section {
+            background-color: #F3E5F5;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        
+        .application-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border-left: 8px solid var(--color-ai);
+        }
+        
+        /* Impacts Section */
+        .impacts-section {
+            background-color: #FFEBEE;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border-left: 10px solid var(--color-impact);
+        }
+        
+        .impact-list {
+            counter-reset: impact-counter;
+            margin: 25px 0;
+        }
+        
+        .impact-list li {
+            list-style: none;
+            margin-bottom: 20px;
+            padding-left: 70px;
+            position: relative;
+            font-size: 18px;
+        }
+        
+        .impact-list li::before {
+            counter-increment: impact-counter;
+            content: counter(impact-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 50px;
+            height: 50px;
+            background-color: var(--color-impact);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: bold;
+            font-family: 'Mali', cursive;
+        }
+        
+        /* Reference Box */
+        .ref-box {
+            background-color: #F5F5F5;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
+            border-left: 10px solid #9E9E9E;
+        }
+        
+        .ref-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--color-dark-blue);
+            margin-bottom: 15px;
+        }
+        
+        /* Try AI */
+        .try-ai {
+            background: linear-gradient(135deg, var(--color-ai), #7B1FA2);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            color: white;
+            text-align: center;
+        }
+        
+        /* Footer */
+        .lesson-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px dashed #DDD;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--color-dark-blue);
+            transform: translateY(-5px);
+            border-color: var(--color-secondary);
+        }
+        
+        .nav-btn.prev {
+            background-color: var(--color-ai);
+        }
+        
+        .nav-btn.prev:hover {
+            background-color: #7B1FA2;
+        }
+        
+        .nav-btn.next {
+            background-color: var(--color-success);
+        }
+        
+        .nav-btn.next:hover {
+            background-color: #05b585;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-hero h1 {
+                font-size: 28px;
+            }
+            
+            .comparison-box, .ai-robot-grid, .examples-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .lesson-footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .process-steps li, .impact-list li {
+                padding-left: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> กลับหน้าแรก
+        </a>
+        <div class="lesson-title">บทที่ 4: ใช้เทคโนโลยีสารสนเทศอย่างปลอดภัย</div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="lesson-hero">
+        <h1>ปัญญาประดิษฐ์ (AI) เทคโนโลยีเปลี่ยนโลก</h1>
+        <div class="ai-badge">
+            <i class="fas fa-robot"></i>
+            <span>Artificial Intelligence - เทคโนโลยีแห่งอนาคต</span>
+        </div>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="lesson-content">
+            <!-- Introduction -->
+            <div class="intro-box">
+                <p style="font-size: 20px;">
+                    เทคโนโลยีปัญญาประดิษฐ์ (Artificial Intelligence: AI) หมายถึง เทคโนโลยีการสร้างเครื่องจักรให้มีคุณลักษณะทางด้านสติปัญญาและความฉลาดเหมือนมนุษย์ ในด้านต่าง ๆ เพื่อนำมาช่วยเพิ่มขีดความสามารถให้แก่องค์กรและประโยชน์อีกหลากหลายประเภท ทั้งยังมีแนวโน้มที่จะถูกใช้ร่วมกับเทคโนโลยี Cloud Computing และ Big Data ซึ่งทำให้เกิดการส่งถ่ายข้อมูลไปมาระหว่างเครื่องจักรในระบบเครือข่ายอินเทอร์เน็ต
+                </p>
+            </div>
+            
+            <!-- AI Definition -->
+            <div class="ai-definition">
+                <h2 style="color: var(--color-primary); margin-top: 0; border-left: none; padding-left: 0;">
+                    <i class="fas fa-brain"></i> 1. ทำความรู้จักปัญญาประดิษฐ์
+                </h2>
+                
+                <p>AI (Artificial Intelligence) คือ "ปัญญาประดิษฐ์" หรือคอมพิวเตอร์ที่ถูกสร้างมาให้ "คิด วิเคราะห์ และเรียนรู้" ได้คล้ายกับมนุษย์</p>
+                
+                <h3 style="color: var(--color-primary); margin-top: 25px;">
+                    <i class="fas fa-balance-scale"></i> เปรียบเทียบให้เห็นภาพ
+                </h3>
+                
+                <div class="comparison-box">
+                    <div class="comparison-item computer">
+                        <h4><i class="fas fa-calculator" style="color: var(--color-primary);"></i> คอมพิวเตอร์ทั่วไป</h4>
+                        <p>เหมือน "เครื่องคิดเลข" ทำตามคำสั่งที่เรากดเป๊ะๆ ถ้าไม่สั่งก็ไม่ทำ</p>
+                        <div style="background-color: #E3F2FD; padding: 10px; border-radius: 8px; margin-top: 10px;">
+                            <p><i class="fas fa-cog"></i> <b>ตัวอย่าง:</b> คำนวณ 2+2 = 4</p>
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-item ai">
+                        <h4><i class="fas fa-child" style="color: var(--color-ai);"></i> AI (ปัญญาประดิษฐ์)</h4>
+                        <p>เหมือน "เด็กน้อยที่ชอบเรียนรู้" ยิ่งเราป้อนข้อมูลให้มากเท่าไหร่ มันยิ่งฉลาดและเดาใจเราเก่งขึ้นเท่านั้น</p>
+                        <div style="background-color: #F3E5F5; padding: 10px; border-radius: 8px; margin-top: 10px;">
+                            <p><i class="fas fa-lightbulb"></i> <b>ตัวอย่าง:</b> แนะนำหนังที่คุณน่าจะชอบ</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI vs Robot -->
+            <div class="ai-vs-robot">
+                <h2 style="color: var(--color-robot); margin-top: 0; border-left: none; padding-left: 0;">
+                    <i class="fas fa-robot"></i> 2. AI ต่างจาก หุ่นยนต์ อย่างไร?
+                </h2>
+                
+                <div class="ai-robot-grid">
+                    <div class="ai-robot-item robot">
+                        <div style="font-size: 40px; margin-bottom: 15px;">🤖</div>
+                        <h4>หุ่นยนต์ (Robot)</h4>
+                        <p>คือ "ร่างกาย" (เหล็ก, มอเตอร์, ล้อ) ที่จับต้องได้</p>
+                    </div>
+                    
+                    <div class="ai-robot-item ai">
+                        <div style="font-size: 40px; margin-bottom: 15px;">🧠</div>
+                        <h4>AI (ปัญญาประดิษฐ์)</h4>
+                        <p>คือ "สมอง" หรือซอฟต์แวร์ที่มองไม่เห็น</p>
+                    </div>
+                </div>
+                
+                <div style="background-color: white; border-radius: 10px; padding: 20px; margin-top: 25px;">
+                    <h4><i class="fas fa-info-circle" style="color: var(--color-robot);"></i> ตัวอย่าง:</h4>
+                    <p>หุ่นยนต์ดูดฝุ่น "ร่างกาย" คือตัวเครื่องวงกลมที่วิ่งไปมา แต่ "AI" คือสมองที่บอกมันว่า "ตรงนั้นคือกำแพงนะ อย่าชน" หรือ "ตรงนี้ดูดไปแล้ว ไม่ต้องไปซ้ำ"</p>
+                </div>
+                
+                <div class="imagebox">
+                    <img src="image-2-1-300x300.webp" alt="ความแตกต่างระหว่าง AI และหุ่นยนต์">
+                    <div class="image-caption">ความแตกต่างระหว่าง AI และหุ่นยนต์</div>
+                </div>
+            </div>
+            
+            <!-- AI Working Process -->
+            <div class="ai-process">
+                <h2 style="color: var(--color-success); margin-top: 0; border-left: none; padding-left: 0;">
+                    <i class="fas fa-cogs"></i> หลักการทำงานของ AI
+                </h2>
+                
+                <ol class="process-steps">
+                    <li><b>รวบรวมข้อมูล:</b> AI จะเริ่มต้นด้วยการรวบรวมข้อมูล จากแหล่งต่างๆ เช่น Database, Sensors, Images, Text</li>
+                    <li><b>ประมวลผลข้อมูล:</b> AI จะนำข้อมูลที่รวบรวมได้ มาวิเคราะห์ และ ประมวลผล ด้วย Algorithms และ Machine Learning</li>
+                    <li><b>เรียนรู้และพัฒนา:</b> AI จะเรียนรู้จากข้อมูล และประสบการณ์ เพื่อปรับปรุงประสิทธิภาพ และความแม่นยำในการทำงาน</li>
+                </ol>
+            </div>
+            
+            <!-- Examples -->
+            <div class="examples-section">
+                <h2 style="color: var(--color-dark-blue); text-align: center;">
+                    <i class="fas fa-star"></i> ตัวอย่าง AI ใกล้ตัว
+                </h2>
+                
+                <div class="examples-grid">
+                    <div class="example-item">
+                        <h4><i class="fas fa-microphone-alt" style="color: var(--color-primary);"></i> Siri และ Google Assistant</h4>
+                        <p>ผู้ช่วยเสมือน ที่ตอบคำถาม และ สั่งงานด้วยเสียง</p>
+                    </div>
+                    
+                    <div class="example-item">
+                        <h4><i class="fas fa-film" style="color: var(--color-primary);"></i> Netflix และ Spotify</h4>
+                        <p>ระบบแนะนำ Movies และ Music ตามความชอบ</p>
+                    </div>
+                    
+                    <div class="example-item">
+                        <h4><i class="fas fa-user-circle" style="color: var(--color-primary);"></i> Facebook และ Instagram</h4>
+                        <p>ระบบจดจำใบหน้า และ Personalized Ads</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Benefits -->
+            <div class="benefits-section">
+                <h2 style="color: var(--color-benefit); margin-top: 0; border-left: none; padding-left: 0;">
+                    <i class="fas fa-gift"></i> ประโยชน์ของ AI (AI ช่วยเราอย่างไร?)
+                </h2>
+                
+                <div class="examples-grid">
+                    <div class="example-item">
+                        <h4><i class="fas fa-graduation-cap" style="color: var(--color-benefit);"></i> ด้านการเรียน</h4>
+                        <p>ช่วยหาคำตอบในเรื่องที่ยาก, ช่วยแปลภาษาทั่วโลกได้ทันที</p>
+                    </div>
+                    
+                    <div class="example-item">
+                        <h4><i class="fas fa-gamepad" style="color: var(--color-benefit);"></i> ด้านบันเทิง</h4>
+                        <p>YouTube หรือ TikTok รู้ว่าเราชอบดูอะไรแล้วเลือกมาให้ (Algorithm)</p>
+                    </div>
+                    
+                    <div class="example-item">
+                        <h4><i class="fas fa-shield-alt" style="color: var(--color-benefit);"></i> ด้านความปลอดภัย</h4>
+                        <p>ระบบสแกนใบหน้าเพื่อปลดล็อกมือถือ</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cautions -->
+            <div class="cautions-section">
+                <h2 style="color: var(--color-caution); margin-top: 0; border-left: none; padding-left: 0;">
+                    <i class="fas fa-exclamation-triangle"></i> โทษและข้อควรระวัง (ใช้ AI อย่างไรให้ปลอดภัย?)
+                </h2>
+                
+                <div class="examples-grid">
+                    <div class="example-item">
+                        <h4><i class="fas fa-bed" style="color: var(--color-caution);"></i> ความขี้เกียจ</h4>
+                        <p>หากใช้ AI ทำการบ้านแทนทั้งหมด สมองเราจะไม่ได้ฝึกฝน</p>
+                    </div>
+                    
+                    <div class="example-item">
+                        <h4><i class="fas fa-times-circle" style="color: var(--color-caution);"></i> AI ไม่ได้ถูกต้อง 100%</h4>
+                        <p>บางครั้ง AI ก็ "มั่ว" (Hallucination) ข้อมูลที่ได้มาต้องตรวจสอบเสมอ</p>
+                    </div>
+                    
+                    <div class="example-item">
+                        <h4><i class="fas fa-theater-masks" style="color: var(--color-caution);"></i> Deepfake (ภัยเงียบ)</h4>
+                        <p>AI สามารถปลอมใบหน้าและเสียงคนได้ อย่าหลงเชื่อวิดีโอหรือเสียงทางโทรศัพท์ที่ขอยืมเงินง่ายๆ</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Applications -->
+            <div class="applications-section">
+                <h2 style="color: var(--color-ai); text-align: center;">
+                    <i class="fas fa-rocket"></i> นวัตกรรม AI ที่เปลี่ยนโลก
+                </h2>
+                
+                <!-- Self-Driving Car -->
+                <div class="application-card">
+                    <h3 style="color: var(--color-ai);">
+                        <i class="fas fa-car"></i> รถยนต์ขับเคลื่อนอัตโนมัติ
+                    </h3>
+                    
+                    <p>
+                        ความก้าวหน้าของวิทยาการเทคโนโลยีของปัญญาประดิษฐ์ ทำให้ปัจจุบันการดำเนินชีวิตของมนุษย์มีความสะดวกสบายมากขึ้น รถยนต์ขับเคลื่อนอัตโนมัติหรือรถยนต์ไร้คนขับ นับเป็นหนึ่งในเทคโนโลยีที่บริษัทยักษ์ใหญ่ เช่น Google, Apple, Uber และ Baidu เข้ามามีบทบาทในการพัฒนา
+                    </p>
+                    
+                    <div class="imagebox">
+                        <img src="car.jpg.webp" alt="รถยนต์ขับเคลื่อนอัตโนมัติ">
+                        <div class="image-caption">รถยนต์ขับเคลื่อนอัตโนมัติ</div>
+                    </div>
+                </div>
+                
+                <!-- Robots -->
+                <div class="application-card">
+                    <h3 style="color: var(--color-ai);">
+                        <i class="fas fa-robot"></i> หุ่นยนต์ (Robotic)
+                    </h3>
+                    
+                    <p>
+                        เป็นการประยุกต์ใช้งานปัญญาประดิษฐ์สำหรับพัฒนาเครื่องจักรกลให้มีความสามารถและฉลาดพอที่จะทำหน้าที่แทนมนุษย์ได้อย่างสมบูรณ์ นิยมใช้กับเครื่องจักรในโรงงานอุตสาหกรรมสำหรับทำงานแทนมนุษย์ เพื่อความปลอดภัยจากงานที่เสี่ยงอันตราย
+                    </p>
+                    
+                    <div class="imagebox">
+                        <img src="200502.jpg.webp" alt="หุ่นยนต์ ASIMO">
+                        <div class="image-caption">หุ่นยนต์ ASIMO ที่ใช้ปัญญาประดิษฐ์ในการควบคุม</div>
+                    </div>
+                </div>
+                
+                <!-- Voice Commands -->
+                <div class="application-card">
+                    <h3 style="color: var(--color-ai);">
+                        <i class="fas fa-microphone"></i> การสั่งงานด้วยเสียง
+                    </h3>
+                    
+                    <p>
+                        ตั้งแต่การสอบถามเส้นทางไปร้านอาหารโปรด จนถึงการสอบถามพยากรณ์อากาศประจำวัน ผู้ช่วยในการสั่งงานด้วยเสียงกลายเป็นสิ่งที่หลายๆ คนขาดไม่ได้ในชีวิตประจำวัน ตัวอย่างได้แก่ Siri, Alexa, Google home และ Cortana
+                    </p>
+                    
+                    <div class="imagebox">
+                        <img src="Cool-Tech-2075-696x464.jpg.webp" alt="การสั่งงานด้วยเสียง">
+                        <div class="image-caption">การสั่งงานด้วยเสียง</div>
+                    </div>
+                </div>
+                
+                <!-- Smart Home -->
+                <div class="application-card">
+                    <h3 style="color: var(--color-ai);">
+                        <i class="fas fa-home"></i> อุปกรณ์สมาร์ทโฮม
+                    </h3>
+                    
+                    <p>
+                        จากบ้านปกติกลายเป็นบ้านที่ "ฉลาด"มากขึ้น ด้วยเทคโนโลยี AI เช่น เครื่องควบคุมอุณหภูมิอัจฉริยะที่สามารถเรียนรู้เกี่ยวกับการปรับอุณหภูมิตามความชอบของเจ้าของบ้าน รวมถึงตู้เย็นอัจฉริยะที่สามารถบอกได้ว่าของอะไรบ้างที่คุณต้องการ
+                    </p>
+                    
+                    <div class="imagebox">
+                        <img src="Smart-Home-696x464.jpeg.webp" alt="อุปกรณ์สมาร์ทโฮม">
+                        <div class="image-caption">อุปกรณ์สมาร์ทโฮม</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Impacts -->
+            <div class="impacts-section">
+                <h2 style="color: var(--color-impact); margin-top: 0; border-left: none; padding-left: 0;">
+                    <i class="fas fa-exclamation-circle"></i> ผลกระทบของเทคโนโลยี
+                </h2>
+                
+                <ol class="impact-list">
+                    <li><b>ทำให้เกิดอาชญากรรม:</b> เทคโนโลยีสารสนเทศสามารถนำมาใช้ในการก่อให้เกิดอาชญากรรมได้</li>
+                    <li><b>ทำให้ความสัมพันธ์ของมนุษย์เสื่อมถอย:</b> สังคมใหม่จะเป็นสังคมที่ไม่ต้องพึ่งพาอาศัยกันมาก</li>
+                    <li><b>ทำให้เกิดความวิตกกังวล:</b> ความกังวลว่าคอมพิวเตอร์อาจทำให้คนตกงานมากขึ้น</li>
+                    <li><b>ทำให้เกิดความเสี่ยงภัยทางด้านธุรกิจ:</b> ธุรกิจจำเป็นต้องพึ่งพาเทคโนโลยีสารสนเทศมากขึ้น</li>
+                    <li><b>ทำให้การพัฒนาอาวุธมีอำนาจทำลายสูงมากขึ้น:</b> การนำเทคโนโลยีไปใช้ในการสร้างอาวุธที่มีอานุภาพการทำลายสูง</li>
+                    <li><b>ทำให้เกิดการแพร่วัฒนธรรมและกระจายข่าวสารที่ไม่เหมาะสมอย่างรวดเร็ว:</b> การนำมาใช้ในทางใดจึงขึ้นอยู่กับผู้ใช้</li>
+                </ol>
+            </div>
+            
+            <!-- Try AI -->
+            <div class="try-ai">
+                <h3 style="color: white;">
+                    <i class="fas fa-play-circle"></i> ลองใช้ AI ดูสิ!
+                </h3>
+                <p>คุณสามารถลองใช้ AI ได้ง่ายๆ ด้วย:</p>
+                
+                <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px; flex-wrap: wrap;">
+                    <div style="background-color: rgba(255, 255, 255, 0.2); border-radius: 10px; padding: 15px; text-align: center; min-width: 150px;">
+                        <p><b>Google Assistant</b></p>
+                        <p>พูดว่า "OK Google"</p>
+                    </div>
+                    <div style="background-color: rgba(255, 255, 255, 0.2); border-radius: 10px; padding: 15px; text-align: center; min-width: 150px;">
+                        <p><b>ChatGPT</b></p>
+                        <p>ถามคำถามได้ทุกเรื่อง</p>
+                    </div>
+                    <div style="background-color: rgba(255, 255, 255, 0.2); border-radius: 10px; padding: 15px; text-align: center; min-width: 150px;">
+                        <p><b>YouTube</b></p>
+                        <p>ดูว่า AI แนะนำอะไรให้คุณ</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Reference -->
+            <div class="ref-box">
+                <div class="ref-title">
+                    <i class="fas fa-book"></i>
+                    <h3 style="margin: 0;">ข้อมูลอ้างอิง</h3>
+                </div>
+                
+                <div style="background-color: white; border-radius: 10px; padding: 20px;">
+                    <p><b>ฉัตรพงศ์ ชูแสงนิล</b> "รถยนต์ขับเคลื่อนอัตโนมัติ"</p>
+                    <p style="color: var(--color-primary);">จากเว็บไซต์ https://www.scimath.org/article-technology/item/9108-2018-10-18-08-40-06</p>
+                    
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #DDD;">
+                        <p><b>ปัญญาประดิษฐ์ (AI) คืออะไร หลักการทำงาน และการใช้ในอุตสาหกรรม</b></p>
+                        <p style="color: var(--color-primary);">จากเว็บไซต์ https://www.dia.co.th/articles/what-is-artificial-intelligence/</p>
+                    </div>
+                    
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #DDD;">
+                        <p><b>ธิติสุดา สายสิงห์</b> "ผลกระทบของเทคโนโลยี"</p>
+                        <p style="color: var(--color-primary);">จากเว็บไซต์ https://earnnoii.wordpress.com</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Navigation -->
+            <div class="lesson-footer">
+                <div style="font-size: 18px;">
+                    <i class="fas fa-graduation-cap"></i> บทเรียนที่ 4.1: ปัญญาประดิษฐ์ (AI) เทคโนโลยีเปลี่ยนโลก
+                </div>
+                
+                <div class="nav-buttons">
+                    <a href="u3-3.html" class="nav-btn prev">
+                        <i class="fas fa-arrow-left"></i> บทที่แล้ว
+                    </a>
+                    <a href="index.html" class="nav-btn">
+                        <i class="fas fa-home"></i> หน้าแรก
+                    </a>
+                    <a href="u4-2.html" class="nav-btn next">
+                        บทต่อไป <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // เพิ่มเอฟเฟกต์เล็กน้อยให้กับเว็บไซต์
+        document.addEventListener('DOMContentLoaded', function() {
+            // เพิ่มเอฟเฟกต์ให้กับการ์ดต่างๆ
+            const cards = document.querySelectorAll('.comparison-item, .ai-robot-item, .example-item, .application-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100 + 300);
+            });
+            
+            // เพิ่มเอฟเฟกต์ให้กับปุ่ม
+            const buttons = document.querySelectorAll('.nav-btn, .back-btn');
+            buttons.forEach(button => {
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // เอฟเฟกต์เมื่อชี้ภาพ
+            const imageboxes = document.querySelectorAll('.imagebox');
+            imageboxes.forEach(box => {
+                box.addEventListener('mouseenter', function() {
+                    const img = this.querySelector('img');
+                    if (img) {
+                        img.style.transform = 'scale(1.02)';
+                        img.style.transition = 'transform 0.3s ease';
+                    }
+                });
+                
+                box.addEventListener('mouseleave', function() {
+                    const img = this.querySelector('img');
+                    if (img) {
+                        img.style.transform = 'scale(1)';
+                    }
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับขั้นตอนกระบวนการ
+            const processItems = document.querySelectorAll('.process-steps li, .impact-list li');
+            processItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const number = this.querySelector('::before');
+                    this.style.backgroundColor = '#F5F5F5';
+                    this.style.paddingLeft = '75px';
+                    this.style.transition = 'all 0.3s ease';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                    this.style.paddingLeft = '70px';
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับไอคอนในตัวอย่าง
+            const exampleIcons = document.querySelectorAll('.example-item i');
+            exampleIcons.forEach(icon => {
+                icon.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.3)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                
+                icon.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับส่วนลองใช้ AI
+            const tryAICards = document.querySelectorAll('.try-ai div[style*="background-color"]');
+            tryAICards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+                    this.style.transition = 'all 0.3s ease';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

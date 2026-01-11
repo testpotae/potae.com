@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เขียนสคริปต์ให้ตัวละครเปลี่ยนท่าทาง - วิทยาการคำนวณ ป.6</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Itim&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #4A90E2;
+            --color-secondary: #FFD166;
+            --color-accent: #FF6B6B;
+            --color-success: #06D6A0;
+            --color-dance: #E91E63;
+            --color-step: #9C27B0;
+            --color-costume: #FF9800;
+            --color-movement: #2196F3;
+            --color-sound: #4CAF50;
+            --color-loop: #673AB7;
+            --color-bg: #F8F9FF;
+            --color-card: #FFFFFF;
+            --color-text: #333333;
+            --color-dark-blue: #0B2C4D;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Itim', cursive;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.8;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><path d="M30,50 Q50,20 90,50 Q70,80 30,50 Z" fill="%23E91E63" opacity="0.05"/><circle cx="60" cy="60" r="15" fill="%234A90E2" opacity="0.05"/></svg>');
+            background-size: 120px;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--color-dance);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-dark-blue);
+            transform: translateX(-5px);
+            border-color: white;
+        }
+        
+        .lesson-title {
+            color: white;
+            font-size: 22px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        /* Hero Section */
+        .lesson-hero {
+            background: linear-gradient(135deg, var(--color-dance) 0%, #C2185B 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .lesson-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="20" cy="20" r="8" fill="white" opacity="0.05"/><circle cx="80" cy="30" r="10" fill="white" opacity="0.05"/><circle cx="40" cy="70" r="12" fill="white" opacity="0.05"/><circle cx="70" cy="80" r="6" fill="white" opacity="0.05"/></svg>');
+            background-size: 100px;
+        }
+        
+        .lesson-hero h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .date-tag {
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .lesson-content {
+            background-color: var(--color-card);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: 5px solid var(--color-dance);
+        }
+        
+        .lesson-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--color-dance), var(--color-secondary));
+        }
+        
+        /* Scratch Button */
+        .scratch-btn-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .scratch-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background-color: #4D97FF;
+            color: white;
+            padding: 18px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0 6px 0 #3669B3;
+            transition: all 0.3s ease;
+            border: 4px solid white;
+            animation: pulse 2s infinite;
+        }
+        
+        .scratch-btn:hover {
+            background-color: #3669B3;
+            transform: translateY(3px);
+            box-shadow: 0 3px 0 #2A528A;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(77, 151, 255, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(77, 151, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(77, 151, 255, 0); }
+        }
+        
+        /* Step Cards */
+        .steps-container {
+            margin: 40px 0;
+        }
+        
+        .step-card {
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-left: 10px solid var(--color-step);
+        }
+        
+        .step-card:nth-child(1) { border-left-color: var(--color-step); }
+        .step-card:nth-child(2) { border-left-color: var(--color-costume); }
+        .step-card:nth-child(3) { border-left-color: var(--color-primary); }
+        .step-card:nth-child(4) { border-left-color: var(--color-movement); }
+        .step-card:nth-child(5) { border-left-color: var(--color-sound); }
+        .step-card:nth-child(6) { border-left-color: var(--color-loop); }
+        
+        .step-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background-color: var(--color-step);
+            color: white;
+            border-radius: 50%;
+            font-size: 28px;
+            font-weight: bold;
+            flex-shrink: 0;
+            font-family: 'Mali', cursive;
+        }
+        
+        .step-card:nth-child(2) .step-number { background-color: var(--color-costume); }
+        .step-card:nth-child(3) .step-number { background-color: var(--color-primary); }
+        .step-card:nth-child(4) .step-number { background-color: var(--color-movement); }
+        .step-card:nth-child(5) .step-number { background-color: var(--color-sound); }
+        .step-card:nth-child(6) .step-number { background-color: var(--color-loop); }
+        
+        .step-header h2 {
+            color: var(--color-dark-blue);
+            font-size: 26px;
+            margin: 0;
+            border-left: none;
+            padding-left: 0;
+        }
+        
+        /* Image Box */
+        .imagebox {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            border: 3px solid #EEE;
+            transition: all 0.3s ease;
+        }
+        
+        .imagebox:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+            border-color: var(--color-secondary);
+        }
+        
+        .imagebox img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+            border: 5px solid white;
+        }
+        
+        .image-caption {
+            font-weight: bold;
+            color: var(--color-dark-blue);
+            background-color: #FFFDE7;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+            
+        }
+        
+        /* Costume Design */
+        .costume-design {
+            background-color: #FFF3E0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .costume-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .costume-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border: 2px solid transparent;
+        }
+        
+        .costume-item:hover {
+            border-color: var(--color-costume);
+            transform: scale(1.05);
+        }
+        
+        .costume-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            background-color: var(--color-costume);
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        /* Result Box */
+        .result-box {
+            background: linear-gradient(135deg, var(--color-success), #05b585);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            color: white;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(6, 214, 160, 0.3);
+        }
+        
+        .result-box h3 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        /* Try It Yourself */
+        .try-box {
+            background: linear-gradient(135deg, var(--color-secondary), #FFC107);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            color: var(--color-dark-blue);
+            text-align: center;
+        }
+        
+        /* Footer */
+        .lesson-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px dashed #DDD;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--color-dark-blue);
+            transform: translateY(-5px);
+            border-color: var(--color-secondary);
+        }
+        
+        .nav-btn.prev {
+            background-color: var(--color-dance);
+        }
+        
+        .nav-btn.prev:hover {
+            background-color: #C2185B;
+        }
+        
+        .nav-btn.next {
+            background-color: var(--color-success);
+        }
+        
+        .nav-btn.next:hover {
+            background-color: #05b585;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-hero h1 {
+                font-size: 28px;
+            }
+            
+            .costume-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            }
+            
+            .lesson-footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .step-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .step-number {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> กลับหน้าแรก
+        </a>
+        <div class="lesson-title">บทที่ 2: ออกแบบและเขียนโปรแกรมอย่างง่าย</div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="lesson-hero">
+        <h1>เขียนสคริปต์ให้ตัวละครเปลี่ยนท่าทาง</h1>
+       
+    </section>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="lesson-content">
+            <!-- Scratch Button -->
+            <div class="scratch-btn-container">
+                <a href="https://scratch.mit.edu/" target="_blank" class="scratch-btn">
+                    <i class="fas fa-play-circle"></i> 🖱️ กดลิงก์เพื่อเปิดโปรแกรม Scratch
+                </a>
+            </div>
+            
+            <!-- Step 1 -->
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <h2>การเตรียมตัวละครและฉากหลัง</h2>
+                    </div>
+                    
+                    <p>เริ่มต้นโดยการเพิ่มฉากหลังชื่อ <b style="color: var(--color-step);">Spotlight</b> และเลือกตัวละครชื่อ <b style="color: var(--color-step);">Jouvi Dance</b> เข้ามาในโปรเจกต์</p>
+                    
+                    <div class="imagebox">
+                        <img src="1-768x395.jpg.webp" alt="การเลือกตัวละครและฉากหลัง">
+                        <span class="image-caption">ภาพแสดงการเลือกตัวละคร Jouvi Dance และฉาก Spotlight</span>
+                    </div>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <h2>ออกแบบท่าเต้น (Costumes)</h2>
+                    </div>
+                    
+                    <p>ให้นักเรียนออกแบบท่าเต้นอย่างน้อย 5 ท่า โดยเลือกจากท่าทาง (Costumes) ที่มีอยู่ โดยระบุลำดับท่าทางที่ต้องการในวงกลม</p>
+                    
+                    <div class="imagebox">
+                        <img src="2-768x175.jpg.webp" alt="ตัวอย่างการออกแบบท่าเต้น">
+                        <span class="image-caption">ตัวอย่างการเลือกท่าทางจากหน้าต่าง Costumes</span>
+                    </div>
+                    
+                    <div class="costume-design">
+                        <h4><i class="fas fa-list-ol"></i> ลำดับท่าเต้นของคุณ:</h4>
+                        <div class="costume-grid">
+                            <div class="costume-item">
+                                <div class="costume-number">1</div>
+                                ท่าแรก
+                            </div>
+                            <div class="costume-item">
+                                <div class="costume-number">2</div>
+                                ท่าที่สอง
+                            </div>
+                            <div class="costume-item">
+                                <div class="costume-number">3</div>
+                                ท่าที่สาม
+                            </div>
+                            <div class="costume-item">
+                                <div class="costume-number">4</div>
+                                ท่าที่สี่
+                            </div>
+                            <div class="costume-item">
+                                <div class="costume-number">5</div>
+                                ท่าที่ห้า
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <h2>สคริปต์เปลี่ยนท่าทาง</h2>
+                    </div>
+                    
+                    <p>ใช้บล็อกคำสั่งในกลุ่ม <b style="color: var(--color-primary);">Looks</b> เพื่อสลับท่าทางให้ครบ 5 ท่าตามที่ออกแบบไว้</p>
+                    
+                    <div class="imagebox">
+                        <img src="3.jpg.webp" alt="สคริปต์เปลี่ยนชุด">
+                        <br>
+                        <span class="image-caption">ใช้บล็อก "switch costume to..." และ "wait" เพื่อหน่วงเวลา</span>
+                    </div>
+                    
+                    <div style="background-color: #E3F2FD; border-radius: 10px; padding: 15px; margin-top: 15px;">
+                        <h4><i class="fas fa-lightbulb" style="color: var(--color-primary);"></i> คำแนะนำ:</h4>
+                        <p>อย่าลืมใช้บล็อก <code style="background-color: #FFF; padding: 2px 8px; border-radius: 4px;">wait 1 seconds</code> ระหว่างการเปลี่ยนท่าเพื่อให้เห็นการเปลี่ยนแปลงชัดเจน</p>
+                    </div>
+                </div>
+                
+                <!-- Step 4 -->
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <h2>กำหนดจุดเริ่มต้นและการเคลื่อนที่</h2>
+                    </div>
+                    
+                    <p>ใช้สคริปต์เพื่อระบุตำแหน่งเริ่มต้น (x, y) และทำให้ตัวละครมีการเคลื่อนไหวไปมาบนเวที</p>
+                    
+                    <div class="imagebox">
+                        <img src="4.jpg.webp" alt="สคริปต์เคลื่อนที่">
+                        <span class="image-caption">ใช้บล็อก "go to x: y:" และ "move" หรือ "glide"</span>
+                    </div>
+                    
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px;">
+                        <div style="flex: 1; min-width: 200px; background-color: #FFF3E0; border-radius: 10px; padding: 15px;">
+                            <h4><i class="fas fa-crosshairs" style="color: var(--color-movement);"></i> ตำแหน่งเริ่มต้น:</h4>
+                            <p>ลองตั้งค่า x: 0, y: 0 เพื่อให้ตัวละครอยู่กลางเวที</p>
+                        </div>
+                        <div style="flex: 1; min-width: 200px; background-color: #E8F5E9; border-radius: 10px; padding: 15px;">
+                            <h4><i class="fas fa-running" style="color: var(--color-success);"></i> การเคลื่อนที่:</h4>
+                            <p>ใช้ <code>glide 1 secs to x: 100 y: 0</code> เพื่อให้เคลื่อนที่ช้าๆ</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 5 -->
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">5</div>
+                        <h2>การใส่เสียงเพลงประกอบ</h2>
+                    </div>
+                    
+                    <p>เลือกเสียงเพลงที่ชอบจากแถบ <b style="color: var(--color-sound);">Sounds</b> และเขียนสคริปต์เพื่อเล่นเพลงไปพร้อมกับการเต้น</p>
+                    
+                    <div class="imagebox">
+                        <img src="5-485x128.jpg.webp" alt="สคริปต์เล่นเสียง">
+                        <span class="image-caption">ใช้บล็อก "play sound ... until done"</span>
+                    </div>
+                    
+                    <div style="background-color: #F1F8E9; border-radius: 10px; padding: 15px; margin-top: 15px;">
+                        <h4><i class="fas fa-music" style="color: var(--color-sound);"></i> เลือกเสียงเพลง:</h4>
+                        <p>เลือกเสียงจากไลบรารีเสียงใน Scratch หรืออัปโหลดเพลงที่คุณชอบได้</p>
+                    </div>
+                </div>
+                
+                <!-- Step 6 -->
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">6</div>
+                        <h2>สคริปต์การทำงานแบบวนซ้ำ (Loop)</h2>
+                    </div>
+                    
+                    <p>เพื่อให้การเต้นและเพลงทำงานต่อเนื่องไม่สิ้นสุด ให้ครอบสคริปต์ทั้งหมดด้วยบล็อก <b style="color: var(--color-loop);">Forever</b></p>
+                    
+                    <div class="imagebox">
+                        <img src="6.jpg.webp" alt="สคริปต์วนซ้ำ">
+                        <span class="image-caption">การใช้บล็อก "forever" ครอบชุดคำสั่งทั้งหมด</span>
+                    </div>
+                    
+                    <div style="background-color: #F3E5F5; border-radius: 10px; padding: 15px; margin-top: 15px;">
+                        <h4><i class="fas fa-sync-alt" style="color: var(--color-loop);"></i> วนซ้ำไม่รู้จบ:</h4>
+                        <p>บล็อก <code>forever</code> จะทำให้ตัวละครเต้นและเปลี่ยนท่าไปเรื่อยๆ จนกว่าคุณจะกดหยุด</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Result Box -->
+            <div class="result-box">
+                <h3>
+                    <i class="fas fa-trophy"></i> 🌟 ผลลัพธ์:
+                </h3>
+                <p style="font-size: 20px;">เมื่อกดธงเขียว ตัวละครจะเคลื่อนที่ เปลี่ยนท่าทางตามลำดับ และเล่นเพลงวนไปเรื่อย ๆ อย่างสวยงาม!</p>
+                <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px; flex-wrap: wrap;">
+                    <div style="text-align: center;">
+                        <div style="background-color: white; color: var(--color-dance); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 28px;">
+                            <i class="fas fa-dragon"></i>
+                        </div>
+                        <p>ตัวละครเต้น</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="background-color: white; color: var(--color-primary); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 28px;">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <p>เปลี่ยนท่าทาง</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="background-color: white; color: var(--color-sound); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 28px;">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <p>มีเสียงเพลง</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="background-color: white; color: var(--color-loop); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 28px;">
+                            <i class="fas fa-infinity"></i>
+                        </div>
+                        <p>วนซ้ำไม่หยุด</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Try It Yourself -->
+            <div class="try-box">
+                <h3><i class="fas fa-lightbulb"></i> ลองทำดูเองสิ!</h3>
+                <p>ลองสร้างโปรเจกต์ของคุณเองโดย:</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div style="background-color: rgba(255, 255, 255, 0.8); border-radius: 10px; padding: 15px; text-align: center;">
+                        <h4>1. เลือกตัวละครใหม่</h4>
+                        <p>สัตว์, นักบินอวกาศ, หรือตัวละครที่คุณชอบ</p>
+                    </div>
+                    <div style="background-color: rgba(255, 255, 255, 0.8); border-radius: 10px; padding: 15px; text-align: center;">
+                        <h4>2. เปลี่ยนฉากหลัง</h4>
+                        <p>ป่า, อวกาศ, หรือเมืองในเวลากลางคืน</p>
+                    </div>
+                    <div style="background-color: rgba(255, 255, 255, 0.8); border-radius: 10px; padding: 15px; text-align: center;">
+                        <h4>3. เพิ่มเอฟเฟกต์</h4>
+                        <p>เปลี่ยนสี, ขนาด หรือเพิ่มคำพูด</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Navigation -->
+            <div class="lesson-footer">
+                <div style="font-size: 18px;">
+                    <i class="fas fa-graduation-cap"></i> บทเรียนที่ 2.5: เขียนสคริปต์ให้ตัวละครเปลี่ยนท่าทาง
+                </div>
+                
+                <div class="nav-buttons">
+                    <a href="u2-4.html" class="nav-btn prev">
+                        <i class="fas fa-arrow-left"></i> บทที่แล้ว
+                    </a>
+                    <a href="index.html" class="nav-btn">
+                        <i class="fas fa-home"></i> หน้าแรก
+                    </a>
+                    <a href="u3-1.html" class="nav-btn next">
+                        บทต่อไป <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // เพิ่มเอฟเฟกต์เล็กน้อยให้กับเว็บไซต์
+        document.addEventListener('DOMContentLoaded', function() {
+            // เพิ่มเอฟเฟกต์ให้กับการ์ดขั้นตอน
+            const stepCards = document.querySelectorAll('.step-card');
+            stepCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200 + 300);
+            });
+            
+            // เพิ่มเอฟเฟกต์ให้กับปุ่ม
+            const buttons = document.querySelectorAll('.nav-btn, .back-btn, .scratch-btn');
+            buttons.forEach(button => {
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // เอฟเฟกต์เมื่อชี้ภาพ
+            const imageboxes = document.querySelectorAll('.imagebox');
+            imageboxes.forEach(box => {
+                box.addEventListener('mouseenter', function() {
+                    const img = this.querySelector('img');
+                    if (img) {
+                        img.style.transform = 'scale(1.02)';
+                        img.style.transition = 'transform 0.3s ease';
+                    }
+                });
+                
+                box.addEventListener('mouseleave', function() {
+                    const img = this.querySelector('img');
+                    if (img) {
+                        img.style.transform = 'scale(1)';
+                    }
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับท่าเต้น
+            const costumeItems = document.querySelectorAll('.costume-item');
+            costumeItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const numSpan = this.querySelector('.costume-number');
+                    if (numSpan) {
+                        numSpan.style.transform = 'scale(1.2)';
+                        numSpan.style.transition = 'transform 0.3s ease';
+                    }
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    const numSpan = this.querySelector('.costume-number');
+                    if (numSpan) {
+                        numSpan.style.transform = 'scale(1)';
+                    }
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับบล็อกคำแนะนำ
+            const codeElements = document.querySelectorAll('code');
+            codeElements.forEach(code => {
+                code.addEventListener('click', function() {
+                    this.style.backgroundColor = '#FFD166';
+                    setTimeout(() => {
+                        this.style.backgroundColor = '';
+                    }, 300);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
