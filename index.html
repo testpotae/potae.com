@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>วิทยาการคำนวณ ป.6 - โลกแห่งความรู้</title>
+    <title>วิทยาการคำนวณ ป.6</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Itim&display=swap" rel="stylesheet">
@@ -358,6 +358,7 @@
             position: relative;
             overflow: hidden;
             font-family: 'Mali', cursive;
+            margin-right: 15px;
         }
         
         .download-btn::before {
@@ -379,6 +380,49 @@
         }
         
         .download-btn:hover::before {
+            left: 100%;
+        }
+        
+        /* Video Button (ใหม่) */
+        .video-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--color-accent);
+            color: white;
+            padding: 16px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 6px 15px rgba(255, 107, 107, 0.4);
+            transition: all 0.3s ease;
+            border: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Mali', cursive;
+        }
+        
+        .video-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.7s;
+        }
+        
+        .video-btn:hover {
+            background-color: #e05555;
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.5);
+            border-color: white;
+        }
+        
+        .video-btn:hover::before {
             left: 100%;
         }
         
@@ -461,13 +505,183 @@
                 align-items: flex-start;
             }
             
-            .quiz-btn, .download-btn {
+            .quiz-btn, .download-btn, .video-btn {
                 margin-bottom: 10px;
                 width: 100%;
                 text-align: center;
                 justify-content: center;
             }
         }
+        /* Modal และ Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-content {
+    background-color: var(--color-card);
+    border-radius: var(--border-radius);
+    width: 90%;
+    max-width: 900px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    animation: modalFadeIn 0.4s ease-out;
+    border-top: 8px solid var(--color-secondary);
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--color-primary) 0%, #1e4f7a 100%);
+    color: white;
+    padding: 25px 30px;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    position: relative;
+}
+
+.modal-header h2 {
+    color: white;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.modal-header h2 i {
+    color: var(--color-secondary);
+}
+
+.close-modal {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.close-modal:hover {
+    background-color: var(--color-accent);
+    transform: rotate(90deg);
+    border-color: white;
+}
+
+.modal-body {
+    padding: 30px;
+}
+
+.lesson-modal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.lesson-modal-item {
+    background-color: #f0f7ff;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--color-dark-blue);
+    transition: all 0.3s ease;
+    border: 3px solid transparent;
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.lesson-modal-item:hover {
+    background-color: white;
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border-color: var(--color-primary);
+}
+
+.lesson-modal-item i {
+    font-size: 40px;
+    margin-bottom: 15px;
+    color: var(--color-primary);
+    display: block;
+}
+
+.lesson-modal-item h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.lesson-modal-item p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.lesson-count {
+    display: inline-block;
+    background-color: var(--color-success);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.modal-quick-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 2px dashed #e0e0e0;
+}
+
+.modal-quick-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--color-secondary);
+    color: var(--color-dark-blue);
+    padding: 12px 25px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.modal-quick-links a:hover {
+    background-color: var(--color-primary);
+    color: white;
+    transform: translateY(-3px);
+}
     </style>
 </head>
 <body>
@@ -480,10 +694,9 @@
             <div class="logo-text">โลกแห่งวิทยาการคำนวณ</div>
         </div>
         <div class="nav-icons">
-            <a href="#" title="หน้าแรก"><i class="fas fa-home"></i></a>
-            <a href="#" title="แบบทดสอบ"><i class="fas fa-clipboard-check"></i></a>
-            <a href="#" title="เกมการเรียนรู้"><i class="fas fa-gamepad"></i></a>
-            <a href="#" title="ช่วยเหลือ"><i class="fas fa-question-circle"></i></a>
+            <a href="index.html" title="หน้าแรก"><i class="fas fa-home"></i></a>
+            <a href="#" title="บทเรียน"><i class="fas fa-clipboard-check"></i></a>
+            
         </div>
     </header>
     
@@ -537,6 +750,10 @@
                 <a class="download-btn" href="1.pdf" download="1.pdf">
                     <i class="fas fa-download"></i> ดาวน์โหลดใบความรู้
                 </a>
+                <!-- ปุ่มวิดีโอสำหรับการเรียนรู้ - บทที่ 1 -->
+                <a class="video-btn" href="https://youtu.be/gaWZNy3f098?si=9Qd8jsg5Cjhi3Fir" target="_blank">
+                    <i class="fas fa-video"></i> วิดีโอสำหรับการเรียนรู้
+                </a>
             </div>
         </div>
         
@@ -579,6 +796,10 @@
                 <a class="download-btn" href="2.pdf" download="2.pdf">
                     <i class="fas fa-download"></i> ดาวน์โหลดใบความรู้
                 </a>
+                <!-- ปุ่มวิดีโอสำหรับการเรียนรู้ - บทที่ 2 -->
+                <a class="video-btn" href="https://youtu.be/4gtPnucORHY?si=yZRRGf_jGCn4H6sD" target="_blank">
+                    <i class="fas fa-video"></i> วิดีโอสำหรับการเรียนรู้
+                </a>
             </div>
         </div>
         
@@ -612,6 +833,10 @@
                 </a>
                 <a class="download-btn" href="3.pdf" download="3.pdf">
                     <i class="fas fa-download"></i> ดาวน์โหลดใบความรู้
+                </a>
+                <!-- ปุ่มวิดีโอสำหรับการเรียนรู้ - บทที่ 3 -->
+                <a class="video-btn" href="https://youtu.be/1zUwLAaejB8?si=gUgDiJYlEf-OaA4p" target="_blank">
+                    <i class="fas fa-video"></i> วิดีโอสำหรับการเรียนรู้
                 </a>
             </div>
         </div>
@@ -650,6 +875,10 @@
                 </a>
                 <a class="download-btn" href="4.pdf" download="4.pdf">
                     <i class="fas fa-download"></i> ดาวน์โหลดใบความรู้
+                </a>
+                <!-- ปุ่มวิดีโอสำหรับการเรียนรู้ - บทที่ 4 -->
+                <a class="video-btn" href="https://youtu.be/Rv6QrbCD4vc?si=1Ttx-Gl21tbK7Sip" target="_blank">
+                    <i class="fas fa-video"></i> วิดีโอสำหรับการเรียนรู้
                 </a>
             </div>
         </div>
@@ -691,7 +920,7 @@
             });
             
             // เพิ่มเอฟเฟกต์เมื่อกดปุ่ม
-            const buttons = document.querySelectorAll('.quiz-btn, .list a, .download-btn');
+            const buttons = document.querySelectorAll('.quiz-btn, .list a, .download-btn, .video-btn');
             buttons.forEach(button => {
                 button.addEventListener('mousedown', function() {
                     this.style.transform = 'scale(0.95)';
@@ -737,6 +966,238 @@
             // link.click();
             // document.body.removeChild(link);
         }
+        // เพิ่มในส่วน script ที่มีอยู่แล้ว
+
+// ฟังก์ชันสำหรับ modal บทเรียน
+function setupLessonModal() {
+    const lessonBtn = document.querySelector('.nav-icons a[title="บทเรียน"]');
+    const modal = document.getElementById('lessonModal');
+    const closeModal = document.getElementById('closeModal');
+    const lessonItems = document.querySelectorAll('.lesson-modal-item');
+    
+    // เปิด modal เมื่อคลิกปุ่มบทเรียน
+    if (lessonBtn) {
+        lessonBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // ป้องกันไม่ให้ scroll หน้าเว็บหลัก
+        });
+    }
+    
+    // ปิด modal เมื่อคลิกปุ่มปิด
+    if (closeModal) {
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+    }
+    
+    // ปิด modal เมื่อคลิกที่ overlay (นอกเนื้อหา modal)
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+    
+    // ปิด modal ด้วยปุ่ม ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+    
+    // เมื่อคลิกที่บทเรียนใน modal
+    lessonItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const unitNum = this.getAttribute('data-unit');
+            
+            // ปิด modal
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // เลื่อนไปยังส่วนของบทเรียนที่เลือก
+            const targetUnit = document.querySelector(`.unit:nth-child(${unitNum})`);
+            if (targetUnit) {
+                // เพิ่มเอฟเฟกต์ไฮไลต์ให้กับหน่วยที่เลือก
+                targetUnit.style.boxShadow = '0 0 0 4px var(--color-secondary), 0 12px 25px rgba(0, 0, 0, 0.15)';
+                targetUnit.style.transition = 'box-shadow 0.5s ease';
+                
+                // เลื่อนหน้าจอไปยังหน่วยที่เลือก
+                targetUnit.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                // คืนค่ากล่องหลัง 2 วินาที
+                setTimeout(() => {
+                    targetUnit.style.boxShadow = 'var(--shadow-hover)';
+                }, 2000);
+            }
+            
+            // แสดงข้อความแจ้งเตือน (สามารถลบออกได้หากไม่ต้องการ)
+            const unitNames = [
+                "บทที่ 1 ใช้เหตุผลเชิงตรรกะและอัลกอริทึมออกแบบการแก้ปัญหา",
+                "บทที่ 2 ออกแบบและเขียนโปรแกรมอย่างง่าย", 
+                "บทที่ 3 ใช้อินเทอร์เน็ตในการค้นหาข้อมูลอย่างมีประสิทธิภาพ",
+                "บทที่ 4 ใช้เทคโนโลยีสารสนเทศอย่างปลอดภัย"
+            ];
+            
+            // แสดงการแจ้งเตือนแบบน่ารัก
+            showNotification(`กำลังเปิด: ${unitNames[unitNum-1]}`, 'success');
+        });
+    });
+}
+
+// ฟังก์ชันแสดงการแจ้งเตือน
+function showNotification(message, type = 'info') {
+    // สร้าง element สำหรับการแจ้งเตือน
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.style.position = 'fixed';
+    notification.style.top = '20px';
+    notification.style.right = '20px';
+    notification.style.padding = '15px 25px';
+    notification.style.borderRadius = '15px';
+    notification.style.color = 'white';
+    notification.style.fontWeight = 'bold';
+    notification.style.zIndex = '2000';
+    notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
+    notification.style.animation = 'slideIn 0.3s ease-out';
+    
+    // ตั้งค่าสีตามประเภท
+    if (type === 'success') {
+        notification.style.backgroundColor = 'var(--color-success)';
+        notification.style.borderLeft = '8px solid #05b585';
+    } else if (type === 'error') {
+        notification.style.backgroundColor = 'var(--color-accent)';
+        notification.style.borderLeft = '8px solid #e05555';
+    } else {
+        notification.style.backgroundColor = 'var(--color-primary)';
+        notification.style.borderLeft = '8px solid #3a7bc8';
+    }
+    
+    // เพิ่ม animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // เพิ่มการแจ้งเตือนเข้าไปใน body
+    document.body.appendChild(notification);
+    
+    // ลบการแจ้งเตือนหลังจาก 3 วินาที
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease-out';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+// เพิ่ม keyframe สำหรับ animation ออก
+const slideOutStyle = document.createElement('style');
+slideOutStyle.textContent = `
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+`;
+document.head.appendChild(slideOutStyle);
+
+// เรียกใช้ฟังก์ชัน setup เมื่อโหลดหน้าเว็บ
+document.addEventListener('DOMContentLoaded', function() {
+    // โค้ดเดิมที่คุณมีอยู่แล้ว...
+    
+    // เพิ่มฟังก์ชัน modal
+    setupLessonModal();
+});
+// เพิ่มฟังก์ชันสำหรับปิด modal
+function closeLessonModal() {
+    const modal = document.getElementById('lessonModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// แล้วใน setupLessonModal ให้ลบส่วน event listener ของ lessonItems ออก
+// หรือใช้วิธีนี้แทน:
+
+function setupLessonModal() {
+    const lessonBtn = document.querySelector('.nav-icons a[title="บทเรียน"]');
+    const modal = document.getElementById('lessonModal');
+    const closeModal = document.getElementById('closeModal');
+    
+    // เปิด modal เมื่อคลิกปุ่มบทเรียน
+    if (lessonBtn) {
+        lessonBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+    }
+    
+    // ปิด modal เมื่อคลิกปุ่มปิด
+    if (closeModal) {
+        closeModal.addEventListener('click', closeLessonModal);
+    }
+    
+    // ปิด modal เมื่อคลิกที่ overlay
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeLessonModal();
+        }
+    });
+    
+    // ปิด modal ด้วยปุ่ม ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+            closeLessonModal();
+        }
+    });
+}
     </script>
+    <!-- Modal สำหรับบทเรียน -->
+<div class="modal-overlay" id="lessonModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-book-open"></i> บทเรียนทั้งหมด</h2>
+            <div class="close-modal" id="closeModal">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+        <div class="lesson-modal-grid">
+    <a href="u1-1.html" onclick="closeLessonModal()" class="lesson-modal-item" data-unit="1">
+        <i class="fas fa-puzzle-piece"></i>
+        <h3>บทที่ 1</h3>
+        <p>ใช้เหตุผลเชิงตรรกะและอัลกอริทึมออกแบบการแก้ปัญหา</p>
+        <span class="lesson-count">3 บทเรียน</span>
+    </a>
+    
+    <a href="u2-1.html" onclick="closeLessonModal()" class="lesson-modal-item" data-unit="2">
+        <i class="fas fa-code"></i>
+        <h3>บทที่ 2</h3>
+        <p>ออกแบบและเขียนโปรแกรมอย่างง่าย</p>
+        <span class="lesson-count">5 บทเรียน</span>
+    </a>
+    
+    <a href="u3-1.html" onclick="closeLessonModal()" class="lesson-modal-item" data-unit="3">
+        <i class="fas fa-search"></i>
+        <h3>บทที่ 3</h3>
+        <p>ใช้อินเทอร์เน็ตในการค้นหาข้อมูลอย่างมีประสิทธิภาพ</p>
+        <span class="lesson-count">3 บทเรียน</span>
+    </a>
+    
+    <a href="u4-1.html" onclick="closeLessonModal()" class="lesson-modal-item" data-unit="4">
+        <i class="fas fa-shield-alt"></i>
+        <h3>บทที่ 4</h3>
+        <p>ใช้เทคโนโลยีสารสนเทศอย่างปลอดภัย</p>
+        <span class="lesson-count">4 บทเรียน</span>
+    </a>
+</div>
 </body>
 </html>

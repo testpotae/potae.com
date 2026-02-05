@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>การใช้อัลกอริทึมในการแก้ปัญหา - วิทยาการคำนวณ ป.6</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Itim&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #4A90E2;
+            --color-secondary: #FFD166;
+            --color-accent: #FF6B6B;
+            --color-success: #06D6A0;
+            --color-algorithm: #9C27B0;
+            --color-pseudocode: #2196F3;
+            --color-flowchart: #FF9800;
+            --color-bg: #F8F9FF;
+            --color-card: #FFFFFF;
+            --color-text: #333333;
+            --color-dark-blue: #0B2C4D;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Itim', cursive;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.8;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M10,30 Q30,10 50,30 T90,30 Q70,50 90,70 T90,90 Q50,70 10,90 T10,10 Q10,30 10,30 Z" fill="%234A90E2" opacity="0.05"/></svg>');
+            background-size: 100px;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--color-algorithm);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-dark-blue);
+            transform: translateX(-5px);
+            border-color: white;
+        }
+        
+        .lesson-title {
+            color: white;
+            font-size: 22px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        /* Hero Section */
+        .lesson-hero {
+            background: linear-gradient(135deg, var(--color-algorithm) 0%, #7B1FA2 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 8px solid var(--color-secondary);
+        }
+        
+        .lesson-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M20,20 L80,20 L80,80 L20,80 Z" fill="white" opacity="0.05"/><circle cx="50" cy="50" r="20" fill="white" opacity="0.05"/></svg>');
+            background-size: 100px;
+        }
+        
+        .lesson-hero h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .lesson-hero .date {
+            font-size: 18px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin-top: 10px;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .lesson-content {
+            background-color: var(--color-card);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: 5px solid var(--color-algorithm);
+        }
+        
+        .lesson-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--color-algorithm), var(--color-secondary));
+        }
+        
+        /* Introduction */
+        .intro-box {
+            background-color: #F3E5F5;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-algorithm);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .intro-box p {
+            font-size: 20px;
+        }
+        
+        .algorithm-definition {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 3px solid var(--color-algorithm);
+        }
+        
+        .algorithm-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 70px;
+            background-color: var(--color-algorithm);
+            border-radius: 50%;
+            font-size: 32px;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        /* Section Cards */
+        .section-card {
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-card.pseudocode {
+            border-top: 10px solid var(--color-pseudocode);
+            background-color: #E3F2FD;
+        }
+        
+        .section-card.flowchart {
+            border-top: 10px solid var(--color-flowchart);
+            background-color: #FFF3E0;
+        }
+        
+        .section-card.benefits {
+            border-top: 10px solid var(--color-success);
+            background-color: #E8F5E9;
+        }
+        
+        .section-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .section-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 28px;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .pseudocode .section-icon {
+            background-color: var(--color-pseudocode);
+        }
+        
+        .flowchart .section-icon {
+            background-color: var(--color-flowchart);
+        }
+        
+        .benefits .section-icon {
+            background-color: var(--color-success);
+        }
+        
+        .section-header h2 {
+            color: var(--color-dark-blue);
+            font-size: 26px;
+            margin: 0;
+        }
+        
+        /* Characteristics List */
+        .characteristics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .char-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 5px solid var(--color-pseudocode);
+        }
+        
+        .char-item i {
+            color: var(--color-pseudocode);
+            font-size: 20px;
+        }
+        
+        /* Image Container */
+        .image-container {
+            text-align: center;
+            margin: 25px 0;
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 3px solid #EEE;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+            border: 5px solid white;
+        }
+        
+        .image-container p {
+            font-weight: bold;
+            color: var(--color-dark-blue);
+            background-color: #FFFDE7;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        
+        /* Activity Box */
+        .activity-box {
+            background-color: #FFFDE7;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 10px solid var(--color-secondary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .activity-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .activity-title i {
+            color: var(--color-secondary);
+            font-size: 28px;
+        }
+        
+        .activity-content {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 2px dashed var(--color-secondary);
+        }
+        
+        .minecraft-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--color-success);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .minecraft-link:hover {
+            background-color: #05b585;
+            transform: translateY(-5px);
+            border-color: white;
+        }
+        
+        /* Benefits List */
+        .benefits-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .benefit-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            border-top: 8px solid var(--color-success);
+        }
+        
+        .benefit-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background-color: var(--color-success);
+            border-radius: 50%;
+            font-size: 28px;
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        /* Footer */
+        .lesson-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px dashed #DDD;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--color-dark-blue);
+            transform: translateY(-5px);
+            border-color: var(--color-secondary);
+        }
+        
+        .nav-btn.prev {
+            background-color: var(--color-algorithm);
+        }
+        
+        .nav-btn.prev:hover {
+            background-color: #7B1FA2;
+        }
+        
+        .nav-btn.next {
+            background-color: var(--color-success);
+        }
+        
+        .nav-btn.next:hover {
+            background-color: #05b585;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-hero h1 {
+                font-size: 28px;
+            }
+            
+            .characteristics, .benefits-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .algorithm-definition {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .lesson-footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> กลับหน้าแรก
+        </a>
+        <div class="lesson-title">บทที่ 1: ใช้เหตุผลเชิงตรรกะและอัลกอริทึม</div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="lesson-hero">
+        <h1>การใช้อัลกอริทึมในการแก้ปัญหา</h1>
+        
+    </section>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="lesson-content">
+            <div class="algorithm-definition">
+                <div class="algorithm-icon">
+                    <i class="fas fa-sitemap"></i>
+                </div>
+                <div>
+                    <p style="font-size: 20px; font-weight: bold; color: var(--color-dark-blue);">
+                        อัลกอริทึม (Algorithm) คือ ลำดับขั้นตอนในการทำงานหรือการแก้ปัญหา ซึ่งสามารถแสดงได้หลายรูปแบบ เช่น รหัสลำลอง และผังงาน เพื่อช่วยให้เข้าใจวิธีการทำงานได้อย่างเป็นระบบ
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Section 1: Pseudocode -->
+            <div class="section-card pseudocode">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h2>1. รหัสลำลอง (Pseudocode)</h2>
+                </div>
+                
+                <p style="font-size: 18px;">
+                    รหัสลำลอง คือ การเขียนลำดับขั้นตอนของอัลกอริทึมด้วยข้อความที่อ่านเข้าใจง่าย เพื่ออธิบายการทำงานอย่างเป็นขั้นตอน
+                </p>
+                
+                <h3 style="color: var(--color-pseudocode); margin-top: 20px;">
+                    <i class="fas fa-list-check"></i> ลักษณะของรหัสลำลอง
+                </h3>
+                
+                <div class="characteristics">
+                    <div class="char-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>ใช้ข้อความสั้น ๆ ได้ใจความ</span>
+                    </div>
+                    <div class="char-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>ใช้คำที่เข้าใจง่าย</span>
+                    </div>
+                    <div class="char-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>เขียนเรียงลำดับทีละบรรทัด</span>
+                    </div>
+                    <div class="char-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>มีลักษณะใกล้เคียงกับภาษามนุษย์</span>
+                    </div>
+                    <div class="char-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>ไม่ขึ้นกับภาษาคอมพิวเตอร์ภาษาใดภาษาหนึ่ง</span>
+                    </div>
+                </div>
+                
+                <h3 style="color: var(--color-pseudocode); margin-top: 20px;">
+                    <i class="fas fa-image"></i> ตัวอย่างการเขียนรหัสลำลอง
+                </h3>
+                
+                <div class="image-container">
+                    <!-- ตัวอย่างภาพรหัสลำลอง -->
+                    <img src="รหัสลำลอง-696x341.jpg.webp">
+                    <p>ตัวอย่างรหัสลำลอง</p>
+                </div>
+                
+                <div class="activity-box">
+                    <div class="activity-title">
+                        <i class="fas fa-tasks"></i>
+                        <h3 style="margin: 0; color: var(--color-dark-blue);">กิจกรรมฝึกทักษะ</h3>
+                    </div>
+                    
+                    <div class="activity-content">
+                        <p>ให้นักเรียนเขียนรหัสลำลอง <strong>การทอดไข่เจียว</strong> ลงในสมุดของตนเอง</p>
+                        <div style="background-color: #FFF3E0; padding: 15px; border-radius: 10px; margin-top: 15px;">
+                            <p><i class="fas fa-lightbulb"></i> <strong>ตัวอย่างแนวคิด:</strong></p>
+                            <ol style="padding-left: 20px; margin-top: 10px;">
+                                <li>เตรียมอุปกรณ์ (ไข่, น้ำมัน, กระทะ)</li>
+                                <li>ตอกไข่ลงในชาม</li>
+                                <li>ตีไข่ให้เข้ากัน</li>
+                                <li>ตั้งกระทะและใส่น้ำมัน</li>
+                                <li>รอให้น้ำมันร้อน</li>
+                                <li>เทไข่ลงในกระทะ</li>
+                                <li>รอจนไข่สุก</li>
+                                <li>ตักไข่เจียวใส่จาน</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 2: Flowchart -->
+            <div class="section-card flowchart">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h2>2. ผังงาน (Flowchart)</h2>
+                </div>
+                
+                <p style="font-size: 18px;">
+                    ผังงาน คือ การเขียนแผนภาพโดยใช้สัญลักษณ์ต่าง ๆ เพื่อแสดงขั้นตอนของอัลกอริทึมอย่างเป็นลำดับ
+                </p>
+                
+                <h3 style="color: var(--color-flowchart); margin-top: 20px;">
+                    <i class="fas fa-shapes"></i> สัญลักษณ์พื้นฐานสำหรับการเขียนผังงาน
+                </h3>
+                
+                <div class="image-container">
+                    <!-- ตัวอย่างภาพสัญลักษณ์ผังงาน -->
+                     <img src="flowchart5-1.jpg.webp  ">
+                     <img src="flowchart-768x432.jpg.webp">
+                    <p>สัญลักษณ์พื้นฐานสำหรับการเขียนผังงาน</p>
+                </div>
+                
+                <div class="activity-box">
+                    <div class="activity-title">
+                        <i class="fas fa-gamepad"></i>
+                        <h3 style="margin: 0; color: var(--color-dark-blue);">กิจกรรมฝึกทักษะกับ Minecraft</h3>
+                    </div>
+                    
+                    <div class="activity-content">
+                        <p>1. ให้นักเรียนเขียนรหัสลำลองและผังงานจากเกม Minecraft ในด่านที่นักเรียนชอบ ลงในสมุด</p>
+                        
+                        <a href="https://code.org/minecraft" target="_blank" class="minecraft-link">
+                            <i class="fas fa-external-link-alt"></i> เล่นเกม Minecraft ที่นี่
+                        </a>
+                        
+                        <div style="background-color: #E8F5E9; padding: 15px; border-radius: 10px; margin-top: 20px;">
+                            <p><i class="fas fa-star"></i> <strong>ตัวอย่างการคิด:</strong></p>
+                            <p>หากนักเรียนจะสร้างบ้านใน Minecraft จะมีขั้นตอนอย่างไร?</p>
+                            <ol style="padding-left: 20px; margin-top: 10px;">
+                                <li>หาที่เหมาะสมสำหรับสร้างบ้าน</li>
+                                <li>เก็บวัสดุ (ไม้, หิน, แก้ว)</li>
+                                <li>ออกแบบบ้าน</li>
+                                <li>สร้างโครงสร้างบ้าน</li>
+                                <li>เพิ่มประตูและหน้าต่าง</li>
+                                <li>ตกแต่งภายในบ้าน</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 3: Benefits -->
+            <div class="section-card benefits">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h2>ประโยชน์ของอัลกอริทึม</h2>
+                </div>
+                
+                <p style="font-size: 18px;">
+                    อัลกอริทึมช่วยให้การทำงานเป็นระบบ ไม่สับสน เพราะทุกขั้นตอนถูกจัดเรียงอย่างชัดเจน มีวิธีการและทางเลือกกำหนดไว้ เมื่อนำไปใช้จะช่วยให้ทำงานสำเร็จได้รวดเร็ว ลดปัญหา และสามารถค้นหาสาเหตุของปัญหาได้ง่าย
+                </p>
+                
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h4>ทำงานเป็นระบบ</h4>
+                        <p>ขั้นตอนชัดเจน ไม่สับสน</p>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h4>ทำงานรวดเร็ว</h4>
+                        <p>มีขั้นตอนที่เตรียมไว้แล้ว</p>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h4>แก้ปัญหาได้ง่าย</h4>
+                        <p>รู้ว่าปัญหาอยู่ที่ขั้นตอนใด</p>
+                    </div>
+                </div>
+                
+                <div style="background-color: white; border-radius: 10px; padding: 20px; margin-top: 20px; border: 3px solid var(--color-success);">
+                    <p style="font-size: 18px; color: var(--color-dark-blue);">
+                        <i class="fas fa-check-circle" style="color: var(--color-success);"></i> 
+                        การออกแบบอัลกอริทึมที่ดี ช่วยให้เราสามารถแก้ปัญหาในชีวิตประจำวันได้อย่างมีประสิทธิภาพ
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Footer Navigation -->
+            <div class="lesson-footer">
+                <div style="font-size: 18px;">
+                    <i class="fas fa-graduation-cap"></i> บทเรียนที่ 1.3: การใช้อัลกอริทึมในการแก้ปัญหา
+                </div>
+                
+                <div class="nav-buttons">
+                    <a href="u1-2.html" class="nav-btn prev">
+                        <i class="fas fa-arrow-left"></i> บทที่แล้ว
+                    </a>
+                    <a href="index.html" class="nav-btn">
+                        <i class="fas fa-home"></i> หน้าแรก
+                    </a>
+                    <a href="u2-1.html" class="nav-btn next">
+                        บทต่อไป <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // เพิ่มเอฟเฟกต์เล็กน้อยให้กับเว็บไซต์
+        document.addEventListener('DOMContentLoaded', function() {
+            // เพิ่มเอฟเฟกต์ให้กับการ์ดส่วนต่างๆ
+            const sectionCards = document.querySelectorAll('.section-card');
+            sectionCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 300 + 300);
+            });
+            
+            // เพิ่มเอฟเฟกต์ให้กับปุ่ม
+            const buttons = document.querySelectorAll('.nav-btn, .back-btn, .minecraft-link');
+            buttons.forEach(button => {
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // เอฟเฟกต์เมื่อคลิกที่รายการลักษณะ
+            const charItems = document.querySelectorAll('.char-item');
+            charItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+            
+            // เอฟเฟกต์สำหรับกิจกรรม
+            const activityContents = document.querySelectorAll('.activity-content');
+            activityContents.forEach(content => {
+                content.addEventListener('mouseenter', function() {
+                    this.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.1)';
+                });
+                
+                content.addEventListener('mouseleave', function() {
+                    this.style.boxShadow = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
